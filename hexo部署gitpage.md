@@ -1,5 +1,7 @@
 # hexo部署gitpage
 
+参考: https://hexo.io/zh-cn/docs/setup
+
 ##  安装npm
 
 ```bash
