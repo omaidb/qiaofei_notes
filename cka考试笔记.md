@@ -2,6 +2,8 @@
 
 ## 第一题: RBAC 授权（问题权重4%）
 
+执行`kubectl config use-context k8s`
+
 ![image-20220130115314034](image/image-20220130115314034.png)
 
 
@@ -22,7 +24,7 @@ kubectl get sa cicd-token -n app-team1
 kubectl describe sa cicd-token -n app-team1 
 
 # 创建ClusterRole(集群角色)deployment-clusterrole,权限限定为:只允许创建deployments,daemonsets,statefulsets
-kubectl create clusterrole deployment-clusterrole --verb=create -- resource=deployments,daemonsets,statefulsets
+kubectl create clusterrole deployment-clusterrole --verb=create -- resource=deployments,statefulsets,daemonsets
 
 # 查看集群角色是否创建成功
 kubectl get clusterrole |grep deployment-clusterrole
@@ -36,6 +38,9 @@ kubectl create rolebinding {binding_NAME} -- clusterrole={集群角色名} --ser
 
 # 在命名空间app-team1中,将ClusterRole(集群角色)deployment-clusterrole绑定到账号cicd-token
 kubectl create rolebinding cicd-token-deployment-clusterrole-binding -- clusterrole=deployment-clusterrole --serviceaccount=app-team1:cicd-token -n app-team1
+
+## 有可能是绑定clusterrolebinding
+kubectl create clusterrolebinding cicd-token-deployment-clusterrole-binding --clusterrole=deployment-clusterrole --serviceaccount=app-team1:cicd-token -n app-team1
 
 # 查看账号绑定成功,验证rolebinding资源
 kubectl describe rolebinding cicd-token-deployment-clusterrole-binding -n app-team1
