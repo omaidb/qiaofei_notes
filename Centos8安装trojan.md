@@ -58,8 +58,50 @@ yum install trojan
 
 <br/>
 
+##  ansible安装trojan剧本
+
+```yaml
+---
+- hosts: all
+  tasks:
+    - name: install trojan telnet proxychains-ng
+      yum:
+        name: [trojan,telnet,proxychains-ng]
+        state: latest
+
+    - name: 拷贝trojan配置文件
+      template:
+        src: /root/ansible/trojan.json.j2
+        dest: /etc/trojan/config.json
+      notify: restat trojan
+
+    - name: 配置proxychains.conf为127.0.0.1 1080
+      lineinfile:
+        path: /etc/proxychains.conf
+        regexp: 'socks4 	127.0.0.1 9050'
+        line: 'socks5 127.0.0.1 1080'
+
+    - name: 启动并开机自启trojan务
+      service:
+        name: trojan
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: restat trojan
+      service:
+        name: trojan
+        state: restarted
+```
+
+
+
+<br/>
+
+
 
 ## 源码安装前置代理
+
 项目地址: [https://github.com/trojan-gfw/trojan/releases](https://github.com/trojan-gfw/trojan/releases)
 ​
 <br/>
@@ -152,7 +194,7 @@ telnet 127.0.0.1 1080
 
 
 
-## ansible安装trojan剧本
+## ansible源码安装trojan剧本
 ```yaml
 ---
 - hosts: all
