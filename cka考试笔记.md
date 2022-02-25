@@ -20,11 +20,11 @@ tags:
 # 切换到名为k8s的集群
 kubectl config use-context k8s
 
-# 在命名空间app-team1中创建账号cicd-token
-kubectl create sa cicd-token -n app-team1
+# 在命名空间app-team1中创建服务账号cicd-token
+kubectl create serviceaccount cicd-token -n app-team1
 
 # 查看账号是否创建
-kubectl get sa cicd-token -n app-team1 
+kubectl get serviceaccount cicd-token -n app-team1 
 
 # 查看服务账户详情
 kubectl describe sa cicd-token -n app-team1 
