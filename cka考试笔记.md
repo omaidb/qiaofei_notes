@@ -375,3 +375,143 @@ spec:
 kubectl get pod nginx-kusc00401 -o wide
 ```
 
+## 第十题 统计准备就绪的node数量
+
+### 答案
+
+```bash
+# 查看下有哪些几点就绪并且没有污点
+kubectl describe node|greo Taint
+
+# 然后写入到指定的记事本中
+```
+
+## 第十一题 pod配置多容器(问题权重4%)
+
+![image-20220227205508472](image/image-20220227205508472.png)
+
+### 答案
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kucc4
+spec:
+  containers:
+  # 配置多个容器
+    - name: nginx
+      image: nginx
+    - name: redis
+      image: redis
+    - name: memcached
+      image: memcached
+```
+
+## 第十二题 创建pv(问题权重4%)
+
+![image-20220227210132544](image/image-20220227210132544.png)
+
+### 答案
+
+参考: [https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/](https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/)
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # pv的名字
+  name: app-data
+spec:
+  capacity:
+  # 存储的大小
+    storage: 2Gi
+    # 读取的模式
+  accessModes:
+    - ReadWriteOnce
+    # hostpath路径
+  hostPath:
+    path: “/srv/app-data”
+```
+
+验证
+
+```bash
+kubectl get pv
+```
+
+## 第十三题 pod使用pvc(问题权重7%)
+
+![image-20220227212129294](image/image-20220227212129294.png)
+
+![image-20220227212016047](image/image-20220227212016047.png)
+
+参考: [https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#创建-persistentvolumeclaim](https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#创建-persistentvolumeclaim)
+
+### 答案
+
+```yaml
+---
+# 创建pvc
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # pvc名称
+  name: pv-volume
+# 存储类名称
+spec:
+  storageClassName: csi-hostpath-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+
+---
+# 创建pod
+apiVersion: v1
+kind: Pod
+metadata:
+  # pod名称
+  name: web-server
+spec:
+  # 使用pvc声明一个卷
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: pv-volume
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: http-server
+      # 挂在卷到容器中的目录
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: data
+```
+
+扩容pvc容量
+
+```bash
+# 加上--save-config会记录修改历史
+kubectl edit pvc pv-volume  --save-config
+```
+
+## 第十四题 获取Pod错误日志(问题权重5%)
+
+![image-20220227215443442](image/image-20220227215443442.png)
+
+### 答案
+
+参考: [https://kubernetes.io/zh/docs/concepts/cluster-administration/logging/](https://kubernetes.io/zh/docs/concepts/cluster-administration/logging/)
+
+```bash
+# logs查看日志
+kubectl logs bar|grep file-not-found > /opt/KUTR0010/bar
+```
+
+## 第十五题 给pod添加一个边车容器(问题权重7%)
+
+![image-20220227220026170](image/image-20220227220026170.png)
