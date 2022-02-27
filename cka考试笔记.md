@@ -72,8 +72,9 @@ kubectl get nodes
 ## --delete-local-data 清空本地数据
 ## --ignore-daemonsets 忽略daemonsets错误
 ## --force 强制执行
-kubectl drain ek8s-node-1 --delete-local-data --ignore-daemonsets --force # 练习执行
 kubectl drain ek8s-node-1 --ignore-daemonsets --force # 考试执行
+## 如果报错,加--delete-local-data 清空本地数据
+kubectl drain ek8s-node-1 --delete-local-data --ignore-daemonsets --force # 练习执行
 
 # 查看node状态
 kubectl get nodes
@@ -108,26 +109,28 @@ kubelet version
 # 切换到ek8s集群
 kubectl config use-context ek8s
 
-# 指定节点为不可调度
-kubectl cordon k8s-master-0
-
-# 驱逐节点上的所有pod(腾空节点)
+# 标记节点为不可调度并驱逐节点上的所有pod(腾空节点)
 kubectl darin k8s-master-0 --ignore-daemonsets
 
-# 升级kubeadm,kubelet,kubectl
-## ubuntu升级kubeadm,kubelet和kubectl到1.22.2
-apt update && apt-mark unhold kubeadm kubelet kubectl && \ 
-apt install kubeadm=1.22.2-00 kubelet=1.22.2-00 kubectl=1.22.2-00 --allow-change-held-packages -y && \ 
-apt-mark hold kubeadm kubelet kubectl
-
-## Centos升级kubeadm,kubelet和kubectl到1.22.2
-yum install -y kubeadm=1.22.2-00 kubelet=1.22.2-00 kubectl=1.22.2-00
+# 升级kubeadm到指定版本
+apt update && apt-mark unhold kubeadm && apt install kubeadm=1.22.2-00
 
 # 验证升级计划
 kubeadm upgrade plan
 
 # 升级k8s到1.20.1版本,且不升级etcd
 kubeadm upgrade apply v1.22.2 --etcd-upgrade=false
+
+# kubelet,kubectl
+## 取消apt的包版本锁定
+apt update && apt-mark unhold kubelet kubectl
+## ubuntu升级kubelet和kubectl到1.22.2
+apt install kubelet=1.22.2-00 kubectl=1.22.2-00 --allow-change-held-packages -y
+## 锁定kubelet和kubectl版本
+apt-mark hold kubelet kubectl
+
+## Centos升级kubeadm,kubelet和kubectl到1.22.2
+yum install -y kubeadm=1.22.2-00 kubelet=1.22.2-00 kubectl=1.22.2-00
 
 # 重启kubelet服务
 sudo systemctl daemon-reload
@@ -152,6 +155,7 @@ kubectl get node
 
 ```bash
 # 备份etcd
+## 设置ETCDCTL_API版本
 ETCDCTL_API=3 
 etcdctl \
 --endpoints=127.0.0.1:2379 \
@@ -161,7 +165,15 @@ etcdctl \
 snapshot save /var/lib/backup/etcd-snapshot.db
 
 # etcd还原
-1.⾸先将etcd、api停⽌了，移动静态pod⽂件后，过了⼀会容器会⾃动停⽌，
+## 如果etcd是二进制安装的,那么需要systemctl暂停etcd,
+1.⾸先停止etcd、api容器或服务
+systemctl stop etcd
+
+1.1. 确认下etcd数据目录
+systemctl cat etcd # --data-dir=数据目录
+
+#考试环境的etcd是二进制搭建的,数据目录是{/var/lib/etcd}
+1.2. 备份静态pod⽂件后，过⼀会容器会⾃动停⽌
 mv /etc/kubernetes/manifests /etc/kubernetes/manifests.bak
 
 2.备份⼀下原来etcd的⽂件夹
@@ -172,7 +184,13 @@ ETCDCTL_API=3
 etcdctl --endpoints=https://127.0.0.1:2379 \
 snapshot restore /data/backup/etcd-snapshot-previous.db --data-dir=/var/lib/etcd
 
-4.启动etcd、api容器，把静态pod⽂件夹移回来 过⼀会就可以启动了
+3.1. 可能要设置etcd数据目录的属主和属组
+chown -R etcd.etcd /var/lib/etcd
+
+4.启动etcd服务或容器
+systemctl start etcd
+
+4.1. 把静态pod⽂件夹移回来 过⼀会就可以启动了
 mv /etc/kubernetes/manifests.bak /etc/kubernetes/manifests
 
 5.验证集群、pod资源状态
@@ -192,6 +210,9 @@ kubectl config use-context hk8s
 
 # 编辑资源清单
 vi networkpolicy.yaml
+
+# 给命名空间打标签
+kubectl label namespace big-corp name=big-corp
 ```
 
 编辑资源清单
@@ -200,20 +221,20 @@ vi networkpolicy.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
- name: allow-port-from-namespace
- namespace: corp-net
+  name: allow-port-from-namespace
+  namespace: corp-net
 spec:
- podSelector: {} 
- policyTypes:
- - Ingress
- ingress:
- - from:
- - namespaceSelector:
- matchLabels:
- name: big-corp
- ports:
- - protocol: TCP
- port: 9200
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: big-corp
+      ports:
+        - protocol: TCP
+      port: 9200
 ```
 
 apply资源清单
