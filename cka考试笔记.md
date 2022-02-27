@@ -576,3 +576,36 @@ apply这个pod的yaml
 kubectl apply -f legacy-app.yaml
 ```
 
+## 第十六题 统计使用CPU最高的Pod(问题权重5%)
+
+![image-20220227222818586](image/image-20220227222818586.png)
+
+### 答案
+
+```bash
+# 按cpu使用率对pod进行排序
+kubectl top pod -l name=cpu-utilizer --sort-by="cpu" -A
+
+# 将cpu使用率第一的pod名写入到/opt/KUTR0040/KUTR00401.txt
+echo "<podname>" > /opt/KUTR0040/KUTR00401.txt
+```
+
+## 第十七题 节点NotReady处理(问题权重13%)
+
+![image-20220227223235108](image/image-20220227223235108.png)
+
+### 答案
+
+```bash
+# 查看node的状态
+kubectl get nodes
+
+# 然后ssh登陆到对应的node
+
+# 启动对应节点上的kubelet即可
+systemctl enable --now kubelet
+
+# 回到控制台,查看node状态
+kubectl get nodes
+```
+
