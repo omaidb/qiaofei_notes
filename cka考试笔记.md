@@ -16,37 +16,36 @@ tags:
 
 ### 答案:
 
+![image-20220227145101389](image/image-20220227145101389.png)
+
+
+
+
+
 ```bash
 # 切换到名为k8s的集群
 kubectl config use-context k8s
 
-# 在命名空间app-team1中创建服务账号cicd-token
-kubectl create serviceaccount cicd-token -n app-team1
-
-# 查看账号是否创建
-kubectl get serviceaccount cicd-token -n app-team1 
-
-# 查看服务账户详情
-kubectl describe sa cicd-token -n app-team1 
-
 # 创建ClusterRole(集群角色)deployment-clusterrole,权限限定为:只允许创建deployments,daemonsets,statefulsets
 kubectl create clusterrole deployment-clusterrole --verb=create -- resource=deployments,statefulsets,daemonsets
 
-# 查看集群角色是否创建成功
-kubectl get clusterrole |grep deployment-clusterrole
+# 在命名空间app-team1中创建服务账号cicd-token
+kubectl create serviceaccount cicd-token -n app-team1
 
-# 查看集群角色详情
-kubectl describe clusterrole deployment-clusterrole
-
+# 在命名空间app-team1中,将ClusterRole(集群角色)deployment-clusterrole绑定到账号cicd-token
+kubectl create rolebinding cicd-token-deployment-clusterrole-binding -- clusterrole=deployment-clusterrole --serviceaccount=app-team1:cicd-token -n app-team1
 ## 将集群角色绑定到账号
 ## {binding_NAME}=用户名-集群角色名-binding
 kubectl create rolebinding {binding_NAME} -- clusterrole={集群角色名} --serviceaccount={命名空间名}:{用户名} -n {命名空间名}
 
-# 在命名空间app-team1中,将ClusterRole(集群角色)deployment-clusterrole绑定到账号cicd-token
-kubectl create rolebinding cicd-token-deployment-clusterrole-binding -- clusterrole=deployment-clusterrole --serviceaccount=app-team1:cicd-token -n app-team1
+# 测试服务账号权限
+kubectl --as=system:serviceaccount:app-team1:cicd-token get pods -n app-team1
 
-## 有可能是绑定clusterrolebinding
-kubectl create clusterrolebinding cicd-token-deployment-clusterrole-binding --clusterrole=deployment-clusterrole --serviceaccount=app-team1:cicd-token -n app-team1
+# 查看服务账户详情
+kubectl describe sa cicd-token -n app-team1 
+
+# 查看集群角色详情
+kubectl describe clusterrole deployment-clusterrole
 
 # 查看账号绑定成功,验证rolebinding资源
 kubectl describe rolebinding cicd-token-deployment-clusterrole-binding -n app-team1
@@ -67,16 +66,14 @@ kubectl config use-context ek8s
 # 查看node状态
 kubectl get nodes
 
-# 将node标记为不可调度状态
-kubectl cordon ek8s-node-1
-
-# 驱逐节点上的所有pod(腾空节点)
+# 设置节点不可用并驱逐节点上的所有pod(腾空节点)
 ## 节点排水(驱逐节点上的所有pod)
 ## 忽略节点上不能杀死的特定系统Pod,例如:CNI插件,daemonSet
 ## --delete-local-data 清空本地数据
 ## --ignore-daemonsets 忽略daemonsets错误
 ## --force 强制执行
-kubectl drain ek8s-node-1 --delete-local-data --ignore-daemonsets --force
+kubectl drain ek8s-node-1 --delete-local-data --ignore-daemonsets --force # 练习执行
+kubectl drain ek8s-node-1 --ignore-daemonsets --force # 考试执行
 
 # 查看node状态
 kubectl get nodes
@@ -84,7 +81,6 @@ kubectl get nodes
 # 查看污点
 kubectl describe nodes node名 |grep Taints
 # Taints:   node.kubernetes.io/unreachable:NoSchedule
-
 ```
 
 
