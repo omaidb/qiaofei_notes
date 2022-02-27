@@ -515,3 +515,64 @@ kubectl logs bar|grep file-not-found > /opt/KUTR0010/bar
 ## 第十五题 给pod添加一个边车容器(问题权重7%)
 
 ![image-20220227220026170](image/image-20220227220026170.png)
+
+### 答案
+
+参考 [https://kubernetes.io/zh/docs/concepts/cluster-administration/logging/#sidecar-container-with-logging-agent](https://kubernetes.io/zh/docs/concepts/cluster-administration/logging/#sidecar-container-with-logging-agent)
+
+```bash
+# 先将legacy-app这个pod导出为yaml
+kubectl get pods legacy-app -o yaml > pod.yaml
+
+# 删除legacy-app这个pod
+kubectl delete pods legacy-app
+
+# 边车容器数据共享卷使用emptydir
+```
+
+配置
+
+```yaml
+# 边车容器
+apiVersion: v1
+kind: Pod
+metadata:
+  name: legacy-app
+spec:
+  containers:
+    - name: count
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        - >
+          i=0;
+          while true;
+          do
+            echo "$i: $(date)" >> /var/log/legacy-app.log;
+            sleep 1;
+          done
+      # 挂载卷到容器日志目录
+      volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+    # 添加边车容器
+    - name: sidecar
+      image: busybox
+      args: [/bin/sh, -c, "tail -n+1 -f /var/log/legacy-app.log"]
+      # 挂载卷到容器日志目录
+      volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+  # 两个容器共享数据卷用emptyDir
+  volumes:
+    - name: varlog
+      emptyDir: {}
+```
+
+apply这个pod的yaml
+
+```bash
+kubectl apply -f legacy-app.yaml
+```
+
