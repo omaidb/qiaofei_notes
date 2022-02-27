@@ -250,7 +250,7 @@ kubectl apply -f networkpolicy.yaml
 
 ![image-20220130121208356](image/image-20220130121208356.png)
 
-## 答案
+### 答案
 
 ```bash
 # 切换到指定集群
@@ -262,14 +262,15 @@ kubectl edit deployment front-end
 
 ```yaml
 …
- containers:
- - image: nginx
- imagePullPolicy: Always
- name: nginx
- ports:
- - name: http
- protocol: TCP
- containerPort: 80
+containers:
+- image:  registry/user/image
+  imagePullPolicy: Always
+  name: nginx
+  # 在容器下添加这一段
+  ports:
+  - name: http
+    protocol: TCP
+    containerPort: 80
 …
 ```
 
@@ -282,5 +283,95 @@ NodePort --name=front-end-svc
 
 # 验证svc是否暴露
 kubectl get svc front-end-svc
+```
+
+
+
+## 第七题 Ingress(问题权重: 7%) 
+
+![image-20220227190500759](image/image-20220227190500759.png)
+
+### 答案
+
+参考: [https://kubernetes.io/zh/docs/concepts/services-networking/ingress/](https://kubernetes.io/zh/docs/concepts/services-networking/ingress/)
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pong
+  Namespace: ing-internal
+  # 这是默认的注解
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+# 规则
+  rules:
+    - http:
+        paths:
+        # 访问路径
+          - path: /hello
+            pathType: Prefix
+            backend:
+            # 指定service
+              service:
+                name: hello
+                port:
+                  number: 5678
+```
+
+
+
+验证
+
+```bash
+# apply
+kubectl apply -f ing.yaml
+# 验证
+## 查看ing的ip地址(ip地址可能要等一会儿才出来)
+kubectl get ing -n ing-internal
+## 访问地址
+curl -kL <ingress-ip>/hello
+```
+
+
+
+## 第八题 pod扩容(问题权重4%)
+
+![image-20220227191520775](image/image-20220227191520775.png)
+
+### 答案
+
+```bash
+kubectl scale deployment loadbalancer --replicas=5
+```
+
+## 第九题 nodeSelector(问题权重4%)
+
+![image-20220227191733743](image/image-20220227191733743.png)
+
+### 答案
+
+参考 [https://kubernetes.io/zh/docs/concepts/scheduling-eviction/assign-pod-node/](https://kubernetes.io/zh/docs/concepts/scheduling-eviction/assign-pod-node/)
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-kusc00401
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      imagePullPolicy: IfNotPresent
+  # 添加选择node    
+  nodeSelector:
+    disktype: ssd
+```
+
+验证
+
+```bash
+kubectl get pod nginx-kusc00401 -o wide
 ```
 
