@@ -51,9 +51,39 @@ test   4/4     Running   0          2m17s
 
 ```bash
 # ssh登录到node1
+ssh node1
 
+# 查看配置文件中的静态pod路径staticPodPath: /etc/kubernetes/manifests
+cat /var/lib/kubelet/config.yaml
 
-## 暂时不会
+# 在staticPodPath中创建static-web.yaml
+touch /etc/kubernetes/manifests/static-web.yaml
+```
+
+static-web.yaml文件示例
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  # 静态pod的名称
+  name: static-web
+  labels:
+    # 标签
+    role: myrole
+spec:
+  containers:
+    # 容器名
+    - name: web
+      # 镜像名
+      image: nginx
+```
+
+查看静态pod
+
+```bash
+[master root ~]# kubectl get po|grep -i static-web
+static-web-node   1/1     Running   0          6m10s
 ```
 
 
@@ -65,6 +95,26 @@ test   4/4     Running   0          2m17s
 ### 答案
 
 ```yaml
-
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: test
+  name: test
+spec:
+  containers:
+  - image: nginx
+    name: test
+    args:
+      - /bin/bash
+      - -c
+      - touch /tmp/test.sock; sleep 600; 
+    livenessProbe:
+      exec:
+        command:
+          - cat
+          - /tmp/test.sock
+      initialDelaySeconds: 0
+      periodSeconds: 1
 ```
 
