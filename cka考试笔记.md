@@ -171,9 +171,10 @@ snapshot save /data/backup/etcd-snapshot.db
 systemctl stop etcd
 
 1.1. 确认下etcd数据目录
+##考试环境的etcd是二进制搭建的,数据目录是{/var/lib/etcd}
 systemctl cat etcd # --data-dir=数据目录
 
-#考试环境的etcd是二进制搭建的,数据目录是{/var/lib/etcd}
+# 如果是容器搭建的直接备份静态pod目录
 1.2. 备份静态pod⽂件后，过⼀会容器会⾃动停⽌
 mv /etc/kubernetes/manifests /etc/kubernetes/manifests.bak
 
@@ -186,9 +187,11 @@ etcdctl --endpoints=https://127.0.0.1:2379 \
 snapshot restore /data/backup/etcd-snapshot-previous.db --data-dir=/var/lib/etcd
 
 3.1. 可能要设置etcd数据目录的属主和属组
+# 如果是二进制安装的,建议执行
 chown -R etcd.etcd /var/lib/etcd
 
 4.启动etcd服务或容器
+# 如果是二进制安装的要执行
 systemctl start etcd
 
 4.1. 把静态pod⽂件夹移回来 过⼀会就可以启动了
@@ -209,11 +212,11 @@ kubectl get pods
 # 切换到指定k8s集群
 kubectl config use-context hk8s
 
-# 编辑资源清单
-vi networkpolicy.yaml
-
 # 给命名空间打标签
 kubectl label namespace big-corp name=big-corp
+
+# 编辑资源清单
+vi networkpolicy.yaml
 ```
 
 编辑资源清单
@@ -222,19 +225,29 @@ kubectl label namespace big-corp name=big-corp
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
+  # 网络策略名称
   name: allow-port-from-namespace
+  # 所在命名空间
   namespace: corp-net
 spec:
+  # pod选择,所有
   podSelector: {}
   policyTypes:
+    # 流方向
     - Ingress
+  # 入pod方向
   ingress:
+    # 从哪来
     - from:
+        # 从哪个ns来
         - namespaceSelector:
+            # 匹配ns的label
             matchLabels:
               name: big-corp
       ports:
+        # 允许的协议
         - protocol: TCP
+      # 允许的端口
       port: 9200
 ```
 
