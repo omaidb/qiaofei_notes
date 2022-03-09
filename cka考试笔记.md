@@ -109,8 +109,8 @@ kubelet version
 # 切换到ek8s集群
 kubectl config use-context ek8s
 
-# 标记节点为不可调度并驱逐节点上的所有pod(腾空节点)
-kubectl darin k8s-master-0 --ignore-daemonsets
+# 标记节点为不可调度并驱逐节点上的所有pod(节点排水)
+kubectl drain k8s-master-0 --ignore-daemonsets
 
 # 升级kubeadm到指定版本
 apt update && apt-mark unhold kubeadm && apt install kubeadm=1.22.2-00
@@ -154,15 +154,16 @@ kubectl get node
 ### 答案
 
 ```bash
-# 备份etcd
-## 设置ETCDCTL_API版本
+# 设置ETCDCTL_API版本
 ETCDCTL_API=3 
+
+# 备份etcd
 etcdctl \
---endpoints=127.0.0.1:2379 \
+--endpoints=https://127.0.0.1:2379 \
 --cacert=/opt/KUIN00601/ca.crt \
 --cert=/opt/KUIN00601/etcd-client.crt \
 --key=/opt/KUIN00601/etcd-client.key \
-snapshot save /var/lib/backup/etcd-snapshot.db
+snapshot save /data/backup/etcd-snapshot.db
 
 # etcd还原
 ## 如果etcd是二进制安装的,那么需要systemctl暂停etcd,
