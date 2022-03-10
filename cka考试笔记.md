@@ -274,6 +274,10 @@ kubectl config use-context k8s
 kubectl edit deployment front-end
 ```
 
+修改deployment
+
+参考: [https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/)
+
 ```yaml
 …
 containers:
@@ -289,6 +293,8 @@ containers:
 ```
 
 暴露service
+
+参考: []()
 
 ```bash
 # 暴露svc
