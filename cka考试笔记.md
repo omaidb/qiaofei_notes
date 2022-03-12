@@ -235,7 +235,7 @@ kubectl get pods
 
 ## 第五题 网络策略（问题权重： 7%）  
 
-创建一个`NetworkPolicy`,允许`namespace` `corp-net`中的pods连接到`namespace` `corp-net`中的pods的端口`9200`
+创建一个名为`allow-port-from-namespace`的`NetworkPolicy`,允许`namespace` `corp-net`中的pods连接到`namespace` `corp-net`中的pods的端口`9200`
 
 `源ns`是`corp-bar`，`目的地ns`是`foobar`,端口是`9200`
 
