@@ -100,7 +100,7 @@ kubectl describe nodes node名 |grep Taints
 
 ## 第三题 升级 K8s 版本（问题权重： 7%）  
 
-现有的Kubernetes集权正在运行的版本是`1.22.0`，仅将主节点上的所有kubernetes控制面板和组件升级到版本`1.22.2`   另外，`在主节点上升级kubelet和kubectl`
+现有的Kubernetes集权正在运行的版本是`1.22.0`，仅将主节点上的所有kubernetes控制面板和组件升级到版本`1.22.2`   另外，`在主节点上升级kubelet和kubectl`,但不要升级`etcd`
 
 
 
