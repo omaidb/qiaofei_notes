@@ -181,6 +181,9 @@ CA证书:  /opt/KUIN00601/ca.crt
 # 设置ETCDCTL_API版本
 ETCDCTL_API=3 
 
+# 设置下etcdctl别名,后面就可以不用加这么长的参数了
+alias etcdctl='etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/opt/KUIN00601/ca.crt --cert=/opt/KUIN00601/etcd-client.crt --key=/opt/KUIN00601/etcd-client.key'
+
 # 备份etcd
 etcdctl \
 --endpoints=https://127.0.0.1:2379 \
