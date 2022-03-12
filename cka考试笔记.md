@@ -194,6 +194,7 @@ snapshot save /data/backup/etcd-snapshot.db
 
 # etcd还原
 ## 如果etcd是二进制安装的,那么需要systemctl暂停etcd,
+systemctl status etcd
 1.⾸先停止etcd、api容器或服务
 systemctl stop etcd
 
@@ -202,6 +203,9 @@ systemctl stop etcd
 systemctl cat etcd # --data-dir=数据目录
 
 # 如果是容器搭建的直接备份静态pod目录
+## 检查是否容器运行etcd
+kubectl get po -A|grep etcd
+
 1.2. 备份静态pod⽂件后，过⼀会容器会⾃动停⽌
 mv /etc/kubernetes/manifests /etc/kubernetes/manifests.bak
 
