@@ -12,6 +12,16 @@ tags:
 
 ![image-20220130115314034](image/image-20220130115314034.png)
 
+创建`deployment-clusterrole`且仅允许创建以下资源类型的新`ClusterRole`:
+
+- `Deployment`
+- `StatefulSet`
+- `DaemonSet`
+
+在现有的namespace `app-team1`中创建一个名为`cicd-token`的新`ServiceAccount`
+
+限于namespace `app-team1`中,将新的ClusterRole `deployment-clusterrole`绑定到新的ServiceAccount `cicd-token`
+
 
 
 ### 答案:
