@@ -21,10 +21,10 @@ choco install nodejs-lts -y
 ## 安装hexo
 
 ```bash
-npm install -g hexo-cli
+npm install hexo-cli -g
 npm install hexo
 
-# 部署hexo时需要的插件
+# 安装hexo部署插件
 npm install hexo-deployer-git --save
 
 # 安装hexo-server，用于预览静态网站
@@ -36,16 +36,16 @@ npm install hexo-server --save
 ## 建站
 
 ```bash
-# 初始化站点
-mkdir blog && cd blog
-hexo init
-npm install
-
 # clone代码库
 git clone https://github.com/omaidb/omaidb.github.io.git
 
 # cd 到你的githubpage目录下
 cd omaidb.github.io
+
+# 初始化站点
+mkdir blog && cd blog
+hexo init
+npm install
 
 # 将blog目录下的文件全部拷贝到git项目下,拷贝完成后可以删除blog目录
 
@@ -67,7 +67,20 @@ hexo new [layout] <title>
 
 # 示例
 hexo new "文章标题"
+
+# 编辑这个文章
+source\_posts\hexo部署gitpage.md
 ```
+
+
+
+## 创建一个about me页面
+
+```bash
+hexo new page --path about/me "About me"
+```
+
+
 
 
 
@@ -90,6 +103,9 @@ hexo g -d
 
 ```bash
 hexo publish [layout] <filename>
+
+# 示例
+hexo publish "文章标题"
 ```
 
 
@@ -97,16 +113,17 @@ hexo publish [layout] <filename>
 ## 预览
 
 ```bash
-hexo server
+hexo s
 # 会打开http://localhost:4000/
 ```
 
 
 
-## 部署
+## 常见问题:部署后,网页仍未更新
 
 ```bash
-hexo deploy
+# 解决办法清除缓存和已生成的静态文件
+hexo clean && hexo g -d
 ```
 
 

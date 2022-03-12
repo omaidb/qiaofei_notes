@@ -151,6 +151,20 @@ kubectl get node
 
 ![image-20220130120420553](image/image-20220130120420553.png)
 
+监听地址: https://127.0.0.1:2379
+
+CA证书:  /opt/KUIN00601/ca.crt
+
+客户端证书: /opt/KUIN00601/etcd-client.crt
+
+客户端密钥: /opt/KUIN00601/etcd-client.key
+
+备份存储位置: /data/backup/etcd-snapshot.db
+
+现有备份位置: /data/backup/etcd-snapshot-previous.db
+
+
+
 ### 答案
 
 ```bash
@@ -204,7 +218,11 @@ kubectl get pods
 
 ## 第五题 网络策略（问题权重： 7%）  
 
-![image-20220130120946148](image/image-20220130120946148.png)
+创建一个`NetworkPolicy`,允许`namespace` `corp-net`中的pods连接到`namespace` `corp-net`中的pods的端口`9200`
+
+`源ns`是`corp-bar`，`目的地ns`是`foobar`,端口是`9200`
+
+
 
 ###  答案
 
@@ -212,8 +230,8 @@ kubectl get pods
 # 切换到指定k8s集群
 kubectl config use-context hk8s
 
-# 给命名空间打标签
-kubectl label namespace big-corp name=big-corp
+# 给源命名空间打标签
+kubectl label namespace corp-bar ns=corp-bar
 
 # 编辑资源清单
 vi networkpolicy.yaml
@@ -227,8 +245,8 @@ kind: NetworkPolicy
 metadata:
   # 网络策略名称
   name: allow-port-from-namespace
-  # 所在命名空间
-  namespace: corp-net
+  # 目的地命名空间
+  namespace: foobar
 spec:
   # pod选择,所有
   podSelector: {}
@@ -239,16 +257,16 @@ spec:
   ingress:
     # 从哪来
     - from:
-        # 从哪个ns来
+        # 标签选择从哪个ns来
         - namespaceSelector:
             # 匹配ns的label
             matchLabels:
-              name: big-corp
+              ns: corp-bar
       ports:
         # 允许的协议
         - protocol: TCP
-      # 允许的端口
-      port: 9200
+          # 允许的端口
+          port: 9200
 ```
 
 apply资源清单
@@ -278,6 +296,8 @@ kubectl edit deployment front-end
 
 参考: [https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/)
 
+![image-20220312180056428](image/cka%E8%80%83%E8%AF%95%E7%AC%94%E8%AE%B0/image-20220312180056428.png)
+
 ```yaml
 …
 containers:
@@ -287,14 +307,14 @@ containers:
   # 在容器下添加这一段
   ports:
   - name: http
-    protocol: TCP
+  	# 注意P是大写
     containerPort: 80
 …
 ```
 
 暴露service
 
-参考: []()
+参考: [kubectl expose命令用法](https://kubernetes.io/zh/docs/tutorials/stateless-application/expose-external-ip-address/)
 
 ```bash
 # 暴露svc
@@ -314,6 +334,15 @@ kubectl get svc front-end-svc
 ### 答案
 
 参考: [https://kubernetes.io/zh/docs/concepts/services-networking/ingress/](https://kubernetes.io/zh/docs/concepts/services-networking/ingress/)
+
+```bash
+# 通过命令行创建yaml
+kubectl -n ing-internal create ingress pong --rule=/hello=hello:5678 --dry-run=client -o yaml > ing.yaml
+```
+
+
+
+yaml文件
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -384,9 +413,9 @@ spec:
     - name: nginx
       image: nginx
       imagePullPolicy: IfNotPresent
-  # 添加选择node    
+  # 添加选择node,和容器字段对齐   
   nodeSelector:
-    disktype: ssd
+    disk: ssd
 ```
 
 验证
@@ -394,6 +423,8 @@ spec:
 ```bash
 kubectl get pod nginx-kusc00401 -o wide
 ```
+
+
 
 ## 第十题 统计准备就绪的node数量
 
