@@ -263,7 +263,7 @@ metadata:
   # 网络策略名称
   name: allow-port-from-namespace
   # 目的地命名空间
-  namespace: foobar
+  namespace: my-app
 spec:
   # pod选择,所有
   podSelector: {}
@@ -278,7 +278,7 @@ spec:
         - namespaceSelector:
             # 匹配ns的label
             matchLabels:
-              ns: corp-bar
+              project: fubar
       ports:
         # 允许的协议
         - protocol: TCP
