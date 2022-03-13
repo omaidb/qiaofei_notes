@@ -340,6 +340,9 @@ NodePort --name=front-end-svc
 
 # 验证svc是否暴露
 kubectl get svc front-end-svc
+
+# 验证NodePort端口是否可以访问
+curl 127.0.0.1:NodePort端口号
 ```
 
 
