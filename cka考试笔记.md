@@ -614,6 +614,41 @@ kubectl logs bar|grep file-not-found > /opt/KUTR0010/bar
 
 参考 [https://kubernetes.io/zh/docs/concepts/cluster-administration/logging/#sidecar-container-with-logging-agent](https://kubernetes.io/zh/docs/concepts/cluster-administration/logging/#sidecar-container-with-logging-agent)
 
+
+
+先创建练习用的pod
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: legacy-app
+spec:
+  containers:
+  - name: count
+    image: busybox
+    args:
+    - /bin/sh
+    - -c
+    - >
+      i=0;
+      while true;
+      do
+        echo "$i: $(date)" >> /var/log/legacy-app.log;
+        sleep 1;
+      done
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  volumes:
+  - name: varlog
+    emptyDir: {}
+```
+
+
+
+导出运行中的yaml,进行边车容器的修改
+
 ```bash
 # 先将legacy-app这个pod导出为yaml
 kubectl get pods legacy-app -o yaml > pod.yaml
