@@ -424,6 +424,14 @@ kubectl scale deployment loadbalancer --replicas=5
 
 ![image-20220227191733743](image/image-20220227191733743.png)
 
+调度一个pod
+
+名称: `nginx-kusc00401`
+
+Image: `nginx`
+
+NodeSelector: `disk=ssd`
+
 ### 答案
 
 参考 [https://kubernetes.io/zh/docs/concepts/scheduling-eviction/assign-pod-node/](https://kubernetes.io/zh/docs/concepts/scheduling-eviction/assign-pod-node/)
