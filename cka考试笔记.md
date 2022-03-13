@@ -660,11 +660,17 @@ kubectl logs -f legacy-app sidecar
 
 ![image-20220227222818586](image/image-20220227222818586.png)
 
+`kubectl config use-context k8s`
+
+通过pod的标签 `name=cpu-loader`,找到运行时占用大量cpu的pod,并将占用cpu最高的pod写入到文件`/opt/KUTR0040/KUTR00401.txt`
+
+
+
 ### 答案
 
 ```bash
 # 按cpu使用率对pod进行排序
-kubectl top pod -l name=cpu-utilizer --sort-by="cpu" -A
+kubectl top pod -l name=cpu-cpu-loader --sort-by="cpu" -A
 
 # 将cpu使用率第一的pod名写入到/opt/KUTR0040/KUTR00401.txt
 echo "<podname>" > /opt/KUTR0040/KUTR00401.txt
