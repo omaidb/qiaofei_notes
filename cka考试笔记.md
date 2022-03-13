@@ -326,7 +326,7 @@ containers:
   # 在容器下添加这一段
   ports:
   - name: http
-  	# 注意P是大写
+	# 注意P是大写
     containerPort: 80
 …
 ```
