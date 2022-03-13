@@ -532,6 +532,14 @@ kubectl get pv
 
 ![image-20220227212016047](image/image-20220227212016047.png)
 
+创建一个pvc,名称为: `pv-volume` ,Class: `csi-hostpath-sc` , 容量 `10Mi` ;
+
+创建一个新pod, 此pod作挂在pvc, pod名: `web-server` , image: `nginx` , 挂载路径 `/usr/share/nginx/html`; volume权限: `ReadWriteOnce`权限;
+
+`kubectl edit`将容量扩展为`70Mi`,并记录此更改.
+
+
+
 参考: [https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#创建-persistentvolumeclaim](https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#创建-persistentvolumeclaim)
 
 ### 答案
