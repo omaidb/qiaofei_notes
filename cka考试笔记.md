@@ -649,7 +649,11 @@ spec:
 apply这个pod的yaml
 
 ```bash
+# apply
 kubectl apply -f legacy-app.yaml
+
+# 验证边车容器是否读到日志
+kubectl logs -f legacy-app sidecar
 ```
 
 ## 第十六题 统计使用CPU最高的Pod(问题权重5%)
