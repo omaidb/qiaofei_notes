@@ -299,6 +299,8 @@ kubectl apply -f networkpolicy.yaml
 
 ![image-20220130121208356](image/image-20220130121208356.png)
 
+创建一个名为`front-end-svc`的新服务,以公开容器端口的http,选择NodePort
+
 ### 答案
 
 ```bash
