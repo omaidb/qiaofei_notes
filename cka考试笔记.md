@@ -454,7 +454,7 @@ kubectl get pod nginx-kusc00401 -o wide
 ### 答案
 
 ```bash
-# 查看下有哪些几点就绪并且没有污点
+# 查看下有哪些节点就绪并且没有污点
 kubectl describe node|greo Taint
 
 # 然后写入到指定的记事本中
@@ -485,6 +485,8 @@ spec:
 ## 第十二题 创建pv(问题权重4%)
 
 ![image-20220227210132544](image/image-20220227210132544.png)
+
+创建名为: `app-data`的pv,容量为`2Gi`,访问模式为`ReadWriteOnce`. volume类型为`hostPath`,位于`/srv/app-data`.
 
 ### 答案
 
