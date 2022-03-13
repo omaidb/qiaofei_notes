@@ -235,9 +235,9 @@ kubectl get pods
 
 ## 第五题 网络策略（问题权重： 7%）  
 
-创建一个名为`allow-port-from-namespace`的`NetworkPolicy`,允许`namespace` `corp-net`中的pods连接到`namespace` `corp-net`中的pods的端口`9200`
+创建一个名为`allow-port-from-namespace`的`NetworkPolicy`,允许`namespace` `fubar`中的pods连接到`namespace` `my-app`中的pods的端口`9200`
 
-`源ns`是`corp-bar`，`目的地ns`是`foobar`,端口是`9200`
+`源ns`是`fubar`，`目的地ns`是`my-app`,端口是`9200`
 
 
 
@@ -248,7 +248,7 @@ kubectl get pods
 kubectl config use-context hk8s
 
 # 给源命名空间打标签
-kubectl label namespace corp-bar ns=corp-bar
+kubectl label namespace fubar project=fubar
 
 # 编辑资源清单
 vi networkpolicy.yaml
