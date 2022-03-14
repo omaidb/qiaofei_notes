@@ -474,6 +474,8 @@ kubectl describe node|greo Taint
 
 ![image-20220227205508472](image/image-20220227205508472.png)
 
+创建一个名为`kuncc4`的pod,在pod里运行3个容器,`nginx`+`redis`+`memcached`
+
 ### 答案
 
 ```yaml
