@@ -412,12 +412,12 @@ curl -kL <ingress-ip>/hello
 
 ## 第八题 pod扩容(问题权重4%)
 
-![image-20220227191520775](image/image-20220227191520775.png)
+将Deployment `front-end`的副本数扩展只`5`个pod
 
 ### 答案
 
 ```bash
-kubectl scale deployment loadbalancer --replicas=5
+kubectl scale deployment front-end --replicas=5
 ```
 
 ## 第九题 nodeSelector(问题权重4%)
