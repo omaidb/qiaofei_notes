@@ -299,6 +299,8 @@ kubectl apply -f networkpolicy.yaml
 
 ![image-20220130121208356](image/image-20220130121208356.png)
 
+请重新配置现有的deployment `front-end`并添加名为`http`的端口范围来公开现有容器nginx的端口`80/tcp`.
+
 创建一个名为`front-end-svc`的新服务,以公开容器端口的http,选择NodePort
 
 ### 答案
