@@ -112,17 +112,55 @@ yum install trojan
 wget https://ghproxy.com/https://github.com/trojan-gfw/trojan/releases/download/v1.16.0/trojan-1.16.0-linux-amd64.tar.xz
 
 # 解压
-tar xvf trojan-1.16.0-linux-amd64.tar.xz -C /opt/
+tar xvf trojan-1.16.0-linux-amd64.tar.xz
+
+# 移动主程序到/usr/bin/
+cd trojan/trojan /usr/bin/
 ```
 
 <br/>
 
 ### 创建配置文件
 ```bash
-cd /opt/trojan && touch config.json
+mkdir -p /etc/trojan && touch /etc/trojan/config.json
 
 # 从从官网获取config配置,粘贴到config.json中
 ```
+
+###  开机自启service文件
+
+将下列内容写入`/usr/lib/systemd/system/trojan.service`文件中
+
+```bash
+[Unit]
+# 服务的定义描述
+Description=trojan
+Documentation=man:trojan(1) https://trojan-gfw.github.io/trojan/config https://trojan-gfw.github.io/trojan/
+# 服务启动的前置条件
+After=network.target network-online.target nss-lookup.target
+
+[Service]
+# service类型
+Type=simple
+StandardError=journal
+# 由哪个用户运行
+User=nobody
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+# 需要启动的程序
+ExecStart=/usr/bin/trojan /etc/trojan/config.json
+
+ExecReload=/bin/kill -HUP $MAINPID
+# 重启策略,失败时重启
+Restart=on-failure
+# 重启间隔时间
+RestartSec=1s
+
+[Install]
+# 定义service放在哪个target里面
+WantedBy=multi-user.target
+```
+
+
 
 <br/>
 
@@ -243,3 +281,6 @@ telnet 127.0.0.1 1080
 export ALL_PROXY=socks5://127.0.0.1:1080
 # 如果想开机自启,写入到`.bashrc`中
 ```
+
+
+
