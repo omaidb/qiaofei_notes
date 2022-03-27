@@ -49,7 +49,38 @@ web    1/1     Running   0          2m41s   100.104.217.1   n2     <none>       
 ### 答案
 
 ```bash
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cache
+spec:
+  selector:
+    matchLabels:
+      app: store
+  # 副本数3
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: store
+    spec:
+      affinity:
+        # pod反亲和
+        podAntiAffinity:
+          # 硬需求/硬策略
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              # 禁止在同一node上部署多个标签为app=strore的副本
+              - key: app
+                operator: In
+                values:
+                - store
+            # 用主机名来作为拓扑域
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: redis-server
+        image: redis:3.2-alpine
 ```
 
 ## 3.查看集群中状态为ready的node数量,并将结果写到指定文件
