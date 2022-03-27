@@ -48,7 +48,7 @@ web    1/1     Running   0          2m41s   100.104.217.1   n2     <none>       
 
 ### 答案
 
-```bash
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
