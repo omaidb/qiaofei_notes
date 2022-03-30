@@ -1,7 +1,7 @@
 ---
 title: Centos8安装trojan
 date: 2022-02-22 22:18:06
-tags:
+tags: Centos
 ---
 
 ## yum安装前置代理

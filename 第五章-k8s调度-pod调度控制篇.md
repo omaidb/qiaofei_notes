@@ -1,3 +1,9 @@
+---
+title: 第五章-k8s调度-pod调度控制篇
+date: 2022-03-30 12:45:51
+tags: k8s
+---
+
 ## 1. 创建一个pod,分配到指定标签node上
 
 - pod名: web
@@ -17,7 +23,6 @@ kubectl label node n2 disk=ssd
 apiVersion: v1
 kind: Pod
 metadata:
-  creationTimestamp: null
   labels:
     run: web
   name: web

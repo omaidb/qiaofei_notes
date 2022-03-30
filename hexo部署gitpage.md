@@ -1,10 +1,8 @@
 ---
 title: hexo部署gitpage
-date: 2022-02-22 22:14:32
-tags:
+date: 2022-03-10 22:45:51
+tags: hexo
 ---
-
-
 
 参考: https://hexo.io/zh-cn/docs/setup
 
@@ -29,6 +27,15 @@ npm install hexo-deployer-git --save
 
 # 安装hexo-server，用于预览静态网站
 npm install hexo-server --save
+
+# 安装本地搜索插件
+npm install hexo-generator-searchdb --save
+
+# 安装文章字数统计及阅读时常功能
+npm install hexo-wordcount --save
+
+# 安装图片显示插件(实测没用)
+npm install hexo-asset-img --save
 ```
 
 
@@ -127,3 +134,15 @@ hexo clean && hexo g -d
 ```
 
 
+
+
+
+## 其他美化
+
+参考: [hexo-next主题配置](https://blog.csdn.net/as480133937/article/details/100138838)
+
+
+
+## hexo不显示图片
+
+找好久,有让装插件的,有改Typora图片路径的,但是都不奏效哈.头疼,还没解决.

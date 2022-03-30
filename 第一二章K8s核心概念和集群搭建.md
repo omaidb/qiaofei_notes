@@ -1,4 +1,9 @@
-# 第一章和第二章: K8s核心概念和集群搭建
+---
+title: 第一二章K8s核心概念和集群搭建
+date: 2022-03-30 12:15:51
+tags: k8s
+---
+
 
 ## 1. 搭建一个k8s集群
 
@@ -48,7 +53,7 @@ kubectl expose deployment web --port=80 --target-port=80 --type=NodePort
 <title>Welcome to nginx!</title>
 ```
 
-![image-20220308223002494](image/第一二章作业/image-20220308223002494.png)
+
 
 ## 3.列出命名空间下指定标签pod
 
@@ -71,4 +76,3 @@ NAME                       READY   STATUS    RESTARTS      AGE   LABELS
 coredns-78fcd69978-8kjtl   1/1     Running   1 (10d ago)   12d   k8s-app=kube-dns,pod-template-hash=78fcd69978
 coredns-78fcd69978-jkxkd   1/1     Running   1 (10d ago)   12d   k8s-app=kube-dns,pod-template-hash=78fcd69978
 ```
-
