@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Deployment名
+  name: nfs-client-provisioner
+  labels:
+    app: nfs-client-provisioner
+  # 部署到哪个命名空间
+  namespace: storage
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      # 使用哪个服务账号
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          # image: lizhenliang/nfs-subdir-external-provisioner:v4.0.1
+          image: k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: k8s-sigs.io/nfs-subdir-external-provisioner
+            - name: NFS_SERVER
+              # NFS服务器地址
+              value: 192.168.31.63
+            - name: NFS_PATH
+              # NFS服务器share目录
+              value: /ifs/kubernetes
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            # NFS服务器地址
+            server: 192.168.31.63
+            # NFS服务器share目录
+            path: /ifs/kubernetes

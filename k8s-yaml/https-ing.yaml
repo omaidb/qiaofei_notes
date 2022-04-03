@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: edu
+  annotations:
+    # 指定下ingress控制器,不然域名访问不了
+    kubernetes.io/ingress.class: "nginx"
+
+spec:
+  tls:
+  - host: web.edu.cn
+    secretName: 证书名 # 这里填写证书名
+  rules:
+    - host: web.edu.cn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: edu
+                port:
+                  number: 443

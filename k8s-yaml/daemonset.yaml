@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+spec:
+  selector:
+    matchLabels:
+      name: fluentd-elasticsearch
+  template:
+    metadata:
+      labels:
+        name: fluentd-elasticsearch
+    spec:
+      # 容忍
+      tolerations:
+        # 容忍所有effect值
+        # 容忍所有effect值为NoSchedule的污点
+        - effect: NoSchedule
+          operator: Exists
+        # 容忍所有effect值为PreferNoSchedule的污点
+        - effect: PreferNoSchedule
+          operator: Exists
+        # 容忍所有effect值为NoExecute的污点
+        - effect: NoExecute
+          operator: Exists
+      # 关闭程序前的缓冲时间
+      terminationGracePeriodSeconds: 30
+
+      containers:
+        - name: fluentd-elasticsearch
+          image: quay.io/fluentd_elasticsearch/fluentd:v2.5.2
+          resources:
+            limits:
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers

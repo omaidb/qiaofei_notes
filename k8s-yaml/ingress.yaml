@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pong
+  Namespace: ing-internal
+  # 这是默认的注解
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+# 规则
+  rules:
+    - http:
+        paths:
+        # 访问路径
+          - path: /hello
+            pathType: Prefix
+            backend:
+            # 指定service
+              service:
+                name: hello
+                port:
+                  number: 5678

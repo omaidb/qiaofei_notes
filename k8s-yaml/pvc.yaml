@@ -1,0 +1,39 @@
+---
+# 创建pvc
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # pvc名称
+  name: pv-volume
+# 存储类名称
+spec:
+  storageClassName: csi-hostpath-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+
+---
+# 创建pod
+apiVersion: v1
+kind: Pod
+metadata:
+  # pod名称
+  name: web-server
+spec:
+  # 使用pvc声明一个卷
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: pv-volume
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: http-server
+      # 挂在卷到容器中的目录
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: data

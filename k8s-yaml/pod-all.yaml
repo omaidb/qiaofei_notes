@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: apiserver
+  labels:
+    env: test
+spec:
+  containers:
+    - name: apiserver
+      image: apiserver
+      imagePullPolicy: IfNotPresent
+  # 污点容忍
+  tolerations:
+    # 容忍所有effect值为NoSchedule的污点
+    - effect: NoSchedule
+      operator: Exists
+    # 容忍污点key值CriticaAddonsOnly存在
+    - key: CriticaAddonsOnly
+      operator: Exists
+    # 容忍所有effect值为NoExecute的污点
+    - effect: NoExecute
+      operator: Exists

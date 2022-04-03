@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-client
+provisioner: k8s-sigs.io/nfs-subdir-external-provisioner # 或选择其他名称，必须与部署的环境 PROVISIONER_NAME 匹配
+parameters:
+  # 启用PV归档模式 true|false
+  archiveOnDelete: "false"

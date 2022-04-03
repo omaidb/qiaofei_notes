@@ -1,0 +1,15 @@
+---
+# 创建pvc
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # pvc名称
+  name: pv-volume
+spec:
+  # 存储类名称
+  storageClassName: nfs-client
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi # pvc容量

@@ -1,0 +1,71 @@
+---
+# 使用NFS创建一个pv
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # 创建的PV的名字
+  name: mypv
+spec:
+  capacity:
+    storage: { 2:<Size> } # 声明存储大小,例如 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    # ReadWriteOnce：读写权限、并且只能被单个Node挂载
+    # ReadWriteMany：读写权限，允许被多个Node挂载
+    # ReadOnlyMany：只读权限，允许被多个Node挂载
+    - ReadWriteOnce
+  # pv回收策略:
+  # A. `Retain`模式：`PVC`删除后，PV依然存在
+  # C. `Delete`模式：`PVC`删除后，PV同时被删除
+  # D. `Recycle`模式：`PVC`删除后，PV可再次使用
+  persistentVolumeReclaimPolicy: Recycle
+  # 将NFS挂载为PV
+  nfs:
+    # NFS服务器存储目录
+    path: /tmp
+    # NFS服务器地址
+    server: 172.17.0.2
+---
+# 使用pvc绑定pv
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # 创建的PVC存储的名字
+  name: mypvc
+spec:
+  resources:
+    requests:
+      storage: { 2:<Size> } # 传入需要的存储容量,不能大于PV的容量
+  volumeMode: Filesystem
+  # ReadWriteOnce：读写权限、并且只能被单个Node挂载
+  # ReadWriteMany：读写权限，允许被多个Node挂载
+  # ReadOnlyMany：只读权限，允许被多个Node挂载
+  accessModes:
+    - ReadWriteOnce
+---
+# pod绑定pvc
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp
+spec:
+  containers:
+    - name: myapp
+      image: <Image>
+      volumeMounts:
+        - mountPath: Path to mount # 容器中的挂载点(挂砸到容器中的哪个目录)
+          name: pod-data # 从哪个volumes挂载
+      # pod资源限制
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: <Port> # 容器暴露的端口
+  # 使用PVC声明一个volumes(存储卷)
+  volumes:
+    - name: pod-data # 存储卷的名字
+      persistentVolumeClaim:
+        claimName: mypvc # 要使用的pvc的名字

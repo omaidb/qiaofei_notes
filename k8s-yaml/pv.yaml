@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # pv的名字
+  name: app-data
+spec:
+  capacity:
+  # 存储的大小
+    storage: 2Gi
+    # 读取的模式
+  accessModes:
+    - ReadWriteOnce
+    # hostpath路径
+  hostPath:
+    path: “/srv/app-data”

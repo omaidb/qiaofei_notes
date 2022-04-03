@@ -1,0 +1,35 @@
+# 边车容器
+apiVersion: v1
+kind: Pod
+metadata:
+  name: legacy-app
+spec:
+  containers:
+    - name: count
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        - >
+          i=0;
+          while true;
+          do
+            echo "$i: $(date)" >> /var/log/legacy-app.log;
+            sleep 1;
+          done
+      # 挂载卷到容器日志目录
+      volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+    # 添加边车容器
+    - name: sidecar
+      image: busybox
+      args: [/bin/sh, -c, "tail -n+1 -f /var/log/legacy-app.log"]
+      # 挂载卷到容器日志目录
+      volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+  # 两个容器共享数据卷用emptyDir
+  volumes:
+    - name: varlog
+      emptyDir: {}

@@ -1,0 +1,11 @@
+…
+containers:
+- image:  registry/user/image
+  imagePullPolicy: Always
+  name: nginx
+  # 在容器下添加这一段
+  ports:
+  - name: http
+    protocol: TCP
+    containerPort: 80
+…
