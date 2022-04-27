@@ -39,20 +39,20 @@ mv /usr/include/openssl /usr/include/openssl.bak
 
 # 安装 openssl
 cd /usr/local/src/$OPENSSL_VERSION/ || exit
-./config --prefix=/usr/local/ssl -d shared
+./config --prefix=/usr/local/openssl -d shared
 make -j && make install
 
 # 创建软连接到/usr/bin/openssl
-ln -s /usr/local/ssl/bin/openssl /usr/bin/openssl
-ln -s /usr/local/ssl/include/openssl /usr/include/openssl
+ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
+ln -s /usr/local/openssl/include/openssl /usr/include/openssl
 
-echo '/usr/local/ssl/lib' >>/etc/ld.so.conf
+echo '/usr/local/openssl/lib' >>/etc/ld.so.conf
 ldconfig -v
 
 # 安装openssh
 mv /etc/ssh /etc/ssh.bak # 备用原ssh
 cd /usr/local/src/$OPENSSH_VERSION/ || exit
-./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/ssl --with-zlib=/usr/local/zlib
+./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-zlib=/usr/local/zlib
 make -j && make install
 
 # 卸载原openssh
