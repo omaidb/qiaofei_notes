@@ -73,8 +73,12 @@ cp /usr/local/openssh/etc/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
 cd /usr/local/src/openssh-9.0p1/contrib/redhat || exit
 cp sshd.init /etc/init.d/sshd
 
+
+# 恢复原来的sshd_config配置
+cp /etc/ssh.bak/sshd_config /etc/ssh/sshd_config
+
 # sshd_config文件修改
-cp /usr/local/openssh/etc/sshd_config /etc/ssh/sshd_config
+# cp /usr/local/openssh/etc/sshd_config /etc/ssh/sshd_config
 # 开启x11转发
 # echo "X11Forwarding yes" >> /etc/ssh/sshd_config
 # X11配置
@@ -82,13 +86,13 @@ cp /usr/local/openssh/etc/sshd_config /etc/ssh/sshd_config
 # X11认证配置
 # echo "XAuthLocation /usr/bin/xauth" >> /etc/ssh/sshd_config
 # 禁用DNS反查,加快ssh登录速度
-echo "UseDNS no" >>/etc/ssh/sshd_config
-# 允许root登录
-echo 'PermitRootLogin yes' >>/etc/ssh/sshd_config
-# 允许密钥登录
-echo 'PubkeyAuthentication yes' >>/etc/ssh/sshd_config
-# 允许密码登录
-echo 'PasswordAuthentication yes' >>/etc/ssh/sshd_config
+# echo "UseDNS no" >>/etc/ssh/sshd_config
+# # 允许root登录
+# echo 'PermitRootLogin yes' >>/etc/ssh/sshd_config
+# # 允许密钥登录
+# echo 'PubkeyAuthentication yes' >>/etc/ssh/sshd_config
+# # 允许密码登录
+# echo 'PasswordAuthentication yes' >>/etc/ssh/sshd_config
 
 # 启动 sshd 并将其加入开机自启
 systemctl stop sshd.service &>/dev/null
