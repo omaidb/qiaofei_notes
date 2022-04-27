@@ -67,6 +67,8 @@ cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
 mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak &>/dev/null
 cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
 mv /etc/ssh/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub.bak &>/dev/null
+
+# 脚本实际执行结果是没有 /etc这个目录
 cp /usr/local/openssh/etc/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
 
 # 复制文件到相应的系统文件夹
@@ -114,7 +116,7 @@ ssh -v
 openssl version
 
 if [ $? -eq 0 ]; then
-    echo -e "\033[32m[INFO] OpenSSH upgraded to 8.4p1  successfully！\033[0m"
+    echo -e "\033[32m[INFO] OpenSSH upgraded to $OPENSSH_VERSION  successfully！\033[0m"
 else
-    echo -e "\033[31m[ERROR] OpenSSH upgraded to 8.4p1 faild！\033[0m"
+    echo -e "\033[31m[ERROR] OpenSSH upgraded to $OPENSSH_VERSION faild！\033[0m"
 fi
