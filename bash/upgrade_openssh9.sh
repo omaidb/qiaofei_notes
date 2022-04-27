@@ -8,7 +8,7 @@ OPENSSL_VERSION=openssl-1.1.1n
 ZILB_VERSION=zlib-1.2.11
 
 # 安装编译环境
-yum -y install wget tar gcc make
+yum -y install wget tar gcc make gcc-c++ kernel-devel
 
 # 创建/opt/opensshUpgrade目录
 mkdir -p /opt/opensshUpgrade
@@ -28,8 +28,10 @@ tar xf $OPENSSH_VERSION.tar.gz -C /usr/local/src/
 tar xf $OPENSSL_VERSION.tar.gz -C /usr/local/src/
 tar xf $ZILB_VERSION.tar.gz -C /usr/local/src/
 
+# 卸载原openssh
+yum autoremove openssh -y
+
 # 安装zlib-1.2.11
-yum -y install gcc gcc-c++ kernel-devel
 cd /usr/local/src/$ZILB_VERSION/ || exit
 ./configure --prefix=/usr/local/zlib && make -j && make install
 
@@ -54,9 +56,6 @@ mv /etc/ssh /etc/ssh.bak # 备用原ssh
 cd /usr/local/src/$OPENSSH_VERSION/ || exit
 ./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-zlib=/usr/local/zlib
 make -j && make install
-
-# 卸载原openssh
-yum autoremove openssh -y
 
 # 备份 /etc/ssh 原有文件，并将新的配置复制到指定目录
 mv /usr/sbin/sshd /usr/sbin/sshd.bak &>/dev/null
