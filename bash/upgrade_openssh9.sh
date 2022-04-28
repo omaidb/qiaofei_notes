@@ -8,7 +8,7 @@ OPENSSL_VERSION=openssl-1.1.1n
 ZILB_VERSION=zlib-1.2.11
 
 # 安装编译环境
-yum -y install wget tar gcc make gcc-c++ kernel-devel
+yum -y install wget tar gcc make gcc-c++ kernel-devel openssl-devel pam-devel
 
 # 创建/opt/opensshUpgrade目录
 mkdir -p /opt/opensshUpgrade
@@ -28,16 +28,14 @@ tar xf $OPENSSH_VERSION.tar.gz -C /usr/local/src/
 tar xf $OPENSSL_VERSION.tar.gz -C /usr/local/src/
 tar xf $ZILB_VERSION.tar.gz -C /usr/local/src/
 
-# 卸载原openssh
-yum autoremove openssh -y
 
 # 安装zlib-1.2.11
 cd /usr/local/src/$ZILB_VERSION/ || exit
 ./configure --prefix=/usr/local/zlib && make -j && make install
 
 # 备份老板的openssl和动态库
-mv /usr/bin/openssl /usr/bin/openssl.bak
-mv /usr/include/openssl /usr/include/openssl.bak
+mv /usr/bin/openssl /usr/bin/openssl.old
+mv /usr/include/openssl /usr/include/openssl.old
 
 # 安装 openssl
 cd /usr/local/src/$OPENSSL_VERSION/ || exit
@@ -48,35 +46,60 @@ make -j && make install
 ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
 ln -s /usr/local/openssl/include/openssl /usr/include/openssl
 
+#检查函数库
+ldd /usr/local/openssl/bin/openssl
+
+#添加所缺函数库
 echo '/usr/local/openssl/lib' >>/etc/ld.so.conf
+
+# 更新函数
 ldconfig -v
 
-# 安装openssh
-mv /etc/ssh /etc/ssh.bak # 备用原ssh
-cd /usr/local/src/$OPENSSH_VERSION/ || exit
-./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-zlib=/usr/local/zlib
-make -j && make install
 
 # 备份 /etc/ssh 原有文件，并将新的配置复制到指定目录
-mv /usr/sbin/sshd /usr/sbin/sshd.bak &>/dev/null
+# 备份原ssh
+mv /etc/ssh /etc/ssh.old 
+mv /usr/bin/ssh /usr/bin/ssh.old &>/dev/null
+# 备份原sshd
+mv /usr/sbin/sshd /usr/sbin/sshd.old &>/dev/null
+# 备份原ssh-kegen
+mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.old &>/dev/null
+# 备份原ssh_host_ecdsa_key.pub公钥
+mv /etc/ssh/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub.old &>/dev/null
+
+
+# 备份完成后卸载原openssh
+# yum autoremove openssh -y
+yum erase openssh -y
+
+# 确保openssl升级完,编译安装openssh
+cd /usr/local/src/$OPENSSH_VERSION/ || exit
+./configure --prefix=/usr/local/openssh \
+--sysconfdir=/etc/ssh \
+--mandir=/usr/share/man \
+--with-ssl-dir=/usr/local/openssl \
+--with-zlib=/usr/local/zlib
+
+make -j && make install
+
+
+# 将对应文件复制到指定路径
 cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
-mv /usr/bin/ssh /usr/bin/ssh.bak &>/dev/null
 cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
-
-mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak &>/dev/null
 cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
-mv /etc/ssh/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub.bak &>/dev/null
 
-# 脚本实际执行结果是没有 /etc这个目录
-cp /usr/local/openssh/etc/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
+### 脚本实际执行结果是没有 /etc这个目录!!!
+# cp /usr/local/openssh/etc/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
+# 找不到这个文件就从备份文件中恢复
+cp /etc/ssh/ssh_host_ecdsa_key.pub.old /etc/ssh/ssh_host_ecdsa_key.pub
 
-# 复制文件到相应的系统文件夹
+# 复制启动脚本文件到 /etc/init.d/sshd系统文件夹
 cd /usr/local/src/openssh-9.0p1/contrib/redhat || exit
 cp sshd.init /etc/init.d/sshd
 
 
 # 恢复原来的sshd_config配置
-cp /etc/ssh.bak/sshd_config /etc/ssh/sshd_config
+cp /etc/ssh.old/sshd_config /etc/ssh/sshd_config
 
 # sshd_config文件修改
 # cp /usr/local/openssh/etc/sshd_config /etc/ssh/sshd_config
