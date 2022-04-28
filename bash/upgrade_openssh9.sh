@@ -96,6 +96,13 @@ cp sshd.init /etc/init.d/sshd
 
 # 恢复原来的sshd_config配置
 cp /etc/ssh.old/sshd_config /etc/ssh/sshd_config
+grep -Ev "^$|#" /etc/ssh.old/sshd_config > /etc/ssh/sshd_config
+
+
+## openssh9 提示sshd_config提示不支持的参数
+# GSSAPIAuthentication yes  
+# GSSAPICleanupCredentials no
+# UsePAM yes
 
 # sshd_config文件修改
 # cp /usr/local/openssh/etc/sshd_config /etc/ssh/sshd_config
@@ -118,10 +125,13 @@ cp /etc/ssh.old/sshd_config /etc/ssh/sshd_config
 systemctl stop sshd.service &>/dev/null
 # 删除旧版的sshd服务启动文件
 rm -rf /lib/systemd/system/sshd.service
-# 重新载入systemd
-systemctl daemon-reload
+
 # 复制启动文件到/init.d
 cp /usr/local/src/$OPENSSH_VERSION/contrib/redhat/sshd.init /etc/init.d/sshd
+
+# 修改了服务文件,需要重新载入systemd
+systemctl daemon-reload
+
 # 重新启动sshd
 /etc/init.d/sshd restart
 
