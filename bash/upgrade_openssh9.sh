@@ -83,6 +83,9 @@ cd /usr/local/src/$OPENSSH_VERSION/ || exit
 make -j && make install
 
 
+# sshd禁用scp协议,创建这个文件即可
+/etc/ssh/disable_scp
+
 # 将对应文件复制到指定路径
 cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
 cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
@@ -118,15 +121,21 @@ cp /etc/ssh.old/sshd_config /etc/ssh/sshd_config
 # # 允许密码登录
 # echo 'PasswordAuthentication yes' >>/etc/ssh/sshd_config
 
-# 启动 sshd 并将其加入开机自启
+# 停止旧版 sshd 服务
 systemctl stop sshd.service &>/dev/null
+# 删除旧版的sshd服务启动文件
 rm -rf /lib/systemd/system/sshd.service
+# 重新载入systemd
 systemctl daemon-reload
+# 复制启动文件到/init.d
 cp /usr/local/src/$OPENSSH_VERSION/contrib/redhat/sshd.init /etc/init.d/sshd
+# 重新启动sshd
 /etc/init.d/sshd restart
 
 # 添加开机自启动项
 chkconfig --add sshd
+# 设置开机自启动
+chkconfig sshd on
 systemctl enable --now sshd
 
 # 查看sshd服务是否启动
