@@ -64,9 +64,6 @@ mv /usr/bin/ssh /usr/bin/ssh.old &>/dev/null
 mv /usr/sbin/sshd /usr/sbin/sshd.old &>/dev/null
 # 备份原ssh-kegen
 mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.old &>/dev/null
-# 备份原ssh_host_ecdsa_key.pub公钥
-mv /etc/ssh/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub.old &>/dev/null
-
 
 # 备份完成后卸载原openssh
 # yum autoremove openssh -y
@@ -84,17 +81,13 @@ make -j && make install
 
 
 # sshd禁用scp协议,创建这个文件即可
-/etc/ssh/disable_scp
+touch /etc/ssh/disable_scp
 
 # 将对应文件复制到指定路径
 cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
 cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
 cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
 
-### 脚本实际执行结果是没有 /etc这个目录!!!
-# cp /usr/local/openssh/etc/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
-# 找不到这个文件就从备份文件中恢复
-cp /etc/ssh/ssh_host_ecdsa_key.pub.old /etc/ssh/ssh_host_ecdsa_key.pub
 
 # 复制启动脚本文件到 /etc/init.d/sshd系统文件夹
 cd /usr/local/src/openssh-9.0p1/contrib/redhat || exit
