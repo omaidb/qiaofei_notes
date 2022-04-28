@@ -311,7 +311,3 @@ fi
 # 暂停rpcbind服务--nfs需要依赖rpcbind服务来实现客户端和服务器的路由请求
 systemctl disable --now rpcbind &>/dev/null
 systemctl disable --now rpcbind.socket &>/dev/null
-# systemctl stop rpcbind &>/dev/null
-# systemctl stop rpcbind.socket &>/dev/null
-# systemctl disable rpcbind.socket &>/dev/null
-# systemctl disable rpcbind.socket &>/dev/null
