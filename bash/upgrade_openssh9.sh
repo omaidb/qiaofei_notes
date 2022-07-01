@@ -113,8 +113,8 @@ cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
 
 
 # 复制启动脚本文件到 /etc/init.d/sshd系统文件夹
-cd /usr/local/src/openssh-9.0p1/contrib/redhat || exit
-cp sshd.init /etc/init.d/sshd
+# cd /usr/local/src/openssh-9.0p1/contrib/redhat || exit
+# cp sshd.init /etc/init.d/sshd
 
 
 # 恢复原来的sshd_config配置
@@ -148,24 +148,44 @@ sed -i 's/^UsePAM /# UsePAM yes/' /etc/ssh/sshd_config
 # # 允许密码登录
 # echo 'PasswordAuthentication yes' >>/etc/ssh/sshd_config
 
+
+# 获取旧版sshd进程的pid
+ps -A |grep "sshd"| awk '{print $1}'
+
 # 停止旧版 sshd 服务
 systemctl stop sshd.service &>/dev/null
 # 删除旧版的sshd服务启动文件
 rm -rf /lib/systemd/system/sshd.service
 
-# 复制启动文件到/init.d
-cp /usr/local/src/$OPENSSH_VERSION/contrib/redhat/sshd.init /etc/init.d/sshd
+# 写入新版启动文件
+echo "
+[Unit]
+Description=OpenSSH server daemon
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target sshd-keygen.service
+Wants=sshd-keygen.service
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/sshd
+ExecStart=/usr/sbin/sshd -D $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
+" > /usr/lib/systemd/system/sshd.service
 
 # 修改了服务文件,需要重新载入systemd
 systemctl daemon-reload
 
 # 重新启动sshd
-/etc/init.d/sshd restart
+systemctl Restart sshd
 
 ifCMD
 
-# 添加开机自启动项
-chkconfig --add sshd
 # 设置开机自启动
 systemctl enable --now sshd
 
