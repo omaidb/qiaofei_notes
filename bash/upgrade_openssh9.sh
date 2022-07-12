@@ -1,27 +1,27 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# 声明: 该脚本适用于升级Centos7的openssh到openssh-9.0p1版本
-
-# ifCMD函数,判断上一条命令(不等于0)没执行成就停止,成功就继续运行
-function ifCMD () {
-    if [ $? -ne 0 ]; then
-    exit
-fi
-}
+# 声明: 该脚本适用于升级Centos7的默认openssh到openssh-9.0p1版本
 
 # 定义源码包版本号
 OPENSSH_VERSION=openssh-9.0p1
 OPENSSL_VERSION=openssl-1.1.1n
 ZILB_VERSION=zlib-1.2.11
 
+# ifCMD函数,判断上一条命令(不等于0)没执行成就停止,成功就继续运行
+function ifCMD() {
+    if [ $? -ne 0 ]; then
+        exit
+    fi
+}
+
 # 安装编译环境
 yum -y install wget tar gcc make gcc-c++ kernel-devel openssl-devel pam-devel
 
-# 创建/opt/opensshUpgrade目录
-mkdir -p /opt/opensshUpgrade
+# 创建/usr/local/src/opensshUpgrade目录
+mkdir -p /usr/local/src/opensshUpgrade
 
 # 如果进入目录失败就停止脚本运行
-cd /opt/opensshUpgrade || exit
+cd /usr/local/src/opensshUpgrade || exit
 
 # 下载源码包
 # 下载openssh源码包
@@ -44,15 +44,14 @@ tar xf $OPENSSH_VERSION.tar.gz -C /usr/local/src/
 tar xf $OPENSSL_VERSION.tar.gz -C /usr/local/src/
 tar xf $ZILB_VERSION.tar.gz -C /usr/local/src/
 
-
 # 安装zlib-1.2.11
 cd /usr/local/src/$ZILB_VERSION/ || exit
 ./configure --prefix=/usr/local/zlib && make -j && make install
 ifCMD
 
-# 备份老板的openssl和动态库
-mv /usr/bin/openssl /usr/bin/openssl.old
-mv /usr/include/openssl /usr/include/openssl.old
+# 备份旧版的openssl和动态库
+mv /usr/bin/openssl{,.bak} &>/dev/null
+mv /usr/include/openssl{,.bak} &>/dev/null
 ifCMD
 
 # 安装 openssl
@@ -72,19 +71,17 @@ ldd /usr/local/openssl/bin/openssl
 #添加所缺函数库
 echo '/usr/local/openssl/lib' >>/etc/ld.so.conf
 
-
 # 更新函数
 ldconfig -v
 
-
 # 备份 /etc/ssh 原有文件，并将新的配置复制到指定目录
 # 备份原ssh
-mv /etc/ssh /etc/ssh.old 
-mv /usr/bin/ssh /usr/bin/ssh.old &>/dev/null
+mv /etc/ssh{,.bak} &>/dev/null
+mv /usr/bin/ssh{,.bak} &>/dev/null
 # 备份原sshd
-mv /usr/sbin/sshd /usr/sbin/sshd.old &>/dev/null
+mv /usr/sbin/sshd{,.bak} &>/dev/null
 # 备份原ssh-kegen
-mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.old &>/dev/null
+mv /usr/bin/ssh-keygen{,.bak} &>/dev/null
 
 # 备份完成后卸载原openssh
 # yum autoremove openssh -y
@@ -94,10 +91,10 @@ ifCMD
 # 确保openssl升级完,编译安装openssh
 cd /usr/local/src/$OPENSSH_VERSION/ || exit
 ./configure --prefix=/usr/local/openssh \
---sysconfdir=/etc/ssh \
---mandir=/usr/share/man \
---with-ssl-dir=/usr/local/openssl \
---with-zlib=/usr/local/zlib
+    --sysconfdir=/etc/ssh \
+    --mandir=/usr/share/man \
+    --with-ssl-dir=/usr/local/openssl \
+    --with-zlib=/usr/local/zlib
 
 make -j && make install
 
@@ -111,16 +108,13 @@ cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
 cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
 cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
 
-
 # 复制启动脚本文件到 /etc/init.d/sshd系统文件夹
 # cd /usr/local/src/openssh-9.0p1/contrib/redhat || exit
 # cp sshd.init /etc/init.d/sshd
 
-
 # 恢复原来的sshd_config配置
 cp /etc/ssh.old/sshd_config /etc/ssh/sshd_config
-grep -Ev "^$|#" /etc/ssh.old/sshd_config > /etc/ssh/sshd_config
-
+grep -Ev "^$|#" /etc/ssh.old/sshd_config >/etc/ssh/sshd_config
 
 # 注释下面三个配置
 ## openssh9 提示sshd_config提示不支持的参数
@@ -148,16 +142,15 @@ sed -i 's/^UsePAM /# UsePAM yes/' /etc/ssh/sshd_config
 # # 允许密码登录
 # echo 'PasswordAuthentication yes' >>/etc/ssh/sshd_config
 
-
 # 获取旧版sshd进程的pid
-ps -A |grep "sshd"| awk '{print $1}'
+ps -A | grep "sshd" | awk '{print $1}' >/dev/null
 
 # 停止旧版 sshd 服务
 systemctl stop sshd.service &>/dev/null
 # 删除旧版的sshd服务启动文件
 rm -rf /lib/systemd/system/sshd.service
 
-# 写入新版启动文件
+# 写入sshd.service文件
 echo "
 [Unit]
 Description=OpenSSH server daemon
@@ -176,7 +169,7 @@ RestartSec=42s
 
 [Install]
 WantedBy=multi-user.target
-" > /usr/lib/systemd/system/sshd.service
+" >/usr/lib/systemd/system/sshd.service
 
 # 修改了服务文件,需要重新载入systemd
 systemctl daemon-reload
@@ -197,6 +190,7 @@ sshd -V
 ssh -v
 openssl version
 
+# 打印是否升级成功
 if [ $? -eq 0 ]; then
     echo -e "\033[32m[INFO] OpenSSH upgraded to $OPENSSH_VERSION  successfully！\033[0m"
 else
