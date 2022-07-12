@@ -143,7 +143,7 @@ sed -i 's/^UsePAM /# UsePAM yes/' /etc/ssh/sshd_config
 # echo 'PasswordAuthentication yes' >>/etc/ssh/sshd_config
 
 # 获取旧版sshd进程的pid
-ps -A | grep "sshd" | awk '{print $1}' >/dev/null
+pgrep sshd &>/dev/null
 
 # 停止旧版 sshd 服务
 systemctl stop sshd.service &>/dev/null
