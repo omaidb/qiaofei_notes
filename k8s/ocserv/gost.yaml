@@ -1,0 +1,21 @@
+services:
+  - name: service-0
+    addr: :443
+    handler:
+      type: tcp
+    listener:
+      type: tcp
+    forwarder:
+      nodes:
+        - name: target-0
+          addr: 10.187.71.4:443
+  - name: service-1
+    addr: :443
+    handler:
+      type: udp
+    listener:
+      type: udp
+    forwarder:
+      nodes:
+        - name: target-0
+          addr: 10.187.71.4:443

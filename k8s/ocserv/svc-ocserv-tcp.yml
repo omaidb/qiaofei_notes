@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocserv
+spec:
+  ports:
+    - port: 443
+      name: tcp
+      protocol: TCP
+      targetPort: 443
+    - port: 443
+      name: udp
+      protocol: UDP
+      targetPort: 443
+  selector:
+    app: ocserv
+  type: NodePort

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gost
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: gost
+  template:
+    metadata:
+      labels:
+        app: gost
+    spec:
+      containers:
+        - name: gost
+          image: omaidb/gost:3.0.0-rc6
+          resources:
+            limits:
+              memory: "15Mi"
+              cpu: "5m"
+          ports:
+            - containerPort: 1080

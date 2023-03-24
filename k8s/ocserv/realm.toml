@@ -1,0 +1,27 @@
+# 完整配置
+
+[network]
+# 禁用TCP
+no_tcp = false
+# 使用UDP
+use_udp = true
+# 零拷贝
+zero_copy = true
+# TCP快速打开
+fast_open = true
+# 指定 tcp 超时
+# tcp_timeout = 300
+# 指定 udp 超时
+udp_timeout = 30
+# 发送代理协议头
+send_proxy = false
+# 发送代理协议版本
+send_proxy_version = 2
+# 接受代理协议头
+accept_proxy = false
+# 接受代理协议超时
+accept_proxy_timeout = 5
+
+[[endpoints]]
+listen = "0.0.0.0:443"
+remote = "10.187.71.4:443"
