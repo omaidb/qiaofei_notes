@@ -184,11 +184,11 @@ versionget() {
 
 centosversion() {
     if check_sys sysRelease centos; then
-        local 
+        local
         code=${1}
-        local 
+        local
         version="$(versionget)"
-        local 
+        local
         main_ver=${version%%.*}
         if [ "${main_ver}" == "${code}" ]; then
             return 0
@@ -202,11 +202,11 @@ centosversion() {
 
 debianversion() {
     if check_sys sysRelease debian; then
-        local 
+        local
         version=$(get_opsy)
-        local 
+        local
         code=${1}
-        local 
+        local
         main_ver=$(echo "${version}" | sed 's/[^0-9]//g')
         if [ "${main_ver}" == "${code}" ]; then
             return 0
@@ -291,42 +291,42 @@ install_l2tp() {
 
         if debianversion 7; then
             if is_64bit; then
-                local 
+                local
                 libnspr4_filename1="libnspr4_4.10.7-1_amd64.deb"
-                local 
+                local
                 libnspr4_filename2="libnspr4-0d_4.10.7-1_amd64.deb"
-                local 
+                local
                 libnspr4_filename3="libnspr4-dev_4.10.7-1_amd64.deb"
-                local 
+                local
                 libnspr4_filename4="libnspr4-dbg_4.10.7-1_amd64.deb"
-                local 
+                local
                 libnss3_filename1="libnss3_3.17.2-1.1_amd64.deb"
-                local 
+                local
                 libnss3_filename2="libnss3-1d_3.17.2-1.1_amd64.deb"
-                local 
+                local
                 libnss3_filename3="libnss3-tools_3.17.2-1.1_amd64.deb"
-                local 
+                local
                 libnss3_filename4="libnss3-dev_3.17.2-1.1_amd64.deb"
-                local 
+                local
                 libnss3_filename5="libnss3-dbg_3.17.2-1.1_amd64.deb"
             else
-                local 
+                local
                 libnspr4_filename1="libnspr4_4.10.7-1_i386.deb"
-                local 
+                local
                 libnspr4_filename2="libnspr4-0d_4.10.7-1_i386.deb"
-                local 
+                local
                 libnspr4_filename3="libnspr4-dev_4.10.7-1_i386.deb"
-                local 
+                local
                 libnspr4_filename4="libnspr4-dbg_4.10.7-1_i386.deb"
-                local 
+                local
                 libnss3_filename1="libnss3_3.17.2-1.1_i386.deb"
-                local 
+                local
                 libnss3_filename2="libnss3-1d_3.17.2-1.1_i386.deb"
-                local 
+                local
                 libnss3_filename3="libnss3-tools_3.17.2-1.1_i386.deb"
-                local 
+                local
                 libnss3_filename4="libnss3-dev_3.17.2-1.1_i386.deb"
-                local 
+                local
                 libnss3_filename5="libnss3-dbg_3.17.2-1.1_i386.deb"
             fi
             rm -rf "${cur_dir}"/l2tp
@@ -472,7 +472,7 @@ compile_install() {
     tar -zxf ${libreswan_filename}.tar.gz
 
     cd "${cur_dir}"/l2tp/${libreswan_filename} || exit
-    cat >Makefile.inc.local 
+    cat >Makefile.inc.local
     <<'EOF'
 WERROR_CFLAGS =
 USE_DNSSEC = false
@@ -598,10 +598,10 @@ EOF
 
         update-rc.d -f xl2tpd defaults
 
-        cp -f /etc/rc.local 
+        cp -f /etc/rc.local
         /etc/rc.local.old.$(date +%Y%m%d)
         sed --follow-symlinks -i -e '/^exit 0/d' /etc/rc.local
-        cat >>/etc/rc.local 
+        cat >>/etc/rc.local
         <<EOF
 
 # Added by L2TP VPN script
@@ -755,9 +755,9 @@ list_users() {
         echo "Error: /etc/ppp/chap-secrets file not found."
         exit 1
     fi
-    local 
+    local
     line="+-------------------------------------------+\n"
-    local 
+    local
     string=%20s
     printf "${line}|${string} |${string} |\n${line}" Username Password
     grep -v "^#" /etc/ppp/chap-secrets | awk '{printf "|'${string}' |'${string}' |\n", $1,$3}'
@@ -781,7 +781,7 @@ add_user() {
     pass=$(rand)
     echo "Please input ${user}'s password:"
     read -p "(Default Password: ${pass}):" tmppass
-    [ ! -z "${tmppass}" ] && pass=${tmppass}
+    [ -z "${tmppass}" ] && pass=${tmppass}
     echo "${user}    l2tpd    ${pass}       *" >>/etc/ppp/chap-secrets
     echo "Username (${user}) add completed."
 }
@@ -821,7 +821,7 @@ mod_user() {
     pass=$(rand)
     echo "Please input ${user}'s new password:"
     read -p "(Default Password: ${pass}):" tmppass
-    [ ! -z "${tmppass}" ] && pass=${tmppass}
+    [ -z "${tmppass}" ] && pass=${tmppass}
     sed -i "/^\<${user}\>/d" /etc/ppp/chap-secrets
     echo "${user}    l2tpd    ${pass}       *" >>/etc/ppp/chap-secrets
     echo "Username ${user}'s password has been changed."
