@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: gost
 spec:
-  replicas: 10
+  replicas: 2
   selector:
     matchLabels:
       app: gost
@@ -12,12 +12,21 @@ spec:
       labels:
         app: gost
     spec:
+      volumes:
+        - name: gost-vl
+          configMap:
+            name: gost.yaml
+            items:
+              - key: gost.yaml
+                path: gost.yaml
       containers:
         - name: gost
           image: omaidb/gost:3.0.0-rc6
           resources:
             limits:
-              memory: "15Mi"
-              cpu: "5m"
-          ports:
-            - containerPort: 1080
+              memory: "25Mi"
+              cpu: "10m"
+          volumeMounts:
+            - mountPath: "/app/gost.yaml"
+              subPath: gost.yaml
+              name: gost-vl

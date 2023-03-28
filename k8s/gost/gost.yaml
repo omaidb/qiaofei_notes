@@ -1,0 +1,16 @@
+services:
+  - name: service-0
+    addr: :1080
+    handler:
+      type: socks5
+      auth:
+        username: admin
+        password: Admin123.
+      metadata:
+        udp: "true"
+    listener:
+      type: tcp
+      metadata:
+        udp: "true"
+    metadata:
+      udp: "true"
