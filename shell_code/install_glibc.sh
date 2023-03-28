@@ -1,6 +1,6 @@
 #!/bin/bash
 
-makeinstall_gblic() {
+make_install_gblic() {
     # 定义glibc版本
     glibc_version=2.18
     # 0.安装依赖环境
@@ -30,4 +30,4 @@ makeinstall_gblic() {
 
     # 可以看到2.1X的旧库文件还在，多了新安装${glibc_version}版本的库文件，而且软链接文件全部指向了新装的版本。
 }
-makeinstall_gblic
+make_install_gblic
