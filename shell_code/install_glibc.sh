@@ -12,17 +12,18 @@ make_install_glibc() {
     # https://www.jianshu.com/p/9d31fe1b4ac7
     yum install -y bison gcc
     # 1、下载文件
-    wget -c https://ftp.gnu.org/gnu/glibc/glibc-${glibc_version}.tar.xz
+    wget -c -P /usr/local/src https://ftp.gnu.org/gnu/glibc/glibc-${glibc_version}.tar.xz
 
     # 2、安装部署
     ## 解压
-    tar xf glibc-${glibc_version}.tar.xz
+    cd /usr/local/src || exit 1
+    tar xf /usr/local/src/glibc-${glibc_version}.tar.xz
 
     # 创建编译目录
     cd glibc-${glibc_version} && mkdir build
 
     # 必需进入build目录
-    cd build/ || exit
+    cd build/ || exit 1
     # 构建
     ../configure --prefix=/usr
     ## 参考云智库 https://kb.aliyun-inc.com/kb/206363
