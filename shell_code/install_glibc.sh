@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# 定义CPU核心数
+# 获取CPU总核心数
 cpu_cpunt=$(grep processor -c /proc/cpuinfo)
-# 总核心-1
+# 总核心-1，防止make-j死机
 cpu_cpunt=$((cpu_cpunt - 1))
 # 编译安装glibc
 make_install_glibc() {
@@ -16,7 +16,7 @@ make_install_glibc() {
 
     # 2、安装部署
     ## 解压
-    tar xglibc_versionf glibc-${glibc_version}.tar.xz
+    tar xf glibc-${glibc_version}.tar.xz
 
     # 创建编译目录
     cd glibc-${glibc_version} && mkdir build
