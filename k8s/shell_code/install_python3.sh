@@ -6,8 +6,10 @@ makeinstall_python() {
     # 安装必要的依赖
     yum install -y readline-devel gcc openssl-devel openssl11 openssl11-devel bzip2-devel zlib zlib-devel libffi libffi-devel
     # 安装openssl11，后期的pip3安装网络相关模块需要用到ssl模块。
-    export CFLAGS=$(pkg-config --cflags openssl11)
-    export LDFLAGS=$(pkg-config --libs openssl11)
+    CFLAGS=$(pkg-config --cflags openssl11)
+    export CFLAGS
+    LDFLAGS=$(pkg-config --libs openssl11)
+    export LDFLAGS
 
     # 下载Python源码并解压
     cd /usr/local/src || exit
