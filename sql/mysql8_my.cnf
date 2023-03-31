@@ -1,0 +1,26 @@
+# 服务端配置
+[mysqld]
+# 客户端握手字符集
+character-set-client-handshake=FALSE
+# 服务端使用的默认字符集
+character-set-server=utf8mb4
+# 服务端使用的字符序
+# https://www.cnblogs.com/chyingp/p/mysql-character-set-collation.html
+collation-server=utf8mb4_unicode_ci
+# 数据保存路径
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+# 日志保存路径
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+
+# 远程客户端配置
+[mysql]
+# 指定远程客户端默认使用 utf8mb4 字符集。
+default-character-set=utf8mb4
+
+# 对本地的mysql客户端的配置
+[client]
+# 指定本地客户端默认使用 utf8mb4 字符集。
+default-character-set=utf8mb4
