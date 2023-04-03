@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openai-realm
+spec:
+  selector:
+    matchLabels:
+      app: openai-realm
+  template:
+    metadata:
+      labels:
+        app: openai-realm
+    spec:
+      # 创建数据卷
+      volumes:
+        # 创建的数据卷名称
+        - name: openai-realm-vl
+          configMap:
+            # 挂哪个configMap
+            name: openai-realm-conf
+            # 从configmap中取出配置文件
+            items:
+              - key: realm.toml
+                path: realm.toml
+      containers:
+        - name: openai-realm
+          image: omaidb/realm:2.4.5
+          resources:
+            limits:
+              memory: "10Mi"
+              cpu: "5m"
+          volumeMounts:
+            # 容器挂载的目录（非空目录）
+            - mountPath: "/app/realm.toml"
+              # 从上面的定义的数据卷挂载指定文件
+              subPath: realm.toml
+              name: openai-realm-vl
