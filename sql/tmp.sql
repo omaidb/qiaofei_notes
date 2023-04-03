@@ -1,3 +1,1 @@
-ALTER user root identified 'Omaidb12.';
-alter user root identified '强密码';
-ALTER USER 'root' @'localhost' IDENTIFIED BY 'Omaidb12.';
+ALTER USER 'root' @'localhost' IDENTIFIED WITH mysql_native_password BY '<new-password>';
