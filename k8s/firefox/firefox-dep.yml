@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firefox
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: firefox
+  template:
+    metadata:
+      labels:
+        app: firefox
+    spec:
+      containers:
+        - name: firefox
+          image: jlesage/firefox
+          resources:
+            limits:
+              memory: 3000Mi
+              # 最多限制2个vcpu
+              cpu: 2
+            requests:
+              memory: 2500Mi
+              # 最少限制1个vcpu
+              cpu: 1
+          # 为每个pod指定变量
+          env:
+            - name: ENABLE_CJK_FONT
+              value: “1”
