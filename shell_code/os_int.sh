@@ -1,43 +1,23 @@
 #!/usr/bin/env bash
-echo "本脚本仅适用于Centos7虚拟机初始化配置"
 
 # 判断Linux发行版
 check_os() {
-    if grep -qs "ubuntu" /etc/os-release; then
-        os="ubuntu"
-        os_version=$(grep 'VERSION_ID' /etc/os-release | cut -d '"' -f 2 | tr -d '.')
-    elif [[ -e /etc/debian_version ]]; then
-        os="debian"
-        os_version=$(grep -oE '[0-9]+' /etc/debian_version | head -1)
-    elif [[ -e /etc/almalinux-release || -e /etc/rocky-release || -e /etc/centos-release ]]; then
-        os="centos"
-        os_version=$(grep -shoE '[0-9]+' /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
-    elif [[ -e /etc/fedora-release ]]; then
-        os="fedora"
-        os_version=$(grep -oE '[0-9]+' /etc/fedora-release | head -1)
-    else
-        echo "此安装程序似乎在不受支持的发行版上运行。
-支持的发行版有 Ubuntu、Debian、AlmaLinux、Rocky Linux、CentOS 和 Fedora。" && exit 1
-    fi
+    # 如果有yum包管理器，就是rhel系统发行版
+    (
+        which yum || echo "不是rhel发行版" && exit 1
+    ) && os=rhel
+    # 获取os的版本号
+    os_version=$(grep -shoE '[0-9]+' /etc/redhat-release /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
 }
 
 # 判断Linux版本
 check_os_ver() {
-    if [[ "$os" == "ubuntu" && "$os_version" -lt 1804 ]]; then
-        echo "使用此安装程序需要 Ubuntu 18.04 或更高版本。
-此版本的 Ubuntu 太旧且不受支持." && exit 1
-    fi
-
-    if [[ "$os" == "debian" && "$os_version" -lt 10 ]]; then
-        echo "使用此安装程序需要 Debian 10 或更高版本。
-此版本的 Debian 太旧且不受支持." && exit 1
-    fi
-
-    if [[ "$os" == "centos" && "$os_version" -lt 7 ]]; then
+    if [[ "$os" && "$os_version" -lt 7 ]]; then
         echo "使用此安装程序需要 CentOS 7 或更高版本。
 此版本的 CentOS 太旧且不受支持." && exit 1
     fi
 }
+
 # 0.安装前OS环境检查
 check_os_env() {
     # 先检查系统发行版
@@ -153,8 +133,8 @@ set_locale_config() {
 LC_ALL=zh_CN.UTF-8
 LANG=zh_CN.UTF8
 " >/etc/locale.conf
-	# 现在生效locate
-	source /etc/locale.conf
+    # 现在生效locate
+    source /etc/locale.conf
 }
 
 # 5. 优化ssh
@@ -251,32 +231,36 @@ disable_nonecessary_service() {
     ## 除必须启动的服务外，禁用并现在停止其他服务。
     systemctl list-unit-files --state=enabled | grep -Ev "auditd.service|autovt@.service|crond.service|chronyd.service|getty@.service|irqbalance.service|microcode.service|rsyslog.service|NetworkManager.service|sshd.service|sysstat.service|systemd-readahead-collect.service|systemd-readahead-drop.service|systemd-readahead-replay.service|tuned.service|default.target|multi-user.target|runlevel2.target|runlevel3.target|runlevel4.target|wg-quick@wg0|edge|supernode.service|ocserv.service" | awk '{print "systemctl disable --now",$1}' | bash
     # 禁用后查看自启服务列表还剩哪些
-    systemctl list-unit-files --state=enabled
+    systemctl list-unit-files --state=enabled | grep enabled
 }
 
 # 8. 安装常用repo源
 install_repo() {
-    # 安装epel源
-    ls /etc/yum.repos.d/epel.repo ||
+    # 如果epel.repo文件不存在就安装epel源
+    if [ -f /etc/yum.repos.d/epel.repo ] || [ -f /etc/yum.repos.d/oracle-epel-ol8.repo ]; then
+        echo "本地已有epel.repo"
+    else
         dnf install -y epel-release
+    fi
     # 安装elrepo源
     ls /etc/yum.repo.d/elrepo.repo ||
         dnf install -y elrepo-release
 
-    # 安装SCL源
-    ## centos-release-scl centos-release-scl-rh是SCL源
-    ## scl-utils scl-utils-build是SCL-utils工具
-    yum install -y centos-release-scl centos-release-scl-rh scl-utils scl-utils-build
+    # 如果系统版本号==7,就安装SCL源和IUS源
+    if $os_version -eq 7; then
+        ## centos-release-scl centos-release-scl-rh是SCL源
+        ## scl-utils scl-utils-build是SCL-utils工具
+        yum install -y centos-release-scl centos-release-scl-rh scl-utils scl-utils-build
+        # 安装IUS源(依赖依赖epel源)
+        ## 导入IUS源gpg key
+        rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
 
-    # 安装IUS源(依赖依赖epel源)
-    ## 导入IUS源gpg key
-    rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
-
-    ## 安装IUS源
-    yum install -y https://repo.ius.io/ius-release-el7.rpm
+        ## 安装IUS源
+        yum install -y https://repo.ius.io/ius-release-el7.rpm
+    fi
 
     # 安装REMi源
-    yum install -y http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+    yum install -y http://rpms.famillecollet.com/enterprise/remi-release-"$os_version".rpm
 
     # 查看repolist
     yum repolist
@@ -294,7 +278,7 @@ install_necessary_pkg() {
 
     ## 9.2 安装常用软件
     yum install -y pv net-tools vim lrzsz curl wget tree screen socat lsof telnet tcpdump iperf3 qrencode proxychains-ng traceroute bind-utils
-    yum install -y  conntrack jq sysstat libseccomp git chrony
+    yum install -y conntrack jq sysstat libseccomp git chrony
 
     ## 9.3 卸载不常用软件nano
     yum autoremove -y nano
@@ -377,7 +361,7 @@ prevent_kernel_upgrade() {
 
 main() {
     # 0.安装前OS环境检查
-    #check_os_env
+    check_os_env
     # 1. 关闭防火墙和SELinux
     disable_firewalld
     # 2.内核参数调整
