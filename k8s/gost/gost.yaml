@@ -2,10 +2,10 @@ services:
   - name: service-0
     addr: :1080
     handler:
-      type: socks5
+      type: auto
       auth:
-        username: admin
-        password: Admin123.
+        username: xxx
+        password: xxx
       metadata:
         udp: "true"
     listener:
