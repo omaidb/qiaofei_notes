@@ -1,4 +1,3 @@
-# 请勿使用latest标签
 FROM alpine:latest as unzip
 # 设置gost版本号
 ARG realm_VERSION=2.4.6

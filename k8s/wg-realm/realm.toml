@@ -12,15 +12,15 @@ cache_size = 256
 
 [network]
 # 禁用TCP
-no_tcp = false
+no_tcp = true
 # 使用UDP
 use_udp = true
 # 零拷贝
 zero_copy = true
 # TCP快速打开
-fast_open = true
+fast_open = false
 # 指定 tcp 超时
-tcp_timeout = 300
+# tcp_timeout = 300
 # 指定 udp 超时
 udp_timeout = 30
 # 发送代理协议头
@@ -33,5 +33,5 @@ accept_proxy = false
 accept_proxy_timeout = 5
 
 [[endpoints]]
-listen = "0.0.0.0:1080"
-remote = "10.187.71.6:1080"
+listen = "0.0.0.0:514"
+remote = "10.187.71.5:8000"
