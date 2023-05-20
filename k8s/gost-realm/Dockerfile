@@ -24,4 +24,4 @@ COPY realm.toml .
 EXPOSE 1080/tcp
 EXPOSE 1080/udp
 # 启动主程序
-ENTRYPOINT realm -c realm.toml
+ENTRYPOINT /app/realm -c realm.toml
