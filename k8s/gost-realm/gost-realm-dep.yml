@@ -21,7 +21,7 @@ spec:
                 path: realm.toml
       containers:
         - name: gost-realm
-          image: omaidb/realm:latest
+          image: omaidb/gost-realm:latest
           resources:
             limits:
               memory: "10Mi"

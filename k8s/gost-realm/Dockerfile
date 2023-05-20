@@ -20,5 +20,8 @@ USER nobody:nobody
 WORKDIR /app
 COPY  --from=unzip ./realm .
 COPY realm.toml .
+# 容器使用的端口
+EXPOSE 1080/tcp
+EXPOSE 1080/udp
 # 启动主程序
 ENTRYPOINT realm -c realm.toml
