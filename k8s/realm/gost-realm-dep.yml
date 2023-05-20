@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gost-realm
+spec:
+  replicas: 2  # 设置副本数为2
+  selector:
+    matchLabels:
+      app: gost-realm
+  template:
+    metadata:
+      labels:
+        app: gost-realm
+    spec:
+      volumes:
+        - name: gost-realm-vl
+          configMap:
+            name: gost-realm-conf
+            items:
+              - key: realm.toml
+                path: realm.toml
+      containers:
+        - name: gost-realm
+          image: omaidb/gost-realm:latest
+          resources:
+            limits:
+              memory: "10Mi"
+              cpu: "5m"
+          volumeMounts:
+            # 容器挂载的目录（非空目录）
+            - mountPath: "/app/realm.toml"
+              # 从上面的定义的数据卷挂载指定文件
+              subPath: realm.toml
+              name: gost-realm-vl
