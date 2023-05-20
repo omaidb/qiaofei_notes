@@ -21,7 +21,7 @@ COPY gost.yaml .
 # USER <用户名>[:<用户组>]
 # USER nobody:nobody
 # 容器使用的端口
-# EXPOSE 1080/tcp
-# EXPOSE 1080/udp
+EXPOSE 1080/tcp
+EXPOSE 1080/udp
 # 运行主程序--指定绝对路径
 ENTRYPOINT /app/gost -C gost.yaml
