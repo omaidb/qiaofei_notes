@@ -21,7 +21,7 @@ spec:
                 path: gost.yaml
       containers:
         - name: gost
-          image: omaidb/gost:3.0.0-rc6
+          image: omaidb/gost:latest
           resources:
             limits:
               memory: "25Mi"
