@@ -2,7 +2,7 @@
 ## 请勿使用latest标签
 FROM alpine:latest as unzip
 # 设置gost版本号
-ARG GOST_VERSION=3.0.0-rc7
+ARG GOST_VERSION=3.0.0-rc8
 # 下载GOST3压缩包
 ADD https://github.com/go-gost/gost/releases/download/v"${GOST_VERSION}"/gost_"${GOST_VERSION}"_linux_amd64.tar.gz .
 # 解压gost压缩包
