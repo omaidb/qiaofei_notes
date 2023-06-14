@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# 安装epel源
-install_epel_repo() {
-    # 判断epel源是否存在
-    ls /etc/yum.repos.d/epel.repo ||
-        dnf install -y epel-release
-}
-
 # 安装ocserv主程序
 install_ocserv_pkg() {
     which ocserv || dnf install -y ocserv
