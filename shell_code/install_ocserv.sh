@@ -9,7 +9,7 @@ install_epel_repo() {
 
 # 安装ocserv主程序
 install_ocserv_pkg() {
-    which ocserv || dnf install -y ocserv gnutls gnutls-utils gnutls-devel
+    which ocserv || dnf install -y ocserv
     # 安装lz4压缩支持
     which lz4 || dnf install -y lz4 lz4-devel
     # 安装公网证书签发工具
@@ -43,7 +43,8 @@ start_firewall() {
     # 开机自启firewalld服务并现在启动
     systemctl enable --now firewalld
 
-    # 将默认zone切换到外部模式,会放行所有流量
+    # 将默认zone切换到"外部"模式,会放行所有流量
+    ## external(外部) ：使用防火墙作为网关时的外部网络。它配置为 NAT 伪装，以便你的内部网络保持私有但可访问。
     firewall-cmd --set-default-zone=external
 
     # 设置DNAT
@@ -57,7 +58,8 @@ start_firewall() {
 
 # 配置内核ip转发
 set_ip_forward() {
-    echo "net.ipv4.ip_forward = 1 
+    echo "
+net.ipv4.ip_forward = 1 
 net.ipv6.conf.all.forwarding = 1
 net.ipv4.conf.all.proxy_arp = 1
 # 开启快速tcp
