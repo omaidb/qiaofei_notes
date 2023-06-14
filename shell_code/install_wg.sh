@@ -1,43 +1,18 @@
 #!/usr/bin/env bash
 
 # 判断Linux发行版
-function check_os() {
-    if grep -qs "ubuntu" /etc/os-release; then
-        os="ubuntu"
-        os_version=$(grep 'VERSION_ID' /etc/os-release | cut -d '"' -f 2 | tr -d '.')
-    elif [[ -e /etc/debian_version ]]; then
-        os="debian"
-        os_version=$(grep -oE '[0-9]+' /etc/debian_version | head -1)
-    elif [[ -e /etc/almalinux-release || -e /etc/rocky-release || -e /etc/centos-release ]]; then
-        os="centos"
-        # grep参数
-        ## -s 不显示错误信息
-        ## -h 不标示该列所属的文件名称
-        ## -o 只输出文件中匹配到的部分
-        ## -E 使用正则表达式
-        os_version=$(grep -shoE '[0-9]+' /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
-    elif [[ -e /etc/fedora-release ]]; then
-        os="fedora"
-        os_version=$(grep -oE '[0-9]+' /etc/fedora-release | head -1)
-    else
-        echo "此安装程序似乎在不受支持的发行版上运行。
-支持的发行版有 Ubuntu、Debian、AlmaLinux、Rocky Linux、CentOS 和 Fedora。" && exit 1
-    fi
+check_os() {
+    # 如果有yum包管理器，就是rhel系统发行版
+    (
+        which yum || echo "不是rhel发行版" && exit 1
+    ) && os=rhel
+    # 获取os的版本号
+    os_version=$(grep -shoE '[0-9]+' /etc/redhat-release /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
 }
 
 # 判断Linux版本
-function check_os_ver() {
-    if [[ "$os" == "ubuntu" && "$os_version" -lt 1804 ]]; then
-        echo "使用此安装程序需要 Ubuntu 18.04 或更高版本。
-此版本的 Ubuntu 太旧且不受支持." && exit 1
-    fi
-
-    if [[ "$os" == "debian" && "$os_version" -lt 10 ]]; then
-        echo "使用此安装程序需要 Debian 10 或更高版本。
-此版本的 Debian 太旧且不受支持." && exit 1
-    fi
-
-    if [[ "$os" == "centos" && "$os_version" -lt 7 ]]; then
+check_os_ver() {
+    if [[ "$os" && "$os_version" -lt 7 ]]; then
         echo "使用此安装程序需要 CentOS 7 或更高版本。
 此版本的 CentOS 太旧且不受支持." && exit 1
     fi
@@ -53,7 +28,7 @@ function check_nftables() {
     fi
 }
 
-# 安装前环境检查
+# 0.安装前环境检查
 function check_install_env() {
     # 先检查系统发行版
     check_os
@@ -61,13 +36,6 @@ function check_install_env() {
     check_os_ver
     # 检查是否不受支持的防火墙
     check_nftables
-}
-# 安装ELRepo
-function install_ELRepo() {
-    (yum -y install epel-release elrepo-release || echo "yum源错误，请检查" && exit 1) &&
-        sed -i "0,/enabled=0/s//enabled=1/" /etc/yum.repos.d/epel.repo
-    sed -i "0,/enabled=0/s//enabled=1/" /etc/yum.repos.d/elrepo.repo
-    yum repolist
 }
 
 function install_wg_pkg() {
@@ -155,8 +123,7 @@ EOF
 
 # Centos7安装wireguard
 function install_wireguard() {
-    # 安装ELRepo
-    install_ELRepo
+
     # 安装wg的模块和包
     install_wg_pkg
     # 调整内核参数
