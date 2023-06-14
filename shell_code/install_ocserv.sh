@@ -43,8 +43,8 @@ start_firewall() {
     # 开机自启firewalld服务并现在启动
     systemctl enable --now firewalld
 
-    # 将默认zone切换到白名单模式,会放行所有流量
-    # firewall-cmd --set-default-zone=trusted
+    # 将默认zone切换到外部模式,会放行所有流量
+    firewall-cmd --set-default-zone=external
 
     # 设置DNAT
     firewall-cmd --add-masquerade
