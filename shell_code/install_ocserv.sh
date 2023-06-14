@@ -11,7 +11,8 @@ install_epel_repo() {
 install_ocserv_pkg() {
     which ocserv || dnf install -y ocserv
     # 安装lz4压缩支持
-    which lz4 || dnf install -y lz4 lz4-devel
+    ## zlib-devel 是LZS压缩算法的依赖库
+    which lz4 || dnf install -y lz4 lz4-devel zlib-devel
     # 安装公网证书签发工具
     which certbot || dnf install certbot -y
     # 开机自启动ocserv服务
