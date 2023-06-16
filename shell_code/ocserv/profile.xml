@@ -20,9 +20,9 @@
         </CertificateMatch>
         <!-- BackupServerList 是备用服务器,一般写服务器的IP,防止解析失败  -->
         <BackupServerList>
-            <HostAddress>8.212.47.53</HostAddress>
-            <HostAddress>47.88.171.224</HostAddress>
-            <HostAddress>47.109.95.31</HostAddress>
+            <!-- <HostAddress>8.212.47.53</HostAddress> -->
+            <!-- <HostAddress>47.88.171.224</HostAddress> -->
+            <!-- <HostAddress>47.109.95.31</HostAddress> -->
         </BackupServerList>
 
         <!-- 自动选择低延迟的服务器。 -->
