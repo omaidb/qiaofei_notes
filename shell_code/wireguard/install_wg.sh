@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
 # 判断Linux发行版
 check_os() {
     # 如果有yum包管理器，就是rhel系统发行版

@@ -1,5 +1,9 @@
-#安装OpenSSH
+#!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
+#安装OpenSSH
 
 if [ $? -eq 0 ]; then
 make > /dev/null 2>&1

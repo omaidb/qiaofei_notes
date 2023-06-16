@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
 # 传入客户端名称
 client_name=$1
 

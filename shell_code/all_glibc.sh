@@ -1,5 +1,6 @@
-#!/usr/bin/englibc_version bash
+#!/usr/bin/env bash
 
+set -ex
 # https://www.ucloud.cn/yun/63160.html
 # 定义软件版本
 gmp_glibc_versionersion=6.2.1
@@ -10,7 +11,7 @@ gcc_glibc_versionersion=
 glibc_glibc_versionersion=2.37
 
 # 定义CPU核心数
-cpu_cpunt=$(cat /proc/cpuinfo | grep processor | wc -l)
+cpu_cpunt=$(cat /proc/cpuinfo | grep -c processor)
 cpu_cpunt=$((cpu_cpunt - 1))
 
 # 1.安装gmp

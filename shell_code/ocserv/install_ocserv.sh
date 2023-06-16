@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
 # 安装ocserv主程序
 install_ocserv_pkg() {
     which ocserv || dnf install -y ocserv

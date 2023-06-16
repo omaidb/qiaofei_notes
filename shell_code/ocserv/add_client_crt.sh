@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
 # 证书签发脚本
 # 参考：https://wwww.lvmoo.com/1097.love/
 # 参考 https://www.jianshu.com/p/ab9523a6c0f4

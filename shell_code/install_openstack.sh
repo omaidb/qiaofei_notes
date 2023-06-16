@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+set -ex
 # 判断Linux发行版
 check_os() {
     # 如果有yum包管理器，就是rhel系统发行版
@@ -669,4 +669,4 @@ echo '
 用户 admin
 密码 admin
 推荐 firefox浏览器
-`
+'

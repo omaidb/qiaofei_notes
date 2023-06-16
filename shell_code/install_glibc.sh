@@ -1,9 +1,12 @@
 #!/bin/bash
 
+set -ex
+
 # 获取CPU总核心数
 cpu_cpunt=$(grep processor -c /proc/cpuinfo)
-# 总核心-1，防止make-j死机
+# CPU总核心-1，防止make-j死机
 cpu_cpunt=$((cpu_cpunt - 1))
+
 # 编译安装glibc
 make_install_glibc() {
     # 定义glibc版本
@@ -36,4 +39,5 @@ make_install_glibc() {
 
     # 可以看到2.1X的旧库文件还在，多了新安装${glibc_version}版本的库文件，而且软链接文件全部指向了新装的版本。
 }
+
 make_install_glibc

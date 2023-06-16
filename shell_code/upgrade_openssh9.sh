@@ -2,6 +2,9 @@
 
 # 声明: 该脚本适用于升级Centos7的默认openssh到openssh-9.0p1版本
 
+# 开启debug
+set -ex
+
 # 定义源码包版本号
 OPENSSH_VERSION=openssh-9.0p1
 OPENSSL_VERSION=openssl-1.1.1n

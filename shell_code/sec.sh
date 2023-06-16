@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# 开启debug
+set -ex
+
 # 基于阿里云最佳实践安全实践的CentOS Linux 7基线标准
 # 系统-等保三级-CentOS Linux 7合规基线检查
 
