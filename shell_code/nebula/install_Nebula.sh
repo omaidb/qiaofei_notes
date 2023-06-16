@@ -3,6 +3,10 @@
 # 开启debug
 set -ex
 
+# 参考：
+# https://tommy.net.cn/2021/09/12/build-your-own-sd-lan-by-nebula/
+# https://nebula.defined.net/docs/guides/quick-start/
+
 # 定义版本
 nebula_VERSION=1.7.1
 # 安装nebula
