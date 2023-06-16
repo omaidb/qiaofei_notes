@@ -302,7 +302,7 @@ function start_menu() {
         clear
         echo "请输入正确数字"
         sleep 5s
-        start_menusho
+        start_menu
         ;;
     esac
 }
