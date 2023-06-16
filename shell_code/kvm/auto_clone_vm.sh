@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
 # 将获取源vm实例、新vm实例名称
 function parse_arguments() {
   # 如果没有传入足够的参数，输出使用说明并退出

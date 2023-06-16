@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 开启debug
+set -ex
+
 # 以时间格式生成VM_NAME
 function generate_vm_name() {
   # 定义虚拟机名称的前缀
