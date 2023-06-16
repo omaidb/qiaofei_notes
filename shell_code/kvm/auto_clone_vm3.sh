@@ -1,6 +1,9 @@
 #!/bin/bash
 # 自动链接克隆 KVM 虚拟机的脚本，适用于生产环境
 
+# 开启debug
+set -ex
+
 # 配置
 vm_name="myvm" # 源虚拟机的名称
 clone_prefix="clone-" # 克隆虚拟机名称的前缀
