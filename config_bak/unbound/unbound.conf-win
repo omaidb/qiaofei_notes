@@ -1,0 +1,109 @@
+
+# 将<DoT解析器IP地址>和<DoT解析器端口>替换为您想要使用的DoT解析器的IP地址和端口。
+server:
+    # 日志级别
+	  verbosity: 1
+	  # 线程数
+  	num-threads: 2
+
+  	# 监听地址
+    interface: 127.0.0.1
+    # 允许地址--所有
+    access-control: 127.0.0.1/8 allow
+    # 不监听IPV6地址
+	  do-ip6: no
+    # 指定TCP传输
+    do-tcp: yes
+    do-udp: yes
+
+    # 上游连接仅使用TCP
+    tcp-upstream: yes
+
+    # DOT配置
+    # 通过 TLS 向上游请求（在 TLS 流中使用纯 DNS）
+    tls-upstream: yes
+    # tls-port: 853
+    # https-port: 443
+    # # 指定 DoT 证书和密钥的路径
+    # tls-service-key: "/etc/unbound/keys/dot.key"
+  	# tls-service-pem: "/etc/unbound/keys/dot.pem"
+    # 指定要使用DNS over TLS传输协议
+		## 是本机默认的证书文件，其中包含了一些常见的根证书。
+    # tls-cert-bundle: "/etc/pki/tls/certs/ca-bundle.crt" 
+
+    # 日志
+    # 日志记录到指定文件
+    logfile: "C:\Program Files\Unbound\log\unbound.log"
+    log-time-ascii: yes
+    
+	  # 允许多个进程或线程在同一端口上监听相同的IP地址和协议。这样做可以提高服务器的性能和可伸缩性
+	  so-reuseport: yes
+	  # 允许数据包在穿过网络栈时绕过某些转发过程，从而更快地到达目标
+	  ip-transparent: yes
+    # edns 缓冲区大小
+    edns-buffer-size: 1472
+    msg-cache-size: 32m
+    msg-cache-slabs: 8
+    rrset-cache-size: 64m
+    rrset-cache-slabs: 8
+  	# 设置缓存最长时间为1小时
+  	cache-min-ttl: 3600
+  	# 设置缓存过期时间为24小时
+  	cache-max-ttl: 86400
+
+    # 预取-适用于经常查询的域
+    prefetch: yes
+    prefetch-key: yes
+
+    # 内核区缓存
+    so-rcvbuf: 1m
+
+    # 控制DNSSEC验证
+    trust-anchor-signaling: yes
+    root-key-sentinel: yes
+
+    # trusted-keys-file: /etc/unbound/keys.d/*.key
+
+    # 启用 DNSSEC 功能
+    # 指定 DNSSEC 根信任锚点文件的路径
+    auto-trust-anchor-file: "C:\Program Files\Unbound\root.key"
+
+    # 如果要开启DNSSEC，需要开启这一项
+    # 忽略信任链。 域被视为不安全。
+    # domain-insecure: "example.com"
+    # 是否清除 DNSSEC 额外记录
+    val-clean-additional: yes
+    # 是否开启DNSSEC 的容错模式
+    val-permissive-mode: yes
+
+
+    val-log-level: 1
+    # 引入外部local配置文件
+    # include: /etc/unbound/local.d/*.conf
+    # 用于启用加密
+    tls-ciphers: "PROFILE=SYSTEM"
+
+# 转发cn域名
+forward-zone:
+	name: "cn."
+	forward-addr: 223.5.5.5
+	forward-addr: 114.114.114.114
+
+# 转发到上有DOT
+forward-zone:
+  name: "."
+  # 指定要使用DNS over TLS解析的域名，# 符号后面跟着的是服务器名称或者描述信息
+	# 	forward-addr: 192.0.2.73@5355 # forward to port 5355.
+	# 上游DOT服务器的固定格式：IP@端口#域名
+	# forward-addr: 208.67.222.222@5353
+	# forward-addr: 208.67.220.220@5353
+	# forward-addr: 9.9.9.9
+	# forward-addr: 1.0.0.1
+	# forward-addr: 8.8.4.4
+	forward-addr: 9.9.9.9@853 #dns.quad9.net
+	forward-addr: 1.1.1.1@853 #cloudflare-dns.com
+	forward-addr: 8.8.8.8@853 #dns.google
+	# 	forward-first: no
+	# 开启 DNS over TLS 功能
+	forward-tls-upstream: yes
+#	forward-no-cache: no
