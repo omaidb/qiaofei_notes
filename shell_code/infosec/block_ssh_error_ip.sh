@@ -6,6 +6,9 @@
 # 开启debug模式
 # set -ex
 
+# 设置ssh密码错误阈值变量
+threshold=7
+
 function check() {
     # 初始化IP列表
     block_ip_list=""
@@ -20,7 +23,7 @@ function check() {
         # ssh登录错误源ip
         ip=$(echo "$line" | awk '{print $2}')
         # ssh登录错误大于等于7次，就添加到黑名单IP列表中
-        if [ "$count" -ge 7 ]; then
+        if [ "$count" -ge $threshold ]; then
             # echo "IP $ip failed $count times. Adding to block list."
             block_ip_list="$block_ip_list $ip"
         fi
