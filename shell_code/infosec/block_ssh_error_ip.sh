@@ -54,14 +54,6 @@ function ipt_save(){
     echo "防火墙规则已保存"
 }
 
-# 捕获脚本退出信号
-# trap 退出时绑定的函数名 EXIT
-# trap cleanup EXIT
-# 捕获CTRL+C信号
-# trap ipt_save INT
-# 捕获所有信号
-trap ipt_save SIGINT SIGTERM SIGHUP
-
 # 间隔10s无限循环检查函数
 while true; do
     check
@@ -69,3 +61,11 @@ while true; do
     # 每隔10s检查一次，时间可根据需要自定义
     sleep 10
 done
+
+# 捕获脚本退出信号
+# trap 退出时绑定的函数名 EXIT
+# trap cleanup EXIT
+# 捕获CTRL+C信号
+# trap ipt_save INT
+# 捕获所有信号
+trap ipt_save SIGINT SIGTERM SIGHUP
