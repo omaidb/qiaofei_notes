@@ -6,7 +6,7 @@ pkg_version=2.10
 ## 检查依赖环境
 check_pkg_env(){
     # 检查python3是否安装
-    command -v python|| yum install -y python
+    command -v python|| yum install -y python2
     command -v python3|| yum install -y python3
 }
 
@@ -21,7 +21,7 @@ down_unzip_pkg(){
 ## 安装
 install_pkg(){
     cd /usr/local/src/denyhosts-$pkg_version || exit
-    python setup.py install
+    python setup.py install || python2 setup.py install
     # 创建PID文件
     touch /var/run/denyhosts.pid
     # 下载配置文件
