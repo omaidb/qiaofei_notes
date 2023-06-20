@@ -14,7 +14,7 @@ function check() {
     block_ip_list=""
 
     # 获取最近ssh密码错误登录的IP列表和次数
-    failed_logins=$(journalctl _SYSTEMD_UNIT=sshd.service | grep 'Failed password' | awk '{print $(NF-3)}' | sort | uniq -c)
+    failed_logins=$(journalctl _SYSTEMD_UNIT=sshd.service -n 1000 | grep 'Failed password' | awk '{print $(NF-3)}' | sort | uniq -c)
 
     # 遍历错误登录事件
     while read -r line; do
