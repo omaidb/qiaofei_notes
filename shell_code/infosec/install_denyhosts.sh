@@ -22,6 +22,11 @@ down_unzip_pkg(){
 install_pkg(){
     cd /usr/local/src/denyhosts-$pkg_version || exit
     python setup.py install
+    # 创建PID文件
+    touch /var/run/denyhosts.pid
+    # 下载配置文件
+    wget -P /etc/ -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/denyhosts.conf
+    # 复制服务文件
     cp /usr/local/src/denyhosts-$pkg_version/denyhosts.service /etc/systemd/system/
     systemctl daemon-reload
 }
