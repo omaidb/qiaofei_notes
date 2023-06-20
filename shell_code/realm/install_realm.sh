@@ -12,7 +12,7 @@ check_glibc_version() {
   glibc_version_num=$((glibc_major * 10000 + glibc_minor * 100 + glibc_patch))
 
   # 检查版本是否低于 2.18
-  if [ $glibc_version_num -lt 23800 ]; then
+  if [ $glibc_version_num -lt 21800 ]; then
     echo "glibc 版本低于2.18，脚本停止."
     exit 1
   fi
