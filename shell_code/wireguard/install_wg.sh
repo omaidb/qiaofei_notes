@@ -118,6 +118,8 @@ SaveConfig = true
 # 服务端请求域名解析DNS,可以在本机搭建dns服务加快解析
 DNS = 1.0.0.1,8.8.4.4
 # 服务端mtu不设置,为自动mtu(默认)
+# 连接保活间隔
+PersistentKeepalive = 2
 EOF
 
     # 修改配置文件和密钥文件为600

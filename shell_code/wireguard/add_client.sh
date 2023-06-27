@@ -112,7 +112,7 @@ AllowedIPs = 0.0.0.0/0
 # 连接保活间隔
 ## 服务端和客户端一方没有公网IP，都是NAT，那么就需要添加这个参数定时链接服务端(单位：秒)
 ## 客户端和服务端都是公网,不建议使用该参数（设置为0，或客户端配置文件中删除这行） 
-PersistentKeepalive = 0
+PersistentKeepalive = 2
 EOF
 }
 
