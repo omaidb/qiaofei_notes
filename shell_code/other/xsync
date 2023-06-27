@@ -1,105 +1,47 @@
 #!/usr/bin/env bash
 
-# 定义全局变量
-SERVERS_FILE="$HOME/xsync.txt"  # 服务器列表文件路径
-LOG_FILE="/var/log/xsync.log"  # 日志文件路径
+# 0.依赖包检查
+which rsync >>/dev/null 2>&1 || yum install -y rsync || apt install -y rsync
+ls ~/xsync.txt &>/dev/null || touch ~/xsync.txt
+# 1.判断参数个数，没有参数就会退出
+## $#：获取参数个数，-lt 1：减1
+if [ $# -lt 1 ]; then
+    # 打印使用示例
+    echo "必需有一个参数"
+    echo "使用示例: xsync 目录"
+    echo "意思是将指定目录同步到远程目录"
+    exit
+fi
 
-# 定义数组变量
-DIRECTORIES=()  # 待同步目录列表
+# 2. 遍历所有服务器
+# ******************注意：for循环这里，需要根据情况将机器列表改成相应的主机名******************
 
-# 定义日志函数
-log() {
-  echo "$(date +"%Y-%m-%d %H:%M:%S") - $*" | tee -a "$LOG_FILE"
-}
-
-# 定义错误处理函数
-die() {
-  log "错误: $*"
-  exit 1
-}
-
-# 检查依赖项是否已安装
-check_dependency() {
-  if ! command -v "$1" &>/dev/null; then
-    log "正在安装 $1..."
-    if ! { apt-get -qq -y install "$1" || yum -q -y install "$1"; } &>/dev/null; then
-      die "安装 $1 失败"
-    fi
-  fi
-}
-
-check_dependency rsync
-
-# 定义帮助函数
-usage() {
-  echo "使用方法: xsync [-h] [DIRECTORY...]"
-  echo "同步目录到远程服务器"
-  echo ""
-  echo "选项:"
-  echo "  -h, --help          显示帮助信息并退出"
-  echo ""
-  echo "参数:"
-  echo "  DIRECTORY           待同步的目录"
-}
-
-# 解析命令行参数
-parse_args() {
-  while [[ $# -gt 0 ]]; do
-    case $1 in
-      -h|--help)
-        usage
-        exit
-        ;;
-      *)
-        DIRECTORIES+=("$1")
-        ;;
-    esac
-    shift
-  done
-
-  if [[ ${#DIRECTORIES[*]} -eq 0 ]]; then
-    usage
-    exit 1
-  fi
-}
-
-# 同步单个目录到远程服务器
-sync_directory() {
-  local directory="$1"
-  local server="$2"
-
-  log "正在同步 $directory 到 $server..."
-  rsync -aSHP "$directory" "$server:$directory"
-}
-
-# 同步多个目录到多个远程服务器
-sync_directories() {
-  local directories=("${DIRECTORIES[@]}")
-  local servers=()
-
-  while read -r server; do
-    servers+=("$server")
-  done < "$SERVERS_FILE"
-
-  if [[ ${#servers[@]} -eq 0 ]]; then
-    die "在服务器列表文件中未找到任何服务器"
-  fi
-
-  for server in "${servers[@]}"; do
-    log "正在同步到 $server..."
-    for directory in "${directories[@]}"; do
-      [[ ! -d "$directory" ]] && { log "$directory 不是一个目录"; continue; }
-
-      sync_directory "$directory" "$server"
+for host in $(cat ~/xsync.txt); do
+    echo =======当前主机: "$host"=================
+    # 3. 遍历所有目录并发送
+    # $@: 获取所有参数
+    echo ****************** 以列表形式显示所有的输入参数: "$@" ******************
+    for file in "$@"; do
+        # 4. 判断文件是否存在
+        if [ -e "$file" ]; then
+            # 5. 获取父目录
+            pdir=$(
+                cd -P $(dirname "$file") || exit
+                pwd
+            )
+            echo ------父亲目录是: "$pdir"------
+            # 6. 获取当前文件名
+            fname=$(basename "$file")
+            echo ----------------当前文件:"$fname"-----------
+            # 在目标主机上创建父目录
+            ssh "$host" "mkdir -p $pdir"               
+            ## -a 表示以递归方式传输文件，并保持所有文件属性，等于-rlptgoD
+            ## -S 将空序列变成稀疏块
+            ## -H 保留硬链结
+            ## -P 断点续传并打印过程,
+            rsync -aSHP "$pdir"/"$fname" "$host":"$pdir" # rsync同步文件到远程目录
+        else
+            echo "$file" 文件不存在!
+        fi
     done
-  done
-}
-
-# 主函数
-main() {
-  parse_args "$@"
-  sync_directories
-}
-
-# 执行主函数
-main "$@"
+done
