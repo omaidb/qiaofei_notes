@@ -195,7 +195,7 @@ disable_nonecessary_service() {
     # runlevel3.target                              enabled ----------------------
     # runlevel4.target                              enabled ----------------------
     ## 除必须启动的服务外，禁用并现在停止其他服务。
-    systemctl list-unit-files --state=enabled | grep -Ev "auditd.service|autovt@.service|crond.service|chronyd.service|getty@.service|irqbalance.service|microcode.service|rsyslog.service|NetworkManager.service|sshd.service|sysstat.service|systemd-readahead-collect.service|systemd-readahead-drop.service|systemd-readahead-replay.service|tuned.service|default.target|multi-user.target|runlevel2.target|runlevel3.target|runlevel4.target|wg-quick@wg0|edge|supernode.service|ocserv.service" | awk '{print "systemctl disable --now",$1}' | bash || true
+    systemctl list-unit-files --state=enabled | grep -Ev "auditd.service|autovt@.service|crond.service|chronyd.service|getty@.service|irqbalance.service|microcode.service|rsyslog.service|NetworkManager.service|sshd.service|sysstat.service|systemd-readahead-collect.service|systemd-readahead-drop.service|systemd-readahead-replay.service|tuned.service|default.target|multi-user.target|runlevel2.target|runlevel3.target|runlevel4.target|unbound|wg-quick@wg0|edge|supernode.service|ocserv.service" | awk '{print "systemctl disable --now",$1}' | bash || true
     # 禁用后查看自启服务列表还剩哪些
     systemctl list-unit-files --state=enabled | grep enabled
 }
