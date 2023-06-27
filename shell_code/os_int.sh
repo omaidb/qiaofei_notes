@@ -94,7 +94,7 @@ export TERM=xterm
 # 4.设置locale
 set_locale_config() {
     # 安装语言包,防止出现locate错误
-    yum install -y glibc-minimal-langpack glibc-locale-source glibc-langpack-zh glibc-langpack-en
+    yum install -q -y glibc-minimal-langpack glibc-locale-source glibc-langpack-zh glibc-langpack-en
     echo "
 LC_ALL=zh_CN.UTF-8
 LANG=zh_CN.UTF8
@@ -216,17 +216,17 @@ install_repo() {
     if $os_version -eq 7; then
         ## centos-release-scl centos-release-scl-rh是SCL源
         ## scl-utils scl-utils-build是SCL-utils工具
-        yum install -y centos-release-scl centos-release-scl-rh scl-utils scl-utils-build
+        yum install -q -y centos-release-scl centos-release-scl-rh scl-utils scl-utils-build
         # 安装IUS源(依赖依赖epel源)
         ## 导入IUS源gpg key
         rpm --import https://repo.ius.io/RPM-GPG-KEY-IUS-7
 
         ## 安装IUS源
-        yum install -y https://repo.ius.io/ius-release-el7.rpm
+        yum install -q -y https://repo.ius.io/ius-release-el7.rpm
     fi
 
     # 安装REMi源
-    yum install -y http://rpms.famillecollet.com/enterprise/remi-release-"$os_version".rpm
+    yum install -q -y http://rpms.famillecollet.com/enterprise/remi-release-"$os_version".rpm
 
     # 查看repolist
     yum repolist
@@ -234,21 +234,21 @@ install_repo() {
 # 9. 安装常用必装软件 例如：bash-completion-extras vim
 install_necessary_pkg() {
     # 安装终端自动补全 pip3 dnf 虚拟机增强插件 linux核心标准
-    yum install -y bash-completion python3-pip dnf open-vm-tools redhat-lsb
-    yum install -y bash-completion-extras
+    yum install -q -y bash-completion python3-pip dnf open-vm-tools redhat-lsb
+    yum install -q -y bash-completion-extras
     ## 9.1 安装wireguard内核模块
     # yum install -y kmod-wireguard
     ### 在启动时自动加载wireguard模块
     # echo wireguard >/etc/modules-load.d/wireguard.conf
     # 安装wg-quick
-    yum install -y wireguard-tools
+    yum install -q -y wireguard-tools
 
     ## 9.2 安装常用软件
-    yum install -y pv net-tools vim lrzsz curl wget tree screen socat lsof telnet tcpdump iperf3 qrencode proxychains-ng traceroute bind-utils
-    yum install -y conntrack jq sysstat libseccomp git chrony
+    yum install -q -y pv net-tools vim lrzsz curl wget tree screen socat lsof telnet tcpdump iperf3 qrencode proxychains-ng traceroute bind-utils
+    yum install -q -y conntrack jq sysstat libseccomp git chrony
 
     ## 9.3 卸载不常用软件nano
-    yum autoremove -y nano
+    yum autoremove -q -y nano
 }
 
 # 10.配置xsync工具
@@ -265,8 +265,8 @@ create_xsync() {
 # 11. 阻止内核更新
 prevent_kernel_upgrade() {
     # 安装versionlock工具
-    yum install -y 'dnf-command(versionlock)'
-    yum install -y yum-plugin-versionlock
+    yum install -q -y 'dnf-command(versionlock)'
+    yum install -q -y yum-plugin-versionlock
     # 备份原配置
     cp /etc/yum.conf /etc/yum.conf.bak
 
