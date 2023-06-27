@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 开启debug
-set -ex
+# set -ex
 
 # 判断Linux发行版
 check_os() {
@@ -44,7 +44,7 @@ function check_install_env() {
 function install_wg_pkg() {
     # 安装wg内核模块和wg-quick命令行
     yum install -y kmod-wireguard wireguard-tools || dnf install -y wireguard-tools
-    echo "更新完成"
+    echo "安装wg工具完成"
 }
 
 # 调整内核参数
