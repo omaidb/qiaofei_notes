@@ -232,7 +232,8 @@ install_repo() {
 # 9. 安装常用必装软件 例如：bash-completion-extras vim
 install_necessary_pkg() {
     # 安装终端自动补全 pip3 dnf 虚拟机增强插件 linux核心标准
-    yum install -y bash-completion bash-completion-extras python3-pip dnf open-vm-tools redhat-lsb
+    yum install -y bash-completion python3-pip dnf open-vm-tools redhat-lsb
+    yum install -y bash-completion-extras
     ## 9.1 安装wireguard内核模块
     # yum install -y kmod-wireguard
     ### 在启动时自动加载wireguard模块
@@ -252,54 +253,8 @@ install_necessary_pkg() {
 create_xsync() {
     # 检查目录是否存在
     ls ~/bin &>/dev/null || mkdir -p ~/bin
-    echo '
-#!/usr/bin/env bash
-
-# 0.依赖包检查
-which rsync &>/dev/null || yum install -y rsync || apt install -y rsync
-ls ~/xsync.txt &>/dev/null || touch ~/xsync.txt
-# 1.判断参数个数，没有参数就会退出
-## $#：获取参数个数，-lt 1：减1
-if [ $# -lt 1 ]; then
-    # 打印使用示例
-    echo "必需有一个参数"
-    echo "使用示例: xsync 目录"
-    echo "意思是将指定目录同步到远程目录"
-    exit
-fi
-
-# 2. 遍历所有服务器
-# ******************注意：for循环这里，需要根据情况将机器列表改成相应的主机名******************
-
-for host in $(cat ~/xsync.txt); do
-    echo =======当前主机: "$host"=================
-    # 3. 遍历所有目录并发送
-    # $@: 获取所有参数
-    echo ****************** 以列表形式显示所有的输入参数: "$@" ******************
-    for file in "$@"; do
-        # 4. 判断文件是否存在
-        if [ -e "$file" ]; then
-            # 5. 获取父目录
-            pdir=$(
-        cd -P $(dirname "$file") || exit
-        pwd
-    )
-            echo ------父亲目录是: "$pdir"------
-            # 6. 获取当前文件名
-            fname=$(basename "$file")
-            echo ----------------当前文件:"$fname"-----------
-            # 在目标主机上创建父目录
-            ssh "$host" "mkdir -p $pdir"
-            ## -a 表示以递归方式传输文件，并保持所有文件属性，等于-rlptgoD
-            ## -S 将空序列变成稀疏块
-            ## -H 保留硬链结
-            ## -P 断点续传并打印过程,
-            rsync -aSHP "$pdir"/"$fname" "$host":"$pdir" # rsync同步文件到远程目录
-        else
-            echo "$file" 文件不存在!
-        fi
-    done
-done' >~/bin/xsync
+    # 下载xsync脚本
+    wget -cP $HOME/bin/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/other/xsync
 
     # 赋予~/bin/xsync可执行权限
     chmod +x ~/bin/xsync
@@ -358,4 +313,3 @@ main() {
 
 # 启动主方法
 main
-
