@@ -103,6 +103,8 @@ Address = 10.89.64.1/24
 PostUp = iptables -t nat -I POSTROUTING -o $eth -j MASQUERADE
 # 自动调整mss，防止某些网站打不开
 PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+# 调整DSCP值
+PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
 
 # 停止WireGuard时要执行的iptables防火墙规则，用于关闭NAT转发之类的。
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
@@ -110,6 +112,8 @@ PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-ms
 PreDown = iptables -t nat -D POSTROUTING -o $eth -j MASQUERADE
 # 删除自动调整mss
 PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+# 删除DSCP值
+PostDown = iptables -D mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
 
 # 服务端监听端口，可以自行修改
 ListenPort = 51820
