@@ -36,6 +36,10 @@ disable_firewalld() {
     systemctl disable --now firewalld
     ## 注销firewalld服务
     systemctl mask firewalld
+
+    # 清空iptables规则
+    iptables -F
+    
     ## 立即临时关闭SELinux
     setenforce 0
     ## 永久关闭SELinux
