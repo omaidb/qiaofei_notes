@@ -74,46 +74,14 @@ config_cmd_history_time() {
 
 # 3.1 配置vimrc
 set_vimrc() {
-    echo "
-set nocompatible
-set cursorline
-set cursorcolumn
-set term=builtin_ansi
-set scrolloff=7
-set hlsearch
-set incsearch
-set autoindent
-set cindent
-set smartindent
-set tabstop=2
-set shiftwidth=2 
-set softtabstop=2
-set expandtab
-set showmatch
-set wrap
-syntax on
-set t_Co=256
-highlight CursorLine cterm=none ctermbg=DarkMagenta ctermfg=White
-highlight CursorColumn cterm=none ctermbg=DarkMagenta ctermfg=White
-highlight Search cterm=reverse ctermbg=none ctermfg=none
-set backspace=2
-set backup 
-set autowrite
-set confirm
-set ruler
-set showmode
-set showcmd
-set paste
-set nu
-set encoding=utf-8
-    " >~/.vimrc
+    wget -cP /root/.vimrc https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/history.sh   
 }
 
 # 3.2配置.bashrc
 set_bashrc() {
     echo "
 # 配置proxy变量
-alias proxy='export all_proxy=socks5://admin:Admin123.@127.0.0.1:3389'
+alias proxy='export all_proxy=socks5://admin:Admin123.@127.0.0.1:1080'
 alias unproxy='unset all_proxy'
 
 # 防止htop无任何输出

@@ -10,14 +10,12 @@ DIRECTORIES=()  # 待同步目录列表
 # 定义日志函数
 log() {
   echo "$(date +"%Y-%m-%d %H:%M:%S") - $*" | tee -a "$LOG_FILE"
-  # 打印带时间戳的日志内容，并将日志输出到日志文件和终端
 }
 
 # 定义错误处理函数
 die() {
-  log "ERROR: $*"
+  log "错误: $*"
   exit 1
-  # 打印错误信息，并退出脚本
 }
 
 # 检查依赖项是否已安装
@@ -28,7 +26,6 @@ check_dependency() {
       die "安装 $1 失败"
     fi
   fi
-  # 检查指定的依赖项是否已经安装，如果没有则安装
 }
 
 check_dependency rsync
@@ -47,20 +44,20 @@ usage() {
 
 # 解析命令行参数
 parse_args() {
-  while [[ $# -gt 0 ]]; do  # 使用 while 循环遍历命令行参数
+  while [[ $# -gt 0 ]]; do
     case $1 in
-      -h|--help)  # 如果参数是 -h 或 --help，则打印使用方法并退出脚本
+      -h|--help)
         usage
         exit
         ;;
       *)
-        DIRECTORIES+=("$1")  # 否则，将参数保存到 DIRECTORIES 数组变量中
+        DIRECTORIES+=("$1")
         ;;
     esac
-    shift  # 移除已经处理的参数
+    shift
   done
 
-  if [[ ${#DIRECTORIES[@]} -eq 0 ]]; then  # 如果没有指定待同步的目录，则打印使用方法并退出脚本
+  if [[ ${#DIRECTORIES[*]} -eq 0 ]]; then
     usage
     exit 1
   fi
@@ -68,43 +65,41 @@ parse_args() {
 
 # 同步单个目录到远程服务器
 sync_directory() {
-  local directory="$1"  # 待同步的目录路径
-  local server="$2"  # 远程服务器地址
+  local directory="$1"
+  local server="$2"
 
   log "正在同步 $directory 到 $server..."
   rsync -aSHP "$directory" "$server:$directory"
-  # 使用 rsync 命令将本地目录同步到远程服务器
 }
 
 # 同步多个目录到多个远程服务器
 sync_directories() {
-  local directories=("${DIRECTORIES[@]}")  # 待同步的本地目录列表
-  local servers=()  # 目标服务器列表
+  local directories=("${DIRECTORIES[@]}")
+  local servers=()
 
-  # 从服务器列表文件中读取服务器列表，保存到 servers 数组变量中
   while read -r server; do
     servers+=("$server")
   done < "$SERVERS_FILE"
 
-  if [[ ${#servers[@]} -eq 0 ]]; then  # 如果服务器列表为空，则退出脚本
+  if [[ ${#servers[@]} -eq 0 ]]; then
     die "在服务器列表文件中未找到任何服务器"
   fi
 
-  # 遍历每个目标服务器，并将每个本地目录同步到目标服务器上
   for server in "${servers[@]}"; do
     log "正在同步到 $server..."
     for directory in "${directories[@]}"; do
-      if [[ ! -d "$directory" ]]; then  # 如果待同步的目录不存在，则打印一条错误信息并跳过该目录
-        log "$directory 不是一个目录"
-        continue
-      fi
+      [[ ! -d "$directory" ]] && { log "$directory 不是一个目录"; continue; }
 
-      sync_directory "$directory" "$server"  # 同步本地目录到目标服务器
+      sync_directory "$directory" "$server"
     done
   done
 }
 
 # 主函数
-parse_args "$@"
-sync_directories
-# 解析命令行参数并执行同步操作
+main() {
+  parse_args "$@"
+  sync_directories
+}
+
+# 执行主函数
+main "$@"
