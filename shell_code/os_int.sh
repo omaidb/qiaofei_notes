@@ -64,21 +64,12 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 # 3. PS1美化
 set_PS1() {
     # 下载ps1脚本
-    wget -P /etc/profile.d/ -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/ps1.sh
+    wget -cP /etc/profile.d/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/ps1.sh
 }
 
 # 3.0开启history的时间记录
 config_cmd_history_time() {
-    echo "
-    # 保存历史命令10条
-    HISTSIZE=10
-    # 设置history的时间记录格式
-    HISTTIMEFORMAT="%F %R "
-    # 使变量全局生效
-    export HISTSIZE HISTTIMEFORMAT
-    # 以空格开头的命令行不记录
-    export HISTCONTROL = ignorespace
-    " >/etc/profile/history.sh
+    wget -cP /etc/profile/history.sh https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/history.sh
 }
 
 # 3.1 配置vimrc
