@@ -40,12 +40,13 @@ disable_firewalld() {
     # 清空iptables规则
     iptables -F
 
-    ## 立即临时关闭SELinux
-    setenforce 0
     ## 永久关闭SELinux
     sed -ri 's#(SELINUX=).*#\1disabled#' /etc/selinux/config
     ## 查看SELinux永久策略是否关闭
     eval "grep 'SELINUX=' /etc/selinux/config"
+    
+    ## 立即临时关闭SELinux
+    setenforce 0
 }
 
 # 2.内核参数调整
