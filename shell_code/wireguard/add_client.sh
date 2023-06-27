@@ -110,6 +110,7 @@ Endpoint = $server_public_ip:51820
 AllowedIPs = 0.0.0.0/0
 
 # 连接保活间隔
+## PersistentKeepalive 参数只适用于 WireGuard 的客户端配置，而不是服务器配置
 ## 服务端和客户端一方没有公网IP，都是NAT，那么就需要添加这个参数定时链接服务端(单位：秒)
 ## 客户端和服务端都是公网,不建议使用该参数（设置为0，或客户端配置文件中删除这行） 
 PersistentKeepalive = 2
