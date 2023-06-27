@@ -256,7 +256,7 @@ create_xsync() {
     # 检查目录是否存在
     ls ~/bin &>/dev/null || mkdir -p ~/bin
     # 下载xsync脚本
-    wget -cP $HOME/bin/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/other/xsync
+    wget -cP "$HOME"/bin/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/other/xsync
 
     # 赋予~/bin/xsync可执行权限
     chmod +x ~/bin/xsync
