@@ -39,7 +39,7 @@ disable_firewalld() {
 
     # 清空iptables规则
     iptables -F
-    
+
     ## 立即临时关闭SELinux
     setenforce 0
     ## 永久关闭SELinux
@@ -63,10 +63,8 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 
 # 3. PS1美化
 set_PS1() {
-    echo "
-# PS1美化
-export PS1='\n\e[1;37m[\e[m\e[1;32m\u\e[m\e[1;33m@\e[m\e[1;35m\H\e[m \e[4m\w\e[m\e[1;37m] \[\e[1;33m WORK\e \e[m\e[1;36m\e[m $(echo $?) \n\$'
-" >/etc/profile.d/ps1.sh
+    # 下载ps1脚本
+    wget -P /etc/profile.d/ -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/ps1.sh
 }
 
 # 3.0开启history的时间记录
