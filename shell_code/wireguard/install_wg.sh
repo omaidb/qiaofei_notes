@@ -113,7 +113,7 @@ PreDown = iptables -t nat -D POSTROUTING -o $eth -j MASQUERADE
 # 删除自动调整mss
 PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 # 删除DSCP值
-PostDown = iptables -D mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
+PostDown = iptables -t mangle -D OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
 
 # 服务端监听端口，可以自行修改
 ListenPort = 51820
