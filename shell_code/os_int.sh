@@ -156,9 +156,9 @@ disable_nonecessary_service() {
     # ## 禁用network服务，启用NetworkManager服务
     # systemctl disable --now network && systemctl enable --now NetworkManager
     ## 禁用postfix服务
-    systemctl disable --now postfix
+    systemctl disable --now postfix || true
     ## 注销postfix服务
-    systemctl mask postfix
+    systemctl mask postfix || true
 
     # 精简开机自启动服务
     # https://blog.51cto.com/u_9625010/2385687
