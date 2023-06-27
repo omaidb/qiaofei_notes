@@ -76,7 +76,7 @@ config_cmd_history_time() {
 
 # 3.1 配置vimrc
 set_vimrc() {
-    wget -cP /root/.vimrc https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/history.sh   
+    wget -cP /root/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/.vimrc 
 }
 
 # 3.2配置.bashrc
