@@ -71,7 +71,7 @@ set_PS1() {
 
 # 3.0开启history的时间记录
 config_cmd_history_time() {
-    wget -cP /etc/profile/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/history.sh
+    wget -cP /etc/profile.d/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/history.sh
 }
 
 # 3.1 配置vimrc
