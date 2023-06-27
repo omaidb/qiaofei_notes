@@ -42,11 +42,12 @@ disable_firewalld() {
 
     ## 永久关闭SELinux
     sed -ri 's#(SELINUX=).*#\1disabled#' /etc/selinux/config
+
+    ## 立即临时关闭SELinux--退出码是1，所以强制为true
+    setenforce 0 || true
+
     ## 查看SELinux永久策略是否关闭
     eval "grep 'SELINUX=' /etc/selinux/config"
-    
-    ## 立即临时关闭SELinux
-    setenforce 0
 }
 
 # 2.内核参数调整
