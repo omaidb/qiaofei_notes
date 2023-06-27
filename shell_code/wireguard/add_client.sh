@@ -32,7 +32,7 @@ function set_client_dns() {
         result=$(systemctl is-active dnsmasq.service)
         if [[ $result != "active" ]]; then
                 echo "dnsmasq.service服务端未启动"
-                client_dns="8.8.8.8"
+                client_dns="1.0.0.1"
         else
                 client_dns=$(hostname -i)
         fi
