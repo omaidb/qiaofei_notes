@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
+set -ex
+
 # 定义全局变量
 SERVERS_FILE="$HOME/xsync.txt"  # 服务器列表文件路径
 LOG_FILE="/var/log/xsync.log"  # 日志文件路径
 
 # 定义数组变量
-DIRECTORIES=()  # 待同步目录列表
+ITEMS=()  # 待同步文件或目录列表
 
 # 定义日志函数
 log() {
@@ -20,6 +22,14 @@ die() {
   # 打印错误信息，并退出脚本
 }
 
+# 检查文件是否存在
+check_server_file(){
+    # 判断服务器列表文件是否存在，不存在则创建
+    if ! test -f "$SERVERS_FILE"; then
+       touch "$SERVERS_FILE"
+    fi
+}
+
 # 检查依赖项是否已安装
 check_dependency() {
   if ! command -v "$1" &>/dev/null; then
@@ -31,18 +41,16 @@ check_dependency() {
   # 检查指定的依赖项是否已经安装，如果没有则安装
 }
 
-check_dependency rsync
-
 # 定义帮助函数
 usage() {
-  echo "使用方法: xsync [-h] [DIRECTORY...]"
-  echo "同步目录到远程服务器"
+  echo "使用方法: xsync [-h] [ITEM...]"
+  echo "同步文件或目录到远程服务器"
   echo ""
   echo "选项:"
   echo "  -h, --help          显示帮助信息并退出"
   echo ""
   echo "参数:"
-  echo "  DIRECTORY           待同步的目录"
+  echo "  ITEM                待同步的文件或目录"
 }
 
 # 解析命令行参数
@@ -54,31 +62,31 @@ parse_args() {
         exit
         ;;
       *)
-        DIRECTORIES+=("$1")  # 否则，将参数保存到 DIRECTORIES 数组变量中
+        ITEMS+=("$1")  # 否则，将参数保存到 ITEMS 数组变量中
         ;;
     esac
     shift  # 移除已经处理的参数
   done
 
-  if [[ ${#DIRECTORIES[@]} -eq 0 ]]; then  # 如果没有指定待同步的目录，则打印使用方法并退出脚本
+  if [[ ${#ITEMS[@]} -eq 0 ]]; then  # 如果没有指定待同步的文件或目录，则打印使用方法并退出脚本
     usage
     exit 1
   fi
 }
 
-# 同步单个目录到远程服务器
-sync_directory() {
-  local directory="$1"  # 待同步的目录路径
+# 同步单个文件或目录到远程服务器
+sync_item() {
+  local item="$1"  # 待同步的文件或目录路径
   local server="$2"  # 远程服务器地址
 
-  log "正在同步 $directory 到 $server..."
-  rsync -aSHP "$directory" "$server:$directory"
-  # 使用 rsync 命令将本地目录同步到远程服务器
+  log "正在同步 $item 到 $server..."
+  rsync -aSHP "$item" "$server:$item"
+  # 使用 rsync 命令将本地文件或目录同步到远程服务器
 }
 
-# 同步多个目录到多个远程服务器
-sync_directories() {
-  local directories=("${DIRECTORIES[@]}")  # 待同步的本地目录列表
+# 同步多个文件和目录到多个远程服务器
+sync_items() {
+  local items=("${ITEMS[@]}")  # 待同步的本地文件或目录列表
   local servers=()  # 目标服务器列表
 
   # 从服务器列表文件中读取服务器列表，保存到 servers 数组变量中
@@ -90,21 +98,28 @@ sync_directories() {
     die "在服务器列表文件中未找到任何服务器"
   fi
 
-  # 遍历每个目标服务器，并将每个本地目录同步到目标服务器上
+  # 遍历每个目标服务器，并将每个本地文件或目录同步到目标服务器上
   for server in "${servers[@]}"; do
     log "正在同步到 $server..."
-    for directory in "${directories[@]}"; do
-      if [[ ! -d "$directory" ]]; then  # 如果待同步的目录不存在，则打印一条错误信息并跳过该目录
-        log "$directory 不是一个目录"
+    for item in "${items[@]}"; do
+      if [[ ! -e "$item" ]]; then  # 如果待同步的文件或目录不存在，则打印一条错误信息并跳过该文件或目录
+        log "$item 不存在"
         continue
       fi
 
-      sync_directory "$directory" "$server"  # 同步本地目录到目标服务器
+      sync_item "$item" "$server"  # 同步本地文件或目录到目标服务器
     done
   done
 }
 
-# 主函数
+# 检查依赖项是否已安装
+check_dependency rsync
+
+# 检查服务器列表文件是否存在
+check_server_file
+
+# 解析命令行参数
 parse_args "$@"
-sync_directories
-# 解析命令行参数并执行同步操作
+
+# 同步多个文件和目录到多个远程服务器
+sync_items
