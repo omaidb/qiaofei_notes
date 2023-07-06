@@ -69,7 +69,7 @@ function add_client_to_server() {
         ## set <interface>
         ## peer <base64 public key>
         ## preshared-key 用户的预共享密钥，这里必须传文件
-        wg set wg0 peer "$client_public" preshared-key /etc/wireguard/user_conf/"$client_name".PresharedKey allowed-ips "$ip_add"
+        wg set wg0 peer "$client_public" preshared-key /etc/wireguard/user_conf/"$client_name".PresharedKey persistent-keepalive 2 allowed-ips "$ip_add"
 
         # 重启wg服务端，使新的客户端生效
         ## 一定要重启wg服务端,新的客户端配置才会被加载,加载完成后新客户端就可以接入到服务器了。
