@@ -6,7 +6,8 @@ import json  # 用于处理 JSON 数据
 from pprint import pprint
 import ssl  # 用于处理 SSL 证书
 import time  # 用于添加延迟
-from nostr.event import Event # 自定义模块，用于创建事件
+from nostr.filter import Filter, Filters # 定义和处理事件过滤器，可以用于从中继服务器订阅特定类型的事件。
+from nostr.event import Event, EventKind # 自定义模块，用于创建事件
 from nostr.relay_manager import RelayManager  # 用于管理中继的自定义模块
 from nostr.message_type import ClientMessageType # 自定义模块，用于定义客户端消息类型
 from nostr.key import PrivateKey # 自定义模块，用于生成私钥
@@ -40,6 +41,35 @@ while relay_manager.message_pool.has_notices():
     # 打印通知消息的内容
     pprint(notice_msg.content)
 
+"""
+从中继接收事件
+"""
+# 创建一个 Filters 对象，用于订阅特定作者的文本笔记
+filters = Filters([Filter(authors=["npub1s36lkdvyh45ae5786xem90rm9tdk09c2l4hwgta3pnu24vtq2luqnhyzks"], kinds=[EventKind.TEXT_NOTE])])
+
+# 创建一个字符串，用于标识订阅
+subscription_id = ("订阅标识")
+
+# 创建一个请求列表，包含订阅信息和过滤器信息
+request = [ClientMessageType.REQUEST, subscription_id]
+request.extend(filters.to_json_array())
+
+# 创建一个 RelayManager 对象，并向其添加两个中继服务器
+relay_manager = RelayManager()
+relay_manager.add_relay("wss://nostr-pub.wellorder.net")
+relay_manager.add_relay("wss://relay.damus.io")
+
+# 向 RelayManager 对象中添加订阅信息和过滤器信息
+relay_manager.add_subscription(subscription_id, filters)
+
+# 将请求转换为 JSON 格式，并将其发布到中继服务器
+message = json.dumps(request)
+relay_manager.publish_message(message)
+
+
+"""
+发布事件
+"""
 # 创建一个事件对象
 event = Event("Hello Nostr")
 # 并使用私钥对其进行签名
