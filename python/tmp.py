@@ -1,7 +1,6 @@
-with open('./nostr_test/relay.txt', mode='r', encoding='utf-8') as f:
-    lines = f.readlines()  # 读取所有行数据
-    # 循环读取每一行数据
-    for line in lines:
-        line = line.strip()  # 去除每行的换行符和空格
-        print(line)  # 处理每行数据，例如打印或者存储到其他文件中
-f.close()  # 关闭文件
+from nostr.key import PrivateKey
+
+private_key = PrivateKey()
+public_key = private_key.public_key
+print(f"Private key: {private_key.bech32()}")
+print(f"Public key: {public_key.bech32()}")
