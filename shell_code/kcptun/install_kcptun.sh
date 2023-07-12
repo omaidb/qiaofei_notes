@@ -55,28 +55,56 @@ mv kcptun-server kcptun-client /usr/local/kcptun/
 
 # 将服务端配置文件写入kcptun-server.json文件
 echo '{
-    "listen": ":4000",
-    "target": "127.0.0.1:1080",
-    "key": "5",
+    "listen": ":29900-29909",
+    "target": "127.0.0.1:1081",
+    "key": "1",
     "crypt": "none",
-    "mode": "fast2",
+    "mode": "fast3",
+    "mtu": 1350,
+    "datashard": 27,
+    "parityshard": 9,
+    "interval": 10,
+    "resend": 1,
+    "nc": 1,
+    "dscp": 46,
+    "pprof": false,
     "nocomp": true,
-    "sockbuf": 16777217,
-    "dscp": 46
+    "quiet": true,
+    "acknodelay": false,
+    "nodelay": 1,
+    "smuxver": 2,
+    "keepalive": 2,
+    "conn": 7,
+    "signal": true,
+    "tcp":true
 }' >/etc/kcptun/kcptun-server.json
 
 
 # 将客户端配置文件写入kcptun-client.json文件
 echo '{
-    "remoteaddr": "kcptun-address:12345",
-    "localaddr": ":54321",
-    "key": "5",
+    "remoteaddr": "remote.site:29900-29909",
+    "localaddr": "127.0.0.1:1081",
+    "key": "1",
     "crypt": "none",
-    "mode": "fast2",
+    "mode": "fast3",
+    "mtu": 1350,
+    "datashard": 27,
+    "parityshard": 9,
+    "interval": 10,
+    "resend": 1,
+    "nc": 1,
+    "dscp": 46,
+    "pprof": false,
     "nocomp": true,
-    "autoexpire": 60,
-    "sockbuf": 16777217,
-    "dscp": 46
+    "autoexpire": 86400,
+    "quiet": true,
+    "acknodelay": false,
+    "nodelay": 1,
+    "smuxver": 2,
+    "keepalive": 2,
+    "conn": 2,
+    "signal": true,
+    "tcp": true
 }' >/etc/kcptun/kcptun-client.json
 
 # 创建kcptun-client.service文件
