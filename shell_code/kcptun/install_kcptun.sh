@@ -2,6 +2,8 @@
 
 # !!!声明:该脚本仅适用于Centos7安装kcptun
 
+# KCPTUN项目地址 https://github.com/xtaci/kcptun
+
 # 定义kcptun版本
 KCPTUN_VERSION=20230214
 

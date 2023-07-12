@@ -16,7 +16,7 @@ from nostr.key import PrivateKey # 自定义模块，用于生成私钥
 # private_key = ("nsec1yhalystahd6ndfc7qnu4ccjz4vfn30frxqe2uvwmd8feg2w07uvqp7d9c5")
 private_key = ("nsec1wyumvdel8snyq59nf0jq24kazyemdyyv6gdhadmlz4er2f7ghewqfaw9rr")
 
-# 创建 RelayManager 类的实例
+# 创建 RelayManager 类的实例g
 relay_manager = RelayManager()
 
 with open('nostr_test/relay.txt', mode='r', encoding='utf-8') as f:
