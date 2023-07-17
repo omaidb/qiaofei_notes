@@ -104,7 +104,7 @@ PublicKey = $(cat /etc/wireguard/server.publickey)
 PresharedKey = $(cat /etc/wireguard/user_conf/"$client_name".PresharedKey)
 
 # 服务器地址和端口 
-Endpoint = $server_public_ip:51820
+Endpoint = $server_public_ip:514
 
 # 因为是客户端，所以这个设置为全部IP段即可 
 AllowedIPs = 0.0.0.0/0
