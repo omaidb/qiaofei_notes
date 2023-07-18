@@ -5,7 +5,7 @@
 
 # 判断Linux发行版
 check_os() {
-    # 如果有yum包管理器，就是rhel系统发行版
+    # 如果有yum包管理器,就是rhel系统发行版
     (
         which yum || echo "不是rhel发行版" && exit 1
     ) && os=rhel
@@ -16,7 +16,7 @@ check_os() {
 # 判断Linux版本
 check_os_ver() {
     if [[ "$os" && "$os_version" -lt 7 ]]; then
-        echo "使用此安装程序需要 CentOS 7 或更高版本。
+        echo "使用此安装程序需要 CentOS 7 或更高版本.
 此版本的 CentOS 太旧且不受支持." && exit 1
     fi
 }
@@ -26,7 +26,7 @@ function check_nftables() {
     if [ "$os" = "centos" ]; then
         if grep -qs "hwdsl2 VPN script" /etc/sysconfig/nftables.conf ||
             systemctl is-active --quiet nftables 2>/dev/null; then
-            exiterr "此系统启用了 nftables，但此安装程序不支持。"
+            exiterr "此系统启用了 nftables,但此安装程序不支持."
         fi
     fi
 }
@@ -83,7 +83,7 @@ function init_wg_server() {
 
     # 网卡名
     eth=$(ls /sys/class/net | awk '/^e/{print}')
-    # 如果已经存在wg0.conf文件，就退出代码
+    # 如果已经存在wg0.conf文件,就退出代码
     ls /etc/wireguard/wg0.conf &>/dev/null && echo "wg0.conf文件已经存在" && exit 1
 
     # 生成服务端密钥对
@@ -92,21 +92,22 @@ function init_wg_server() {
     # 生成wg服务端配置文件
     cat <<EOF >/etc/wireguard/wg0.conf
 [Interface]
-# 服务器的私匙，对应客户端配置中的公匙（自动读取上面刚刚生成的密匙内容）
+# 服务器的私匙,对应客户端配置中的公匙(自动读取上面刚刚生成的密匙内容)
 PrivateKey = $(cat /etc/wireguard/server.privatekey)
-# 本机的内网IP地址，一般默认即可，除非和你服务器或客户端设备本地网段冲突
+# 本机的内网IP地址,一般默认即可,除非和你服务器或客户端设备本地网段冲突
 Address = 10.89.64.1/24
 
-# 运行WireGuard时要执行的iptables防火墙规则，用于打开NAT转发之类的。
+# 运行WireGuard时要执行的iptables防火墙规则,用于打开NAT转发之类的.
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
 #PostUp = ufw route allow in on wg0 out on $eth
 PostUp = iptables -t nat -I POSTROUTING -o $eth -j MASQUERADE
-# 自动调整mss，防止某些网站打不开
+# 自动调整mss,防止某些网站打不开
 PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 # 调整DSCP值
 PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
+PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46
 
-# 停止WireGuard时要执行的iptables防火墙规则，用于关闭NAT转发之类的。
+# 停止WireGuard时要执行的iptables防火墙规则,用于关闭NAT转发之类的.
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
 # PreDown = ufw route delete allow in on wg0 out on $eth
 PreDown = iptables -t nat -D POSTROUTING -o $eth -j MASQUERADE
@@ -114,15 +115,16 @@ PreDown = iptables -t nat -D POSTROUTING -o $eth -j MASQUERADE
 PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 # 删除DSCP值
 PostDown = iptables -t mangle -D OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
+PostDown = iptables -t mangle -D OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46
 
-# 服务端监听端口，可以自行修改
+# 服务端监听端口,可以自行修改
 ListenPort = 51820
 # SaveConfig确保当WireGuard接口关闭时,任何更改都将保存到配置文件中
 SaveConfig = true
 # 服务端请求域名解析DNS,可以在本机搭建dns服务加快解析
 DNS = 1.0.0.1,8.8.4.4
 # 服务端mtu不设置,为自动mtu(默认)
-# 连接保活间隔PersistentKeepalive 参数只适用于 WireGuard 的客户端配置，而不是服务器配置
+# 连接保活间隔PersistentKeepalive 参数只适用于 WireGuard 的客户端配置,而不是服务器配置
 EOF
 
     # 修改配置文件和密钥文件为600
@@ -163,7 +165,7 @@ function remove_wireguard() {
     ## 删除net.ipv4.conf.all.proxy_arp行
     sed -i '/net.ipv4.conf.all.proxy_arp/d' /etc/sysctl.conf &>/dev/null
     # 数据包转发--热生效
-    ## 1为开启；0为关闭
+    ## 1为开启;0为关闭
     echo 0 >/proc/sys/net/ipv4/ip_forward
     echo 0 >/proc/sys/net/ipv4/conf/all/proxy_arp
 
@@ -176,11 +178,11 @@ function start_menu() {
     check_install_env
     clear
     echo "========================="
-    echo " 介绍：适用于CentOS7"
-    echo " 作者：Miles"
-    echo " 网站：https://blog.csdn.net/omaidb"
+    echo " 介绍:适用于CentOS7"
+    echo " 作者:Miles"
+    echo " 网站:https://blog.csdn.net/omaidb"
     echo "========================="
-    echo "注意：本脚本只支持Centos7"
+    echo "注意:本脚本只支持Centos7"
     echo "1. 安装wireguard"
     echo "2. 卸载wireguard"
     echo "0. 退出脚本"
@@ -207,5 +209,5 @@ function start_menu() {
     esac
 }
 
-# main方法，显示菜单
+# main方法,显示菜单
 start_menu
