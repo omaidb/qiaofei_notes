@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# !!!声明:该脚本仅适用于Centos7安装kcptun
-
+# !!!声明:该脚本仅适用于Centos7安装kcptun、
 # KCPTUN项目地址 https://github.com/xtaci/kcptun
 
 # 定义kcptun版本

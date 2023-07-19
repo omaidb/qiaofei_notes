@@ -1,0 +1,17 @@
+# /usr/lib/systemd/system/mlocate-updatedb.timer - mlocate 数据库更新定时器
+
+[Unit]
+# - 每天更新 mlocate 数据库的定时器
+Description=Updates mlocate database every day 
+
+[Timer]
+# - 定时器每天运行一次
+OnCalendar=daily
+# - 定时器触发精度为 24 小时 
+AccuracySec=24h 
+# - 如果定时器错过预定的运行时间,定时器将在系统下一次开机时运行
+Persistent=true 
+
+[Install]
+# - 将定时器单元安装到 timers.target 中,以便系统会自动启动该定时器
+WantedBy=timers.target 

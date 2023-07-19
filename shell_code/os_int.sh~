@@ -66,12 +66,12 @@ net.ipv6.conf.lo.disable_ipv6 = 1
 # 3. PS1美化
 set_PS1() {
     # 下载ps1脚本
-    wget -cP /etc/profile.d/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/profile.d/ps1.sh
+    wget -cP /etc/profile.d/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/ps1.sh
 }
 
 # 3.0开启history的时间记录
 config_cmd_history_time() {
-    wget -cP /etc/profile.d/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/profile.d/history.sh
+    wget -cP /etc/profile.d/ https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/config_bak/history.sh
 }
 
 # 3.1 配置vimrc
@@ -83,7 +83,7 @@ set_vimrc() {
 set_bashrc() {
     echo "
 # 配置proxy变量
-alias proxy='export all_proxy=socks5://admin:123@127.0.0.1:1080'
+alias proxy='export all_proxy=socks5://admin:Admin123.@127.0.0.1:1080'
 alias unproxy='unset all_proxy'
 
 # 防止htop无任何输出
