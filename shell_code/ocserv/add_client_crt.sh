@@ -4,6 +4,7 @@
 set -ex
 
 # 证书签发脚本
+# 参考：https://mp.weixin.qq.com/s/Y5dcAv7ChE19QDd_662RQQ
 # 参考：https://wwww.lvmoo.com/1097.love/
 # 参考 https://www.jianshu.com/p/ab9523a6c0f4
 
@@ -122,6 +123,7 @@ create_server_key_and_cert() {
 }
 
 # 生成DH(Diffie-Hellman)密钥
+## Diffie-Hellman文件，也就是秘钥交换时的DH算法，确保密钥可以穿越不安全网络。
 create_dh_ca() {
     # DH密钥的作用是：确保共享密钥KEY安全穿越不安全网络
     ls "$SERVER_SSL_DIR"/dh.pem &>/dev/null && echo "dh.pem证书文件已经存在" && exit 1
