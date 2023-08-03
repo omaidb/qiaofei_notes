@@ -106,4 +106,5 @@ forward-zone:
 	# 	forward-first: no
 	# 开启 DNS over TLS 功能
 	forward-tls-upstream: yes
-#	forward-no-cache: no
+        # 在转发查询时不使用任何缓存的 DNS 响应
+	forward-no-cache: yes
