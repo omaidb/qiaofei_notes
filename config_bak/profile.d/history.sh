@@ -23,5 +23,13 @@ shopt -s histappend
 # 在执行PS1之前保存history记录
 export PROMPT_COMMAND="history -a"
 
+# 同时忽略以空格开头和重复命令
+export HISTCONTROL=ignoreboth
+
 # 以空格开头的命令行不记录
-export HISTCONTROL=ignorespace
+# export HISTCONTROL=ignorespace
+# 重复命令只记录一次
+# export HISTCONTROL=ignoredups
+# 删除重复命令
+# export HISTCONTROL=erasedups
+
