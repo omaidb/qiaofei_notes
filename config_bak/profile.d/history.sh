@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# 保存历史命令10万条
-export HISTSIZE=100000
+# 保存历史命令1千条
+export HISTSIZE=1000
 
 # 获取用户的登录IP
 USER_IP=$(who -u am i 2>/dev/null | awk '{print $NF}' | sed -e 's/[()]//g')
