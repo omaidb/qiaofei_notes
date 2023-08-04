@@ -5,7 +5,8 @@ export HISTSIZE=1000
 
 # 获取用户的登录IP
 USER_IP=$(who -u am i 2>/dev/null | awk '{print $NF}' | sed -e 's/[()]//g')
-if [[ "$USER_IP" == "" ]]; then
+# 检查变量是否为空
+if [ -z "$USER_IP" ]; then
     USER_IP=$(hostname)
 fi
 
