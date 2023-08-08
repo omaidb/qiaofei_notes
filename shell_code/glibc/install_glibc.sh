@@ -29,7 +29,7 @@ make_install_glibc() {
     ../configure --prefix=/usr
     ## 参考云智库 https://kb.aliyun-inc.com/kb/206363
     # ../configure --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include --with-binutils=/usr/bin
-    make
+    make -j ${cpu_cpunt}
     make install
 
     # 查看libc版本
