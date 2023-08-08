@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# 参考：https://developer.aliyun.com/article/1094922
 # 保存历史命令1千条
 export HISTSIZE=1000
 
