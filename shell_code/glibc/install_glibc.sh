@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -ex
-
 # 获取CPU总核心数
 cpu_cpunt=$(grep processor -c /proc/cpuinfo)
 # CPU总核心-1，防止make-j死机
