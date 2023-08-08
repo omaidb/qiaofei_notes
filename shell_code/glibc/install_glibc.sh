@@ -13,7 +13,7 @@ make_install_glibc() {
     # https://www.jianshu.com/p/9d31fe1b4ac7
     yum install -y bison gcc
     # 1、下载文件
-    wget -c -P /usr/local/src https://ftp.gnu.org/gnu/glibc/glibc-${glibc_version}.tar.xz
+    wget -c -P /usr/local/src https://ftp.gnu.org/gnu/glibc/glibc-${glibc_version}.tar.xz --no-check-certificate
 
     # 2、安装部署
     ## 解压
