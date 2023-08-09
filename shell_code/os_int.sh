@@ -158,7 +158,7 @@ disable_nonecessary_service() {
     ## 禁用postfix服务
     systemctl disable --now postfix || true
     ## 注销postfix服务
-    systemctl mask postfix || true
+    systemctl mask --now postfix || true
 
     # 精简开机自启动服务
     # https://blog.51cto.com/u_9625010/2385687
