@@ -58,7 +58,7 @@ use_udp = true
 # 零拷贝
 zero_copy = true
 # TCP快速打开
-fast_open = true
+fast_open = false
 # 指定 tcp 超时
 tcp_timeout = 300
 # 指定 udp 超时
@@ -75,6 +75,10 @@ accept_proxy_timeout = 5
 [[endpoints]]
 listen = "0.0.0.0:443"
 remote = "10.187.71.4:443"
+# 备用远程地址
+# extra_remotes = ["b:443", "c:443"]
+# [a,b,c]的权重依次为[4,2,1]。
+# balance = "roundrobin: 4, 2, 1"
 
 [[endpoints]]
 listen = "0.0.0.0:26000"
