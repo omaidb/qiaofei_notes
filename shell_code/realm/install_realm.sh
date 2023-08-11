@@ -39,36 +39,37 @@ create_config() {
     # 创建空的配置文件
     cat >/etc/realm/realm.toml <<END
     # 完整配置
+[log]
+# 日志级别
+# level = "warn"
+# 日志保存路径
+# output = "/var/log/realm.log"
 [dns]
 # 指定DNS模式
 mode = "ipv4_only"
 # 指定DNS协议
 protocol = "tcp_and_udp"
 # DNS服务器和端口
-nameservers = ["8.8.4.4:53","1.0.0.1:53"]
-min_ttl = 600
-max_ttl = 3600
 cache_size = 256
+max_ttl = 3600
+min_ttl = 600
+nameservers = ["8.8.4.4:53", "1.0.0.1:53"]
 
 [network]
 # 禁用TCP
 no_tcp = false
 # 使用UDP
 use_udp = true
-# 零拷贝
-zero_copy = true
-# TCP快速打开
-fast_open = false
 # 指定 tcp 超时
 tcp_timeout = 300
 # 指定 udp 超时
 udp_timeout = 30
 # 发送代理协议头
-send_proxy = false
+send_proxy = true
 # 发送代理协议版本
 send_proxy_version = 2
 # 接受代理协议头
-accept_proxy = false
+accept_proxy = true
 # 接受代理协议超时
 accept_proxy_timeout = 5
 
@@ -78,7 +79,13 @@ remote = "10.187.71.4:443"
 # 备用远程地址
 # extra_remotes = ["b:443", "c:443"]
 # [a,b,c]的权重依次为[4,2,1]。
+## roundrobin 负载均衡
+## iphash ip哈希
 # balance = "roundrobin: 4, 2, 1"
+# 从哪个ip地址发送数据
+# through = "0.0.0.0"
+# 指定网卡接口
+# interface = "eth0"
 
 [[endpoints]]
 listen = "0.0.0.0:26000"
