@@ -1,20 +1,48 @@
 #!/usr/bin/env bash
 
 # 参考：https://developer.aliyun.com/article/1094922
-# 保存历史命令1千条
-export HISTSIZE=1000
+
+history
+
+# 保存历史命令条数
+export HISTSIZE=2705
 
 # 获取用户的登录IP
 USER_IP=$(who -u am i 2>/dev/null | awk '{print $NF}' | sed -e 's/[()]//g')
-# 检查变量是否为空
+
+# 检查 USER_IP 变量是否为空
 if [ -z "$USER_IP" ]; then
+    # 如果为空则显示本主机名
     USER_IP=$(hostname)
 fi
 
-# 配置history格式中显示用户的IP地址
-## 显示history时间格式:2021-11-06_00:01:35
-export HISTTIMEFORMAT="%F %T $USER_IP $(whoami) " 
+# 检查/var/log/history目录，没有则创建
+## 该目录用来存储history命令记录
+if [ ! -d /var/log/history ]; then
+    mkdir /var/log/history
+    chmod 777 /var/log/history
+fi
 
+# 检查当前用户名这个histor是否存在，没有则创建
+if [ ! -d /var/log/history/"${LOGNAME}" ]; then
+    mkdir /var/log/history/"${LOGNAME}"
+    chmod 300 /var/log/history/"${LOGNAME}"
+fi
+
+# 显示history命令的时间格式:2023-08-17 10:24:46 root history
+## $(whoami) 后面要加个空格
+HISTTIMEFORMAT="%F %T $(whoami) "
+export HISTTIMEFORMAT
+
+# history文件的时间格式
+Date_Framt=$(date +%Y%m%d_%H%M%S)
+
+# 配置histfile路径
+HISTFILE="/var/log/history/${LOGNAME}/$(whoami)@${USER_IP}_$Date_Framt"
+export HISTFILE
+
+# 将historyfile文件设为600
+chmod 600 /var/log/history/"${LOGNAME}"/*history* 2>/dev/null
 # 设置history的时间记录格式 2023-03-10 17:10
 # HISTTIMEFORMAT="%F %R "
 
@@ -34,4 +62,3 @@ export HISTCONTROL=ignoreboth
 # export HISTCONTROL=ignoredups
 # 删除重复命令
 # export HISTCONTROL=erasedups
-
