@@ -26,7 +26,7 @@ fi
 # 检查当前用户名这个histor是否存在，没有则创建
 if [ ! -d /var/log/history/"${LOGNAME}" ]; then
     mkdir /var/log/history/"${LOGNAME}"
-    chmod 300 /var/log/history/"${LOGNAME}"
+    chmod 700 /var/log/history/"${LOGNAME}"
 fi
 
 # 显示history命令的时间格式:2023-08-17 10:24:46 root history
