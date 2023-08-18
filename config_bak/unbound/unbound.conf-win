@@ -4,7 +4,7 @@ server:
     # 日志级别
 	  verbosity: 1
 	  # 线程数
-  	num-threads: 2
+  	num-threads: 1
 
   	# 监听地址
     interface: 127.0.0.1
@@ -17,12 +17,12 @@ server:
     do-udp: yes
 
     # 上游连接仅使用TCP
-    tcp-upstream: yes
+    tcp-upstream: no
 
     # DOT配置
     # 通过 TLS 向上游请求（在 TLS 流中使用纯 DNS）
     tls-upstream: yes
-    # tls-port: 853
+    tls-port: 853
     # https-port: 443
     # # 指定 DoT 证书和密钥的路径
     # tls-service-key: "/etc/unbound/keys/dot.key"
@@ -46,14 +46,16 @@ server:
     msg-cache-slabs: 8
     rrset-cache-size: 64m
     rrset-cache-slabs: 8
-  	# 设置缓存最长时间为1小时
-  	cache-min-ttl: 3600
-  	# 设置缓存过期时间为24小时
-  	cache-max-ttl: 86400
+	# 设置缓存最长时间为1小时
+	cache-min-ttl: 3600
+	# 设置缓存过期时间为24小时
+	cache-max-ttl: 86400
 
     # 预取-适用于经常查询的域
     prefetch: yes
     prefetch-key: yes
+    # 节省宽带流量
+    minimal-responses: yes
 
     # 内核区缓存
     so-rcvbuf: 1m
@@ -100,9 +102,7 @@ forward-zone:
 	# forward-addr: 9.9.9.9
 	# forward-addr: 1.0.0.1
 	# forward-addr: 8.8.4.4
-	forward-addr: 9.9.9.9@853 #dns.quad9.net
 	forward-addr: 1.1.1.1@853 #cloudflare-dns.com
-	forward-addr: 8.8.8.8@853 #dns.google
 	# 	forward-first: no
 	# 开启 DNS over TLS 功能
 	forward-tls-upstream: yes
