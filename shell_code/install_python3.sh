@@ -4,7 +4,7 @@
 # set -ex
 
 # 定义python版本
-python3_version=3.11.2
+python3_version=3.9.9
 
 makeinstall_python() {
     # 安装必要的依赖
