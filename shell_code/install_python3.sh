@@ -8,23 +8,25 @@ python3_version=3.9.9
 
 makeinstall_python() {
     # 安装必要的依赖
-    yum install -y yum-utils readline-devel gcc openssl-devel openssl11 openssl11-devel bzip2-devel zlib zlib-devel libffi libffi-devel
-    
-	# 自动查找并安装构建 Python 所需的开发包和依赖库
-	yum-builddep python
-	yum-builddep python3
+    yum install -y yum-utils readline-devel gcc \
+    	openssl-devel openssl openssl-devel openssl11 openssl11-devel \
+     	bzip2-devel zlib zlib-devel libffi libffi-devel ncurses-devel \
+      	sqlite-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel    
+    # 自动查找并安装构建 Python 所需的开发包和依赖库
+    yum-builddep python
+    yum-builddep python3
     # 安装openssl11，后期的pip3安装网络相关模块需要用到ssl模块。
     CFLAGS=$(pkg-config --cflags openssl11)
     export CFLAGS
     LDFLAGS=$(pkg-config --libs openssl11)
     export LDFLAGS
 
-    # 下载Python源码并解压
+    # 下载Python3源码并解压
     cd /usr/local/src || exit
     wget -P /usr/local/src -c https://www.python.org/ftp/python/"${python3_version}"/Python-"${python3_version}".tgz
     tar xf Python-"${python3_version}".tgz
 
-    # 编译并安装Python
+    # 编译并安装Python3
     cd /usr/local/src/Python-"${python3_version}" || exit
     ## --enable-optimizations 可以提高python10%-20%代码运行速度
     ## 安装pip需要用到ssl，否则会报错
@@ -37,9 +39,9 @@ makeinstall_python() {
 }
 
 uninstall_python() {
-    # 检查Python是否已安装
+    # 检查Python3是否已安装
     if [ -f "/usr/local/bin/python3" ]; then
-        # 删除Python安装目录
+        # 删除Python3安装目录
         rm -rf "/usr/local/bin/python3"
         rm -rf "/usr/local/bin/pip3"
         rm -rf "/usr/local/lib/python${python3_version}/"
