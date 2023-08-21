@@ -22,8 +22,9 @@ makeinstall_python() {
 
     # 编译并安装Python
     cd /usr/local/src/Python-"${python3_version}" || exit
-    ./configure --enable-optimizations
-    # ./configure --prefix=/usr/python --with-ssl
+    ## --enable-optimizations 可以提高python10%-20%代码运行速度
+    ## 安装pip需要用到ssl，否则会报错
+    ./configure --enable-optimizations --with-ssl
     # 编译安装时间会持续几分钟
     make && make install
     # 创建软链接
