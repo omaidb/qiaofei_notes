@@ -10,7 +10,7 @@ makeinstall_python() {
     # 安装必要的依赖
     yum install -y yum-utils readline-devel gcc \
     	openssl-devel openssl openssl-devel openssl11 openssl11-devel \
-     	bzip2-devel zlib zlib-devel libffi libffi-devel ncurses-devel \
+     	bzip2 bzip2-devel zlib zlib-devel libffi libffi-devel ncurses-devel \
       	sqlite-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel    
     # 自动查找并安装构建 Python 所需的开发包和依赖库
     yum-builddep python
