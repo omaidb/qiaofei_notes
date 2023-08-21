@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 开启debug
-set -ex
+# set -ex
 
 # 定义python版本
 python3_version=3.11.2
