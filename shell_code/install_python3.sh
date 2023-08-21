@@ -21,7 +21,7 @@ makeinstall_python() {
 
     # 下载Python源码并解压
     cd /usr/local/src || exit
-    wget -P /usr/local/src https://www.python.org/ftp/python/"${python3_version}"/Python-"${python3_version}".tgz
+    wget -P /usr/local/src -c https://www.python.org/ftp/python/"${python3_version}"/Python-"${python3_version}".tgz
     tar xf Python-"${python3_version}".tgz
 
     # 编译并安装Python
