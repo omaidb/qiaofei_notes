@@ -67,9 +67,9 @@ function load_the_wg_kernel_module() {
 # 调整内核参数
 function tune_kernel() {
     # 下载适用于wg的sysctl配置
-    wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/vpn.conf
+    wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/sysctl_vpn.conf
     # 使sysctl配置生效
-    sysctl -p /etc/sysctl.d/vpn.conf
+    sysctl -p /etc/sysctl.d/sysctl_vpn.conf
 
 }
 
