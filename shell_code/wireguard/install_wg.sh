@@ -54,16 +54,6 @@ function install_wg_pkg() {
     echo "安装wg工具完成"
 }
 
-# 调整内核参数
-function tune_kernel() {
-    echo "
-# 开启内核开启数据包转发
-net.ipv4.ip_forward = 1 
-net.ipv4.conf.all.proxy_arp = 1
-" >>/etc/sysctl.conf && sysctl -p
-
-}
-
 # 加载内核模块
 function load_the_wg_kernel_module() {
 
@@ -72,6 +62,15 @@ function load_the_wg_kernel_module() {
 
     # 加载内核模块,查看模块是否加载成功
     modprobe wireguard && lsmod | grep wireguard --color=auto
+}
+
+# 调整内核参数
+function tune_kernel() {
+    # 下载适用于wg的sysctl配置
+    wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/vpn.conf
+    # 使sysctl配置生效
+    sysctl -p /etc/sysctl.d/vpn.conf
+
 }
 
 # 生成服务端密钥对
@@ -185,7 +184,7 @@ function start_menu() {
     check_install_env
     clear
     echo "========================="
-    echo " 介绍:适用于CentOS7"
+    echo " 介绍:适用于RHEL7和RHEL8"
     echo " 作者:Miles"
     echo " 网站:https://blog.csdn.net/omaidb"
     echo "========================="
