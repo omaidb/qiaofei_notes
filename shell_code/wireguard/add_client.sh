@@ -9,6 +9,9 @@ client_name=$1
 # 获取公网IP地址
 server_public_ip=$(curl -s ipv4.icanhazip.com)
 
+# 连接保活间隔
+Persistent_Keepalive_time=7
+
 # 环境检查
 function check_env() {
         ## 查看qrencode是否存在
@@ -69,7 +72,7 @@ function add_client_to_server() {
         ## set <interface>
         ## peer <base64 public key>
         ## preshared-key 用户的预共享密钥，这里必须传文件
-        wg set wg0 peer "$client_public" preshared-key /etc/wireguard/user_conf/"$client_name".PresharedKey persistent-keepalive 2 allowed-ips "$ip_add"
+        wg set wg0 peer "$client_public" preshared-key /etc/wireguard/user_conf/"$client_name".PresharedKey persistent-keepalive "$Persistent_Keepalive_time" allowed-ips "$ip_add"
 
         # 重启wg服务端，使新的客户端生效
         ## 一定要重启wg服务端,新的客户端配置才会被加载,加载完成后新客户端就可以接入到服务器了。
@@ -111,9 +114,9 @@ AllowedIPs = 0.0.0.0/0
 
 # 连接保活间隔
 ## PersistentKeepalive 参数只适用于 WireGuard 的客户端配置，而不是服务器配置
-## 服务端和客户端一方没有公网IP，都是NAT，那么就需要添加这个参数定时链接服务端(单位：秒)
+## 服务端和客户端一方没有公网IP，都是NAT，那么就需要添加这个参数定时连接服务端(单位：秒)
 ## 客户端和服务端都是公网,不建议使用该参数（设置为0，或客户端配置文件中删除这行） 
-PersistentKeepalive = 2
+PersistentKeepalive = "$Persistent_Keepalive_time"
 EOF
 }
 
