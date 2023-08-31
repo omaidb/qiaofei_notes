@@ -41,6 +41,13 @@ function check_install_env() {
     check_nftables
 }
 
+# 安装依赖包
+function install_dependent_pkg () {
+    yum install -y systemd-devel libevent-devel || dnf install -y systemd-devel libevent-devel
+    echo "安装依赖包完成"
+}
+
+
 function install_wg_pkg() {
     # 安装wg内核模块和wg-quick命令行
     yum install -y kmod-wireguard wireguard-tools || dnf install -y wireguard-tools
