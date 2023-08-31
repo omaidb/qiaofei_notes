@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 
 # 开启debug
-set -ex
-
+# set -ex
 # 传入客户端名称
 client_name=$1
-
 # 获取公网IP地址
 server_public_ip=$(curl -s ipv4.icanhazip.com)
-
 # 连接保活间隔
 Persistent_Keepalive_time=7
 
