@@ -60,11 +60,11 @@ main() {
             # 拉黑检查到的ip
             block_ipv4 "$ip"
             # 捕获block_ipv4的异常
-            trap block_ipv4 SIGINT SIGTERM SIGHUP
+            trap 'exit 2' INT
         elif [[ $ip_address =~ $ipv6_regex ]]; then
             block_ipv6 "$ip"
             # 捕获block_ipv6的异常
-            trap block_ipv6 SIGINT SIGTERM SIGHUP
+            trap 'exit 4' INT
         else
             echo "无效地址"
         fi
