@@ -20,7 +20,9 @@ function block_ipv4() {
         # 将IP添加到防火墙规则中
         echo "sshd:  $ip" >>/etc/hosts.deny
         # echo "Add ip $ip to /etc/hosts.deny"
-        iptables -A INPUT -s "$ip" -j DROP
+        ## -w 5：等待锁的时间为 5 秒。如果在规定时间内无法获取到锁，将会报错。
+        ## -W 100000：尝试获取锁的最大次数为 100,000 次。如果超过此次数仍无法获取到锁，将会报错。
+        iptables -w 5 -W 100000 -A INPUT -s "$ip" -j DROP
         # echo "iptabtles拉黑$ip"
     else
         # echo "IP $ip 已在被iptables封锁中。"
@@ -37,7 +39,9 @@ function block_ipv6() {
         # 将IP添加到防火墙规则中
         echo "sshd:  $ip" >>/etc/hosts.deny
         # echo "Add ip $ip to /etc/hosts.deny"
-        ip6tables -A INPUT -s "$ip" -j DROP
+        ## -w 5：等待锁的时间为 5 秒。如果在规定时间内无法获取到锁，将会报错。
+        ## -W 100000：尝试获取锁的最大次数为 100,000 次。如果超过此次数仍无法获取到锁，将会报错。
+        ip6tables -w 5 -W -A INPUT -s "$ip" -j DROP
         # echo "iptabtles拉黑$ip"
     else
         # echo "IP $ip 已在被iptables封锁中。"
