@@ -7,10 +7,15 @@
 # set -ex
 
 # 设置ssh密码错误阈值变量
-threshold=7
+threshold=1
+
+function download_blocklist() {
+    # 下载最新的恶意IP数据库
+    wget -O /tmp/all.txt https://lists.blocklist.de/lists/all.txt
+}
 
 function check() {
-    # 初始化IP列表
+    # 检查sshd日志中的IP列表
     block_ip_list=""
 
     # 获取最近ssh密码错误登录的IP列表和次数
@@ -18,16 +23,16 @@ function check() {
 
     # 遍历错误登录事件
     while read -r line; do
-        # ssh登录错误次数 
+        # ssh登录错误次数
         count=$(echo "$line" | awk '{print $1}')
         # ssh登录错误源ip
         ip=$(echo "$line" | awk '{print $2}')
-        # ssh登录错误大于等于7次，就添加到黑名单IP列表中
+        # ssh登录错误大于等于指定次，就添加到黑名单IP列表中
         if [ "$count" -ge $threshold ]; then
             # echo "IP $ip failed $count times. Adding to block list."
             block_ip_list="$block_ip_list $ip"
         fi
-    done <<< "$failed_logins"
+    done <<<"$failed_logins"
 }
 
 # 方法：拉黑IP
@@ -40,28 +45,12 @@ function block_ip() {
         :
     else
         # 将IP添加到防火墙规则中
+        echo "sshd:  $ip" >>/etc/hosts.deny
+        echo "Add ip $ip to /etc/hosts.deny"
         sudo iptables -A INPUT -s "$ip" -j DROP
-        echo "拉黑$ip"
+        echo "iptabtles拉黑$ip"
     fi
 }
-
-# 脚本退出前保存防火墙规则
-function ipt_save(){
-    # 退出前保存iptabels规则
-    service iptables save || iptables-save > /etc/sysconfig/iptables
-    echo "防火墙规则已保存"
-}
-
-# 捕获脚本退出信号
-# trap 退出时绑定的函数名 EXIT
-# trap cleanup EXIT
-# 捕获CTRL+C信号
-# trap ipt_save INT
-# 捕获所有信号
-trap ipt_save SIGINT SIGTERM SIGHUP
-
-# 设置退出信号处理方式
-trap ipt_save EXIT
 
 # 设置INT信号处理方式
 # 在接收到INT信号时执行exit 2命令，即以退出状态码2退出当前脚本。
