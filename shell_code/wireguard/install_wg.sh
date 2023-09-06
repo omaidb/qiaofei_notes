@@ -16,8 +16,7 @@ check_os() {
 # 判断Linux版本
 check_os_ver() {
     if [[ "$os" && "$os_version" -lt 7 ]]; then
-        echo "使用此安装程序需要 CentOS 7 或更高版本.
-此版本的 CentOS 太旧且不受支持." && exit 1
+        echo "使用此安装程序需要 CentOS 7 或更高版本.此版本的 CentOS 太旧且不受支持." && exit 1
     fi
 }
 
@@ -42,11 +41,10 @@ function check_install_env() {
 }
 
 # 安装依赖包
-function install_dependent_pkg () {
+function install_dependent_pkg() {
     yum install -y systemd-devel libevent-devel || dnf install -y systemd-devel libevent-devel
     echo "安装依赖包完成"
 }
-
 
 function install_wg_pkg() {
     # 安装wg内核模块和wg-quick命令行
@@ -66,10 +64,18 @@ function load_the_wg_kernel_module() {
 
 # 调整内核参数
 function tune_kernel() {
-    # 下载适用于wg的sysctl配置
-    wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/sysctl_vpn.conf
+    if [[ "$os" && "$os_version" -eq 7 ]]; then
+        # 下载适用于wg的sysctl配置
+        wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/sysctl_vpn_rhel7.conf
+    elif [[ "$os" && "$os_version" -eq 8 ]]; then
+        # 下载适用于wg的sysctl配置
+        wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/sysctl_vpn_rhel8.conf
+    else
+        echo "使用此安装程序需要 CentOS7 或RHEL8.此版本的Linux不受支持." && exit 1
+    fi
+
     # 使sysctl配置生效
-    sysctl -p /etc/sysctl.d/sysctl_vpn.conf
+    sysctl --system
 
 }
 
@@ -170,10 +176,7 @@ function remove_wireguard() {
     rm -rf /etc/modules-load.d/wireguard.conf
 
     # 取消sysctl配置--关闭数据包转发
-    ## 删除net.ipv4.ip_forward行
-    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf &>/dev/null
-    ## 删除net.ipv4.conf.all.proxy_arp行
-    sed -i '/net.ipv4.conf.all.proxy_arp/d' /etc/sysctl.conf &>/dev/null
+
     # 数据包转发--热生效
     ## 1为开启;0为关闭
     echo 0 >/proc/sys/net/ipv4/ip_forward
