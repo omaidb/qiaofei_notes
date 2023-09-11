@@ -40,7 +40,7 @@ main() {
             # 捕获block_ipv6的异常
             trap 'exit 4' INT
         else
-            echo "无效地址"
+            echo "$ip"无效地址
         fi
     done </tmp/all.txt
     echo "ad Blocak IP list Done"
