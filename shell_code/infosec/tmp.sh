@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# IPv4 正则表达式
+ipv4_regex="^([0-9]{1,3}\.){3}[0-9]{1,3}$"
+
+# IPv6 正则表达式
+ipv6_regex="^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$"
+
 # 方法：拉黑IP
 function block_ipv4() {
     local ip="$1"
