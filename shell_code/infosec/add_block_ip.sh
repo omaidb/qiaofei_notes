@@ -71,7 +71,10 @@ main() {
             # 捕获block_ipv6的异常
             trap 'exit 4' INT
         else
-            echo "无效地址"
+            # 文件不存在则创建
+            test -e /tmp/hosts.error || touch /tmp/hosts.error
+            # echo "无效地址"
+            echo "sshd: $ip" >>/tmp/hosts.error >/dev/null 2>&1
         fi
     done </tmp/all.txt
     echo "ad Blocak IP list Done"
