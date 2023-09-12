@@ -6,7 +6,7 @@ pkg_version=2.10
 ## 检查依赖环境
 check_pkg_env() {
     # 检查python2是否安装
-    command -v python || yum install -y python2
+    command -v python2 || yum install -y python2
 }
 
 ## 下载解压
@@ -46,11 +46,15 @@ remove_denyhosts() {
     systemctl disable --now denyhosts
     # 删除服务
     rm -rf /etc/systemd/system/denyhosts.service
-    # 删除已安装的文件
+    # 删除所有已安装的文件
     while IFS= read -r exe_file; do
         rm -rf "$exe_file"
         # 从安装文件的历史记录中删除每一个已安装的文件
     done </usr/local/src/denyhosts-"$pkg_version"/install_pkg_list.txt
+    # 删除安装包
+    rm -rf /usr/local/src/v$pkg_version.tar.gz
+    # 删除解压的目录
+    rm -rf /usr/local/src/denyhosts-"$pkg_version"
 }
 
 #开始菜单
