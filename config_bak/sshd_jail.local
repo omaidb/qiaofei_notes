@@ -1,0 +1,32 @@
+[sshd]
+# 启用防护
+enabled = true
+# 选择过滤器
+filter = sshd
+
+# 启用抗攻击防护模式--防护策略敏感度最高
+# 正常（默认）、ddos、额外或 aggressive （攻击性 全部组合）。
+## normal (default), ddos, extra or aggressive (combines all).
+# 有关使用示例和详细信息，请参阅“tests/files/logs/sshd”或“filter.d/sshd.conf”。
+mode = aggressive
+
+# 禁止 IP 的持续时间(以秒为单位)。负数-1为“永久”禁止。
+## 864000秒为10天
+bantime = 864000
+## 如果在“findtime”秒内未找到匹配，则计数器设置为零。默认 600s
+findtime = 1200
+# ssh登录失败阈值默认为 3
+maxretry = 1
+# 指定封禁的端口，默认为0:65535，也就是所有端口，但可以在jail中设定
+port = ssh
+# 使用哪个工具方法阻止IP
+## firewall防火墙： firewallcmd-ipset
+## iptables防火墙： iptables 或 iptables-multiport
+## 拉黑到/etc/hosts.deny： hostsdeny
+banaction = iptables-multiport
+            hostsdeny
+# 日志路径
+logpath = %(sshd_log)s
+# 指定用于修改日志文件的后端
+#backend = %(sshd_backend)s
+backend = systemd
