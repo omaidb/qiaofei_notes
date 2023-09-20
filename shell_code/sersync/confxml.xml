@@ -5,8 +5,10 @@
 	<!-- debug调试开关 -->
 	<debug start="false" />
 
-	<!-- 排除指定数据不要进行同步(默认关闭) -->
+	<!-- 是否为xfs文件系统 -->
 	<fileSystem xfs="false" />
+
+	<!-- 文件类型过滤功能，不同步指定文件类型(默认关闭) -->
 	<filter start="false">
 		<exclude expression="(.*)\.svn"></exclude>
 		<exclude expression="(.*)\.gz"></exclude>
@@ -15,6 +17,7 @@
 	</filter>
 
 	<!-- 监控事件信息 -->
+	<!-- 默认监控：删除，写，移动，创建 -->
 	<inotify>
 		<!-- 删除事件 -->
 		<delete start="true" />
@@ -29,41 +32,67 @@
 		<!-- 移出事件 -->
 		<moveTo start="true" />
 		<!-- 属性事件 -->
-		<attrib start="false" />
+		<!-- 改为true，文件属性变化也会同步 -->
+		<attrib start="true" />
 		<!-- 修改事件 -->
 		<modify start="false" />
 	</inotify>
 
+	<!-- 这里是实时同步配置 -->
 	<sersync>
-		<!-- 这里是实时同步配置 -->
-		<localpath watch="/opt/tongbu">
-			<remote ip="127.0.0.1" name="tongbu1" />
+
+		<!-- 要同步的源目录或源文件 -->
+		<localpath watch="/data/www">
+
+			<!-- 指定 远程服务器地址 和 模块名 -->
+			<!-- 如果下面开启了ssh start，此时 ${name} 为 远程shell 运行时的目标目录 -->
+			<remote ip="127.0.0.1" name="模块名" />
 			<!-- <remote ip="192.168.8.39" name="tongbu" />-->
 			<!-- <remote ip="192.168.8.40" name="tongbu" />-->
 		</localpath>
 
 		<!-- rsync的配置 -->
 		<rsync>
-			<commonParams params="-artuz" />
-			<!-- 指定密码文件 -->
-			<auth start="false" users="root" passwordfile="/etc/rsync.pas" />
-			<!-- port=874 -->
+
+			<!-- 指定rsync参数 
+			   ## 原版参数
+			-->
+			<!-- <commonParams params="-artuz" /> -->
+			<!-- 
+				# -a 保留所有属性，等于 -rlptgoD（无 -H、-A、-X）
+				# -u 只同步源文件中更新时间较新的文件
+				# -z 压缩
+			 -->
+			<commonParams params="-auz" />
+			<!-- start="true" 指定密码文件 -->
+			<auth start="true" users="rsyncuser" passwordfile="/etc/rsync.pas" />
+			<!-- 指定rsync的非标准端口 874 -->
 			<userDefinedPort start="false" port="874" />
-			<!-- timeout=100 -->
+			<!-- 指定rsync的超时时间timeout=100 -->
 			<timeout start="false" time="100" />
+
+			<!-- 是否使用ssh模式 -->
 			<ssh start="false" />
 		</rsync>
 
+		<!-- 错误重传和 日志路径 -->
 		<!-- default every 60mins execute once -->
 		<failLog path="/tmp/rsync_fail_log.sh" timeToExecute="60" />
 
+
+<!-- **********下方配置基本不改************ -->
+
+		<!-- 计划任务方式来同步 false -->
 		<!-- 600mins -->
 		<crontab start="false" schedule="600">
+			<!-- 定时同步的筛选功能 false -->
 			<crontabfilter start="false">
+				<!-- 不同步的文件类型 -->
 				<exclude expression="*.php"></exclude>
 				<exclude expression="info/*"></exclude>
 			</crontabfilter>
 		</crontab>
+
 		<plugin start="false" name="command" />
 	</sersync>
 
