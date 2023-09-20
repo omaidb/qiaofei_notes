@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <head version="2.5">
+
+	<!-- ******** rsyncd守护进程的 配置文件，如果要ssh免密传输使用另一个配置 ********* -->
+	<!--      -->
 	<host hostip="localhost" port="8008"></host>
 
 	<!-- debug调试开关 -->
@@ -34,17 +37,25 @@
 		<modify start="false" />
 	</inotify>
 
+	<!-- 这里是实时同步配置 -->
 	<sersync>
-		<!-- 这里是实时同步配置 -->
+		<!-- 这里配置本地 的 目录 -->
 		<localpath watch="/opt/tongbu">
-			<remote ip="127.0.0.1" name="tongbu1" />
+			<!-- rsyncd守护进程+密码验证模式,${name}指定远程服务器上的模块名 -->
+			<remote ip="rsync远程服务器IP" name=" 远程服务器上的模块名 " />
 			<!-- <remote ip="192.168.8.39" name="tongbu" />-->
 			<!-- <remote ip="192.168.8.40" name="tongbu" />-->
 		</localpath>
 
-		<!-- rsync的配置 -->
+		<!-- rsync的配置__rsyncd守护进程+密码验证模式 -->
 		<rsync>
-			<commonParams params="-artuz" />
+			<!-- <commonParams params="-artuz" /> -->
+			<!-- 
+				# -a 保留所有属性(-rlptgoD)
+				# -u 只同步更新的文件
+				# -z 压缩传输
+			 -->
+			<commonParams params="-auz " />
 			<!-- 指定密码文件 -->
 			<auth start="false" users="root" passwordfile="/etc/rsync.pas" />
 			<!-- port=874 -->
@@ -57,6 +68,7 @@
 		<!-- default every 60mins execute once -->
 		<failLog path="/tmp/rsync_fail_log.sh" timeToExecute="60" />
 
+		<!-- 非实时同步，计划任务方式来同步 -->
 		<!-- 600mins -->
 		<crontab start="false" schedule="600">
 			<crontabfilter start="false">
