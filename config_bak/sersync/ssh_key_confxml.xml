@@ -2,6 +2,7 @@
 <head version="2.5">
 
 	<!-- ******** ssh免密传输 方式的配置文件 ********* -->
+	<!-- ******** 前提条件，配置好ssh免密 ********* -->
 	<!--      -->
 	<host hostip="localhost" port="8008"></host>
 
@@ -57,12 +58,13 @@
 			 -->
 			<commonParams params="-auz " />
 			<!-- 使用ssh 免密验证，不实用密码认证，不指定密码文件 false -->
+			<ssh start="true" />
 			<auth start="false" users="root" passwordfile="/etc/rsync.pas" />
 			<!-- port=874 -->
 			<userDefinedPort start="false" port="874" />
 			<!-- timeout=100 -->
 			<timeout start="false" time="100" />
-			<ssh start="false" />
+
 		</rsync>
 
 		<!-- default every 60mins execute once -->

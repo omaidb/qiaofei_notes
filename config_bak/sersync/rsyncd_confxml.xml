@@ -56,13 +56,15 @@
 				# -z 压缩传输
 			 -->
 			<commonParams params="-auz " />
+			<!-- 不使用ssh传输 -->
+			<ssh start="false" />
 			<!-- 指定密码文件  true -->
 			<auth start="true" users="root" passwordfile="/etc/rsync.pas" />
 			<!-- port=874 -->
 			<userDefinedPort start="false" port="874" />
 			<!-- timeout=100 -->
 			<timeout start="false" time="100" />
-			<ssh start="false" />
+
 		</rsync>
 
 		<!-- default every 60mins execute once -->
