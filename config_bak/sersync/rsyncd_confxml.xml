@@ -56,7 +56,7 @@
 				# -z 压缩传输
 			 -->
 			<commonParams params="-auz " />
-			<!-- 指定密码文件 -->
+			<!-- 指定密码文件  true -->
 			<auth start="true" users="root" passwordfile="/etc/rsync.pas" />
 			<!-- port=874 -->
 			<userDefinedPort start="false" port="874" />
