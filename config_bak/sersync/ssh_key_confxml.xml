@@ -43,7 +43,7 @@
 		<!-- 这里配置本地 的 目录 -->
 		<localpath watch="/opt/tongbu">
 			<!-- 配置远程服务器的 同步目录 -->
-			<remote ip="rsync远程服务器IP" name="rsync 远程服务器上的 路径" />
+			<remote ip="rsync远程服务器IP" name="rsync远程服务器上的 路径" />
 			<!-- <remote ip="192.168.8.39" name="tongbu" />-->
 			<!-- <remote ip="192.168.8.40" name="tongbu" />-->
 		</localpath>
