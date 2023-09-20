@@ -54,8 +54,9 @@
 				# -a 保留所有属性(-rlptgoD)
 				# -u 只同步更新的文件
 				# -z 压缩传输
+				# partial:保留那些因故没有完全传输的文件，以是加快随后的再次传输
 			 -->
-			<commonParams params="-auz " />
+			<commonParams params="-auz --partial " />
 			<!-- 不使用ssh传输 -->
 			<ssh start="false" />
 			<!-- 指定密码文件  true -->
