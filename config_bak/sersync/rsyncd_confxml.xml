@@ -57,7 +57,7 @@
 			 -->
 			<commonParams params="-auz " />
 			<!-- 指定密码文件 -->
-			<auth start="false" users="root" passwordfile="/etc/rsync.pas" />
+			<auth start="true" users="root" passwordfile="/etc/rsync.pas" />
 			<!-- port=874 -->
 			<userDefinedPort start="false" port="874" />
 			<!-- timeout=100 -->
