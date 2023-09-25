@@ -1,24 +1,35 @@
 #!/usr/bin/env bash
 
-# echo "start"
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=eureka1 -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/eureka-server1-0.0.1-SNAPSHOT.jar >/var/log/qianyao/eureka1.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=eureka2 -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/eureka-server2-0.0.1-SNAPSHOT.jar >eureka2.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=cinema -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/cinema-stage-0.0.1-SNAPSHOT.jar >cinema.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=jobs -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/jobs-0.0.1-SNAPSHOT.jar >jobs.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=comment -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/comment-0.0.1-SNAPSHOT.jar >comment.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=movie -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/movie-stage-0.0.1-SNAPSHOT.jar >movie.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=orders -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/orders-stage-0.0.1-SNAPSHOT.jar >orders.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=gateway -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/gateway-0.0.1-SNAPSHOT.jar >gateway.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=user -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/user-0.0.1-SNAPSHOT.jar >user.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=general -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/general-0.0.1-SNAPSHOT.jar >general.log 2>&1 &
-# java -javaagent:/opt/pinpoint/pinpoint-agent-2.1.0/pinpoint-bootstrap.jar -Dpinpoint.agentId=web -Dpinpoint.applicationName=woniuticket -jar /opt/qianyao/xm/web-0.0.1-SNAPSHOT.jar >web.log 2>&1 &
-# echo "end"
+# 应用程序列表
+## 将所有要启动的程序写入到一个列表中
+node_list=(
+    # 数据结构如下：
+    ## "${ipfs_node_ip} : ${Peer_ID}"
+    # ipfs1
+    "192.168.0.1:QmV7Thb3mjuWa1xDK5UrgtG7SSYFt4PSyvo6CjcnA5gZAg"
+    # ipfs2
+    "192.168.0.2:QmV7Thb3mjuWa1xDK5UrgtG7SSYFt4PSyvo6CjcnA5gZAg"
+    # ipfs3
+    "192.168.0.3:QmV7Thb3mjuWa1xDK5UrgtG7SSYFt4PSyvo6CjcnA5gZAg"
+    # ipfs4
+    "192.168.0.4:QmV7Thb3mjuWa1xDK5UrgtG7SSYFt4PSyvo6CjcnA5gZAg"
+)
 
-AGENT_PATH=/opt/pinpoint/pinpoint-agent-2.1.0
-AGENT_ID=123456
-APPLICATION_NAME=woniu_test
-VERSION=2.1.0
+# 添加集群节点到节点的bootstrap列表中
+add_nodeip_to_bootstrap_list() {
+    # IPFS的节点IP地址
+    local ipfs_node_ip="$1"
+    # Peer ID(对等节点标识符)
+    local Peer_ID="$2"
+    # ipfs bootstrap add /ip4/${ipfs节点的IP地址}/tcp/4001/ipfs/${Peer ID(对等节点标识符)}
+    ipfs bootstrap add /ip4/"$ipfs_node_ip"/tcp/4001/ipfs/"$Peer_ID" 2>&1 &
+}
 
-CATALINA_OPTS="$CATALINA_OPTS -javaagent:$AGENT_PATH/pinpoint-bootstrap-$VERSION.jar"
-CATALINA_OPTS="$CATALINA_OPTS -Dpinpoint.agentId=$AGENT_ID"
-CATALINA_OPTS="$CATALINA_OPTS -Dpinpoint.applicationName=$APPLICATION_NAME"
+# 遍历应用程序列表并启动应用程序
+for ipfs_node_info in "${node_list[@]}"; do
+    # 从列表中提取出ip和Peer_ID
+    IFS=':' read -r ipfs_node_ip Peer_ID <<<"${ipfs_node_info}"
+    # echo "${ipfs_node_ip}" "${Peer_ID}"
+    # 添加集群节点到节点的bootstrap列表中
+    add_nodeip_to_bootstrap_list "${ipfs_node_ip}" "${Peer_ID}"
+done
