@@ -4,7 +4,7 @@
 # KCPTUN项目地址 https://github.com/xtaci/kcptun
 
 # 定义kcptun版本
-KCPTUN_VERSION=20230214
+KCPTUN_VERSION=20231012
 
 # ifCMD函数,判断上一条命令(不等于0)没执行成就停止,成功就继续运行
 function ifcmd() {
@@ -75,7 +75,7 @@ echo '{
     "keepalive": 2,
     "conn": 7,
     "signal": true,
-    "tcp":true
+    "tcp":false
 }' >/etc/kcptun/kcptun-server.json
 
 
@@ -103,7 +103,7 @@ echo '{
     "keepalive": 2,
     "conn": 2,
     "signal": true,
-    "tcp": true
+    "tcp": false
 }' >/etc/kcptun/kcptun-client.json
 
 # 创建kcptun-client.service文件
