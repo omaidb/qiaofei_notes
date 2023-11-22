@@ -316,5 +316,4 @@ if __name__ == '__main__':
 """
 # 使用示例：
 python tcpping2.py -c 3600 -i 0.2 -l X.X.X.X XX 
-
 """
