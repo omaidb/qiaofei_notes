@@ -72,7 +72,7 @@ function generate_client_conf() {
         echo "client"
         echo "dev tun"
         echo "proto tcp"
-        echo "remote $IP_ADD 1194"
+        echo "remote $IP_ADD 11194"
         echo "resolv-retry infinite"
         echo "nobind"
         echo "persist-key"
