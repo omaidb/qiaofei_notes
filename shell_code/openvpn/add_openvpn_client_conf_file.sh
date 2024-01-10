@@ -20,6 +20,8 @@ client_key_file=/etc/openvpn/easy-rsa/pki/private/${vpn_user}.key
 ca_crt_file=/etc/openvpn/easy-rsa/pki/ca.crt
 # DH证书文件
 # dh_crt_file=/etc/openvpn/easy-rsa/pki/dh.pem
+# ta证书文件
+ta_crt_file=/etc/openvpn/ta.key
 # easyrsa程序目录
 easyrsa_dir=/etc/openvpn/easy-rsa
 # easyrsa程序路径
@@ -86,8 +88,6 @@ function generate_client_conf() {
         echo "tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA256:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-128-CBC-SHA256"
         echo "auth-nocache"
         echo "key-direction 1"
-        echo "dhcp-option DNS 1.1.1.1"
-        echo "dhcp-option DNS 8.8.8.8"
         echo "redirect-gateway def1 bypass-dhcp"
         echo "route-delay 2"
         echo "keepalive 10 60"
@@ -103,6 +103,11 @@ function generate_client_conf() {
         echo "<key>"
         cat "${client_key_file}"
         echo "</key>"
+
+        echo "<tls-crypt>"
+        cat "${ta_crt_file}"
+        echo "</tls-crypt>"
+
     } >>"${client_conf_file}"
 }
 
