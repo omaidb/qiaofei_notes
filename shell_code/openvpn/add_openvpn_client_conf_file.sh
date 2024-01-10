@@ -104,9 +104,9 @@ function generate_client_conf() {
         cat "${client_key_file}"
         echo "</key>"
 
-        echo "<tls-crypt>"
+        echo "<tls-auth>"
         cat "${ta_crt_file}"
-        echo "</tls-crypt>"
+        echo "</tls-auth>"
 
     } >>"${client_conf_file}"
 }
