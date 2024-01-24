@@ -73,24 +73,32 @@ function generate_client_conf() {
     {
         echo "client"
         echo "dev tun"
-        echo "proto tcp"
+        echo "proto udp"
+        echo "explicit-exit-notify"
         echo "remote $IP_ADD 11194"
         echo "resolv-retry infinite"
         echo "nobind"
         echo "persist-key"
         echo "persist-tun"
-        echo "compress lz4-v2"
-        echo "keysize 128"
-        echo "verb 5"
         echo "remote-cert-tls server"
+        echo "auth SHA256"
+        echo "cipher AES-128-GCM"
+        echo "auth-nocache"
+        echo "compress lz4-v2"
+        echo "verb 3"
+
         echo "tls-version-min 1.2"
         echo "tls-version-max 1.2"
-        echo "tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA256:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-128-CBC-SHA256"
-        echo "auth-nocache"
+        echo "tls-cipher TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256"
         echo "key-direction 1"
+        echo "dhcp-option DNS 8.8.8.8"
         echo "redirect-gateway def1 bypass-dhcp"
         echo "route-delay 2"
         echo "keepalive 10 60"
+
+        echo "<tls-auth>"
+        cat "${ta_crt_file}"
+        echo "</tls-auth>"
 
         echo "<ca>"
         cat ${ca_crt_file}
@@ -103,10 +111,6 @@ function generate_client_conf() {
         echo "<key>"
         cat "${client_key_file}"
         echo "</key>"
-
-        echo "<tls-auth>"
-        cat "${ta_crt_file}"
-        echo "</tls-auth>"
 
     } >>"${client_conf_file}"
 }
