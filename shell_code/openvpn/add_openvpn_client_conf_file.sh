@@ -87,6 +87,7 @@ function generate_client_conf() {
         echo "compress lz4-v2"
         echo "verb 3"
         echo "key-direction 1"
+        echo "route-method exe"
         echo "block-outside-dns"
         echo "dhcp-option DNS 8.8.8.8"
         echo "pull-filter ignore 'tun-ipv6'"
