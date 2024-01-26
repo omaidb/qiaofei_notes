@@ -129,6 +129,8 @@ Address = 10.89.64.1/24
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
 # PreUp:在建立 VPN 连接之前执行的命令或脚本
 # PostUp:在成功建立 VPN 连接后执行的命令或脚本
+# 放行wg的udp端口
+PreUp = iptables -A INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
 #PostUp = ufw route allow in on wg0 out on $eth
 PostUp = iptables -t nat -I POSTROUTING -o $eth -j MASQUERADE -m comment --comment '开启地址转换'
 # 自动调整mss,防止某些网站打不开
@@ -136,8 +138,7 @@ PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-ms
 # 调整DSCP值
 PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
 PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
-# 放行wg的udp端口
-PostUp = iptables -A INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
+
 
 # PreDown:在断开 VPN 连接之前执行的命令或脚本
 # PostDown:在成功断开 VPN 连接后执行的命令或脚本
