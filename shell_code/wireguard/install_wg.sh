@@ -120,6 +120,7 @@ PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-ms
 # 调整DSCP值
 PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
 PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
+# 放行wg的udp端口
 PostUp = iptables -A INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
 
 # PreDown:在断开 VPN 连接之前执行的命令或脚本
@@ -127,14 +128,15 @@ PostUp = iptables -A INPUT -p udp --dport $Server_port -j ACCEPT -m comment --co
 # 停止WireGuard时要执行的iptables防火墙规则,用于关闭NAT转发之类的.
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
 # PreDown = ufw route delete allow in on wg0 out on $eth
-PreDown = iptables -t nat -D POSTROUTING -o $eth -j MASQUERADE
+PreDown = iptables -t nat -D POSTROUTING -o $eth -j MASQUERADE -m comment --comment '开启地址转换'
 # 删除自动调整mss
-PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu -m comment --comment '自动调整mss,防止某些网站打不开'
 # 删除DSCP值
-PostDown = iptables -t mangle -D OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
-PostDown = iptables -t mangle -D OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46
+PostDown = iptables -t mangle -D OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
+PostDown = iptables -t mangle -D OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
 # 删除放行端口
 PostUp = iptables -D INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
+
 
 # 服务端监听端口,可以自行修改
 ListenPort = $Server_port
