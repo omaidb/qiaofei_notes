@@ -151,7 +151,7 @@ PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-
 PostDown = iptables -t mangle -D OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
 PostDown = iptables -t mangle -D OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
 # 删除放行端口
-PostUp = iptables -D INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
+PostDown = iptables -D INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
 
 
 # 服务端监听端口,可以自行修改
