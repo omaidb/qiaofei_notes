@@ -111,18 +111,18 @@ Address = 10.89.64.1/24
 
 # 运行WireGuard时要执行的iptables防火墙规则,用于打开NAT转发之类的.
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
-# PreUp：在建立 VPN 连接之前执行的命令或脚本
-# PostUp：在成功建立 VPN 连接后执行的命令或脚本
+# PreUp:在建立 VPN 连接之前执行的命令或脚本
+# PostUp:在成功建立 VPN 连接后执行的命令或脚本
 #PostUp = ufw route allow in on wg0 out on $eth
-PostUp = iptables -t nat -I POSTROUTING -o $eth -j MASQUERADE
+PostUp = iptables -t nat -I POSTROUTING -o $eth -j MASQUERADE -m comment --comment '开启地址转换'
 # 自动调整mss,防止某些网站打不开
-PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu -m comment --comment '自动调整mss,防止某些网站打不开'
 # 调整DSCP值
-PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
-PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46
+PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
+PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
 
-# PreDown：在断开 VPN 连接之前执行的命令或脚本
-# PostDown：在成功断开 VPN 连接后执行的命令或脚本
+# PreDown:在断开 VPN 连接之前执行的命令或脚本
+# PostDown:在成功断开 VPN 连接后执行的命令或脚本
 # 停止WireGuard时要执行的iptables防火墙规则,用于关闭NAT转发之类的.
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
 # PreDown = ufw route delete allow in on wg0 out on $eth
