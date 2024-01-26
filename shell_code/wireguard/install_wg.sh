@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# 开启debug
-# set -ex
+# 服务端端口
+Server_port=22
 
 # 判断Linux发行版
 check_os() {
@@ -120,6 +120,7 @@ PostUp = iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-ms
 # 调整DSCP值
 PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
 PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
+PostUp = iptables -A INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
 
 # PreDown:在断开 VPN 连接之前执行的命令或脚本
 # PostDown:在成功断开 VPN 连接后执行的命令或脚本
@@ -132,9 +133,11 @@ PostDown = iptables -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-
 # 删除DSCP值
 PostDown = iptables -t mangle -D OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46
 PostDown = iptables -t mangle -D OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46
+# 删除放行端口
+PostUp = iptables -D INPUT -p udp --dport $Server_port -j ACCEPT -m comment --comment "放行 udp/$Server_port端口"
 
 # 服务端监听端口,可以自行修改
-ListenPort = 51820
+ListenPort = $Server_port
 # SaveConfig确保当WireGuard接口关闭时,任何更改都将保存到配置文件中
 SaveConfig = true
 # 服务端请求域名解析DNS,可以在本机搭建dns服务加快解析
