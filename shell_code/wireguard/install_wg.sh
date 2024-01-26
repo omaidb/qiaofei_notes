@@ -20,6 +20,20 @@ check_os_ver() {
     fi
 }
 
+# 检查iptables防火墙
+function check_iptables_and_firewalld() {
+    if [ "$os" = "centos" ]; then
+        if systemctl is-active --quiet iptables 2>/dev/null; then
+            echo "此系统启用了iptables服务,停止并仅用iptables服务,wg-quick才能正常执行前置和后置脚本"
+            systemctl disable --now iptables && systemctl mask --now iptables && systemctl mask --now ip6tables && systemctl mask --now ebtables && echo "自动停止iptables服务成功"
+        fi
+        if systemctl is-active --quiet firewalld 2>/dev/null; then
+            echo "此系统启用了firewalld服务,停止并仅用firewalld服务,wg-quick才能正常执行前置和后置脚本"
+            systemctl disable --now firewalld && echo "自动停止iptables服务成功"
+        fi
+    fi
+}
+
 # 检查nftables防火墙
 function check_nftables() {
     if [ "$os" = "centos" ]; then
@@ -36,6 +50,8 @@ function check_install_env() {
     check_os
     # 检查Linux版本号
     check_os_ver
+    # 检查iptabels服务是否停止
+    check_iptables_and_firewalld
     # 检查是否不受支持的防火墙
     check_nftables
 }
