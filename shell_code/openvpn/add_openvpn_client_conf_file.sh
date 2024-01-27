@@ -84,6 +84,7 @@ function generate_client_conf() {
         echo "auth SHA256"
         echo "cipher AES-128-GCM"
         echo "auth-nocache"
+        echo "allow-compression yes"
         echo "compress lz4-v2"
         echo "verb 3"
         echo "key-direction 1"
