@@ -140,8 +140,8 @@ PostUp = iptables -t mangle -I OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp
 PostUp = iptables -t mangle -I OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
 
 
-# PreDown:在断开 VPN 连接之前执行的命令或脚本
-# PostDown:在成功断开 VPN 连接后执行的命令或脚本
+# PreDown:在断开 VPN 连接之前 执行的命令或脚本
+# PostDown:在成功断开 VPN 连接之后 执行的命令或脚本
 # 停止WireGuard时要执行的iptables防火墙规则,用于关闭NAT转发之类的.
 ## 如果不是Ubuntu系统,就注释掉ufw防火墙
 # PreDown = ufw route delete allow in on wg0 out on $eth
