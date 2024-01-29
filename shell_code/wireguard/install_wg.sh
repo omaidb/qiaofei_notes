@@ -136,8 +136,8 @@ PostUp = iptables -t nat -I POSTROUTING -o $eth -j MASQUERADE -m comment --comme
 # 自动调整mss,防止某些网站打不开
 PostUp = iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu -m comment --comment '自动调整mss,防止某些网站打不开'
 # 调整DSCP值
-PostUp = iptables -t mangle -A OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
-PostUp = iptables -t mangle -A OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
+PostUp = iptables -t mangle -I OUTPUT -p tcp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '出方向TCP流量的DSCP值设为46'
+PostUp = iptables -t mangle -I OUTPUT -p udp -s 10.89.64.0/24 -j DSCP --set-dscp 46 -m comment --comment '入方向UDP流量的DSCP值为46'
 
 
 # PreDown:在断开 VPN 连接之前执行的命令或脚本
