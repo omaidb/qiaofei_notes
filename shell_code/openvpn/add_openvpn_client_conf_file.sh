@@ -75,7 +75,7 @@ function generate_client_conf() {
         echo "dev tun"
         echo "proto udp"
         echo "explicit-exit-notify 1"
-        echo "remote-random"
+        # echo "remote-random"
         # echo "resolv-retry infinite"
         econ "resolv-retry 20"
         echo "remote $IP_ADD 11194"
