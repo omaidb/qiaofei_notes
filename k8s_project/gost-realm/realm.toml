@@ -15,8 +15,8 @@ cache_size = 256
 no_tcp = false
 # 使用UDP
 use_udp = true
-# 零拷贝
-zero_copy = true
+# 零拷贝--过期参数，已默认
+#zero_copy = true
 # TCP快速打开
 fast_open = true
 # 指定 tcp 超时
