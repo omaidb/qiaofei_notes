@@ -77,6 +77,8 @@ function install_dependent_pkg() {
 }
 
 function install_wg_pkg() {
+    # 检查wg是否已经安装
+    check_if_wg_ok
     # 安装wg内核模块和wg-quick命令行
     yum install -y kmod-wireguard wireguard-tools || dnf install -y wireguard-tools
     echo "安装wg工具完成"
