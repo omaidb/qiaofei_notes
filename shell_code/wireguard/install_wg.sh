@@ -36,7 +36,7 @@ check_os_ver() {
 
 # 检查iptables防火墙
 function check_iptables_and_firewalld() {
-    if [ "$os" = "centos" ]; then
+    if [ "$os" = "rhel" ]; then
         if systemctl is-active --quiet iptables 2>/dev/null; then
             echo "此系统启用了iptables服务,停止并仅用iptables服务,wg-quick才能正常执行前置和后置脚本"
             systemctl disable --now iptables && systemctl mask --now iptables && systemctl mask --now ip6tables && systemctl mask --now ebtables && echo "自动停止iptables服务成功"
@@ -50,7 +50,7 @@ function check_iptables_and_firewalld() {
 
 # 检查nftables防火墙
 function check_nftables() {
-    if [ "$os" = "centos" ]; then
+    if [ "$os" = "rhel" ]; then
         if grep -qs "hwdsl2 VPN script" /etc/sysconfig/nftables.conf ||
             systemctl is-active --quiet nftables 2>/dev/null; then
             exiterr "此系统启用了 nftables,但此安装程序不支持."
@@ -96,10 +96,12 @@ function load_the_wg_kernel_module() {
 
 # 调整内核参数
 function tune_kernel() {
-    if [[ "$os" && "$os_version" -eq 7 ]]; then
+
+    if [[ "$os" = "rhel" && "$os_version" -eq 7 ]]; then
         # 下载适用于wg的sysctl配置
         wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/sysctl_vpn_rhel7.conf
-    elif [[ "$os" && "$os_version" -eq 8 ]]; then
+
+    elif [[ "$os" = "rhel" && "$os_version" -eq 8 ]]; then
         # 下载适用于wg的sysctl配置
         wget -P /etc/sysctl.d -c https://raw.githubusercontent.com/omaidb/qiaofei_notes/main/shell_code/wireguard/sysctl_vpn_rhel8.conf
     else
