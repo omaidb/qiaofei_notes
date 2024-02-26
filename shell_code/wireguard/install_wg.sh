@@ -3,6 +3,20 @@
 # 服务端端口
 Server_port=22
 
+# 判断wireguard是否已经安装
+check_if_wg_ok() {
+    if [ -d "/etc/wireguard/" ]; then
+        # 目录存在时运行的命令
+        echo "发现/etc/wireguard/目录，可能已经安装过wireguard，请先清理环境。" && exit 1
+    fi
+    # 如果wg命令行存在，则停止安装
+    if [ -f "/usr/bin/wg" ]; then
+        # 如果文件存在则运行的命令
+        echo "发现/usr/bin/wg命令，可能已经安装过wireguard，请先清理环境。" && exit 1
+    fi
+
+}
+
 # 判断Linux发行版
 check_os() {
     # 如果有yum包管理器,就是rhel系统发行版
