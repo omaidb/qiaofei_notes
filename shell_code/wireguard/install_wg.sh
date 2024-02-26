@@ -207,8 +207,8 @@ function remove_wireguard() {
     # 解锁服务器的密钥对文件
     chattr -i /etc/wireguard/server.privatekey /etc/wireguard/server.publickey
 
-    # 删除wireguard配置即可
-    rm -rf /etc/wireguard/*
+    # 删除wireguard配置
+    rm -rf /etc/wireguard/
 
     # 取消开机自动加载wg内核模块
     rm -rf /etc/modules-load.d/wireguard.conf
