@@ -213,6 +213,9 @@ function remove_wireguard() {
     # 取消开机自动加载wg内核模块
     rm -rf /etc/modules-load.d/wireguard.conf
 
+    # 卸载wg-quick命令行
+    yum remove -y wireguard-tools || dnf remove -y wireguard-tools
+
     # 取消sysctl配置--关闭数据包转发
 
     # 数据包转发--热生效
