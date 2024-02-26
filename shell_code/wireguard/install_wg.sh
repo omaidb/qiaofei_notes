@@ -26,12 +26,13 @@ check_os() {
         echo "不是rhel发行版"
         exit 1
     fi
-    # 获取os的版本号
-    os_version=$(grep -shoE '[0-9]+' /etc/redhat-release /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
+
 }
 
 # 判断Linux版本
 check_os_ver() {
+    # 获取os的版本号
+    os_version=$(grep -shoE '[0-9]+' /etc/redhat-release /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
     if [[ "$os" && "$os_version" -lt 7 ]]; then
         echo "使用此安装程序需要 CentOS 7 或更高版本.此版本的 CentOS 太旧且不受支持." && exit 1
     fi
