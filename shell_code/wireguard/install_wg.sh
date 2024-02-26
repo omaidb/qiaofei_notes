@@ -211,7 +211,6 @@ function remove_wireguard() {
 function start_menu() {
     # 先进行安装前环境检查
     check_install_env
-    clear
     echo "========================="
     echo " 介绍:适用于RHEL7和RHEL8"
     echo " 作者:Miles"
