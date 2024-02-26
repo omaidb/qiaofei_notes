@@ -20,9 +20,12 @@ check_if_wg_ok() {
 # 判断Linux发行版
 check_os() {
     # 如果有yum包管理器,就是rhel系统发行版
-    (
-        which yum || echo "不是rhel发行版" && exit 1
-    ) && os=rhel
+    if which yum >/dev/null 2>&1; then
+        os=rhel
+    else
+        echo "不是rhel发行版"
+        exit 1
+    fi
     # 获取os的版本号
     os_version=$(grep -shoE '[0-9]+' /etc/redhat-release /etc/almalinux-release /etc/rocky-release /etc/centos-release | head -1)
 }
