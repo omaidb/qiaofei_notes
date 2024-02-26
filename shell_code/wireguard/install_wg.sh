@@ -205,7 +205,7 @@ function remove_wireguard() {
     # 禁用wireguard开机自启服务
     systemctl disable --now wg-quick@wg0
     # 解锁服务器的密钥对文件
-    chattr -i /etc/wireguard/server.privatekey /etc/wireguard/server.publickey 2>/dev/null
+    chattr -i /etc/wireguard/server.privatekey /etc/wireguard/server.publickey
 
     # 删除wireguard配置
     rm -rf /etc/wireguard/
