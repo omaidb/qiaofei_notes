@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 # 开启debug
-set -ex
+# set -ex
 
 # 参考：
 # https://tommy.net.cn/2021/09/12/build-your-own-sd-lan-by-nebula/
 # https://nebula.defined.net/docs/guides/quick-start/
 
 # 定义版本
-nebula_VERSION=1.7.1
+nebula_VERSION=1.8.2
 # 安装nebula
 install_nebula() {
     # 下载并安装nebula, nebula是个golang的二进制工具，直接下载拷贝到bin目录即可, release页面也可下载
