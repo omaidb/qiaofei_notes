@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 开启debug
-set -ex
+# set -ex
 
 # 获取公网IP地址
 server_public_ip=$(curl -s ipv4.icanhazip.com)
