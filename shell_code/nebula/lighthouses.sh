@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 开启debug
-set -ex
+# set -ex
 
 # 灯塔节点创建CA
 create_CA() {
