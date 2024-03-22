@@ -73,7 +73,7 @@ function add_client_to_server() {
     ## preshared-key 用户的预共享密钥，这里必须传文件
     wg set wg0 peer "$client_public" preshared-key /etc/wireguard/user_conf/"$client_name".PresharedKey persistent-keepalive "$Persistent_Keepalive_time" allowed-ips "$ip_add"
 
-    # 重启wg服务端，使新的客户端生效
+    # 重启wg服务端，使新的客户端生效---不够优雅，会有秒级中断
     ## 一定要重启wg服务端,新的客户端配置才会被加载,加载完成后新客户端就可以接入到服务器了。
     systemctl restart wg-quick@wg0
 
@@ -118,6 +118,8 @@ Endpoint = $server_public_ip:$Server_listen_port
 PersistentKeepalive = "$Persistent_Keepalive_time"
 EOF
 }
+# 去除配置文件到注释和空行，防止wg二维码不被识别
+grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >tmpfile && mv -f /etc/wireguard/user_conf/tmpfile /etc/wireguard/user_conf/"$client_name".conf
 
 # 删除客户端的密钥文件
 function clear_user_key_file() {
