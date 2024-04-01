@@ -84,7 +84,8 @@ function install_wg_pkg() {
     # 检查wg是否已经安装
     check_if_wg_ok
     # 安装的依赖的repo
-    yum install -y epel-release elrepo-release
+    rpm -q --quiet epel-release || yum install -y epel-release
+    rpm -q --quiet elrepo-release || yum install -y elrepo-release
     # 安装wg内核模块和wg-quick命令行
     yum install -y kmod-wireguard wireguard-tools || dnf install -y wireguard-tools
     echo "安装wg工具完成"
