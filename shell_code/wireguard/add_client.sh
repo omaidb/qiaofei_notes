@@ -118,10 +118,8 @@ Endpoint = $server_public_ip:$Server_listen_port
 PersistentKeepalive = "$Persistent_Keepalive_time"
 EOF
 }
-# 去除配置文件到注释和空行，防止wg二维码不被识别
-grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >tmpfile && mv -f /etc/wireguard/user_conf/tmpfile /etc/wireguard/user_conf/"$client_name".conf
 
-# 删除客户端的密钥文件
+# 清理客户端的密钥文件,防止密钥对丢失
 function clear_user_key_file() {
     # 删除公钥文件
     rm -rf /etc/wireguard/user_conf/"$client_name".publickey &>/dev/null
@@ -133,8 +131,12 @@ function clear_user_key_file() {
 
 # 在屏幕生成二维码
 function gen_qrencode() {
+
+    # 去除配置文件到注释和空行，防止生成的wg二维码不被识别
+    # grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >tmpfile && mv -f /etc/wireguard/user_conf/tmpfile /etc/wireguard/user_conf/"$client_name".conf
+    grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >tmpfile
     # 将这个客户端配置文件生成二维码,展示在终端中
-    qrencode -t ansiutf8 </etc/wireguard/user_conf/"$client_name".conf
+    qrencode -t ansiutf8 </etc/wireguard/user_conf/tmpfile
 }
 
 #开始菜单
