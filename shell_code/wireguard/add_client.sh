@@ -134,7 +134,7 @@ function gen_qrencode() {
 
     # 去除配置文件到注释和空行，防止生成的wg二维码不被识别
     # grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >tmpfile && mv -f /etc/wireguard/user_conf/tmpfile /etc/wireguard/user_conf/"$client_name".conf
-    grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >tmpfile
+    grep -Ev '^#|^$' /etc/wireguard/user_conf/"$client_name".conf >/etc/wireguard/user_conf/tmpfile
     # 将这个客户端配置文件生成二维码,展示在终端中
     qrencode -t ansiutf8 </etc/wireguard/user_conf/tmpfile
 }
