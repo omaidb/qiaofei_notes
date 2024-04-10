@@ -72,7 +72,7 @@ punchy:
 
 # 加密方式-默认aes
 ## chachapoly比较省资源
-cipher: aes
+cipher: chachapoly
 
 # 本地网段
 # 能够快速地找到用以建立连接的最快的路径，这适用于设备处于同一个局域网内。
