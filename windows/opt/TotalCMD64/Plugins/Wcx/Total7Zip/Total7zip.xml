@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<settings>
+	<gui lang="Zh-cn" />
+	<path path_7z_dll="%COMMANDER_PATH%\Plugins\wcx\Total7zip\7z.dll" path_7zG_exe="%COMMANDER_PATH%\Plugins\wcx\Total7zip\7zG.exe" />
+	<path64bit path_7z_dll="%COMMANDER_PATH%\Plugins\wcx\Total7zip\7z.dll" path_7zG_exe="%COMMANDER_PATH%\Plugins\wcx\Total7zip\7zG.exe" />
+</settings>

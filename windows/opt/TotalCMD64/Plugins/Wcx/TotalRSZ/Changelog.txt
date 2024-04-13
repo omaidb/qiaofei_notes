@@ -1,0 +1,133 @@
+v2.5 build 310, 19 April 2013
+* Added: An option to resize and replace the original file. 
+
+
+v2.4 build 300, 10 April 2013
+* Added: An option to preserve the original file's timestamp.
+* Added: An option to output to the same directory as the input. 
+
+
+v2.3 build 280, 23 June 2012
+* Fixed: Saving and loading parameters XOff and YOff.
+* Fixed: Multi-threading issue when used with the Shell Extension.
+* Added: German language file (Thanks to Kurt Lettmaier)
+* Added: 64- and 32-bit TotalRSZ_Shell (requires Microsoft Visual C++ 2010 
+	 Redistributable Package).
+* Misc: Upgraded to use GraphicsMagick 1.3.15.
+
+
+v2.2 build 260, 3 June 2012
+* Added: A new option to allow users to set the default output directory via 
+	 the configuration. If it's set to a valid directory, the output path 
+         passed by TC will be ignored, which is usually the path of the active 
+         tab in another panel of TC.
+* Added: A Windows Explorer Shell Extension to access functions of TotalRSZ.
+         To use it, manually install the included TotalRSZ_Shell.dll by running 
+         the following command (Requires Administrator permission):
+         regsvr32 TotalRSZ_Shell.dll
+         NB: The included shell extension DLL is for x64 only. There is a known 
+         issue if multi-threading is enabled on the main dialog of Totalrsz. 
+         Set the number of threads to zero if you want to test the shell extension.
+
+
+v2.1 build 248, 21 March 2012
+* Fixed: The previous win32 build was broken for some reason as the result the
+win32 version doesn't work. 
+* Recompiled GraphicsMagick by setting QuantumDepth to 16 which would run a
+little bit slower but give higher quality. And re-linked TotalrSZ.
+
+v2.1 build 245, 6 March 2012
+* Added: A section of references in the document for comparisons on resizing
+with ImageMagick vs other programs including Photoshop.
+* Changed: The default resizing filter to lanczos for the first time use of
+Totalrsz (which was scale previously). 
+* Re-link with the latest GraphicsMagick 1.3.14 which was rleased on 25
+February 2012 with some bug fixes. 
+
+v2.1 build 240, 4 March 2012
+* Added: A configure dialog to set the language for the user interface.
+  Currently supported languages include Chinese simplified, 
+  Chinese Traditional,English.
+
+v2 build 225, 29 February 2012
+* Fixed: Resizing to the maximum file size and the preferred width or height wouldn't work 
+  if number of threads is zero. 
+* Added: Save and load settings from a configuration file. So the resizing options can be 
+  saved and restored in following sessions. 
+
+v2 build 185, 26 February 2012
+* Fixed: A bug with YOff for "crop" option. It would fail to get correct users' input of 
+  YOff for crop option.
+
+v2 build 180, 24 September 2011
+* Fixed: A bug with resizing if only width is given.
+* Added: A new option to resize images to the desired longer side and/or shorter side. 
+  For images with landscape orientation, the longer side is the width and the shorter side 
+  the height. For images with portrait orientation, the longer side is the height and the 
+  shorter the width. 
+
+
+v1.5 build 165, 18 September 2011
+* Added: Support of x86-64 to be used with TotalCommander 8.
+
+
+v1.5 build 160, 5 June 2011
+* Added: Resize to the preferrred width or height if only the width or height is given.
+* Fixed: Disable reporting errors when working with directories where there non-image 
+  files like Thumbs.db, to make it more suitable for batch processing. 
+
+
+v1.5 build 150, 8 May 2011
+* Added: Limit the output file size to be equal to or smaller than the given 
+  value. Tested with various image types including animated gif files. 
+
+* Added: An option to set quality for compression of images of jpeg/miff/png types. 
+
+* Added: Further optimization of the performance.
+
+
+
+v1.5 build 110, 4 May 2011
+* Fixed: A probelem with cropping image files. There would be an error about  
+  coalesceImages in v1.5 build 102 and 108. 
+
+
+v1.5 build 108, 3 May 2011
+* Fixed: A probelem with synchronization of worker threads. There would be a 
+  crash when closing some handles in the previous version.
+
+
+v1.5 build 102, 2 May 2011
+* Added: Multi-threading implementation to resize/crop files in parallel. 
+
+* Added: Support of the latest APIs of packer plugin v2.1. When used in 
+  TotalCommander v7.5 and later, it can be put in background.
+
+* Added: Support of GraphicsImagick v1.3.12. 
+
+
+v1.2 build 52, 29 May 2005
+* Added: A new item "crop" to the algorithm combobox. If this item is 
+  selected, you have to give values of XOff and YOff which are x- and 
+  y- offsets of the cropped area with respect to the original top-left.
+
+
+v1.1 build 33, 26 January 2005
+* Fixed: A problem with animated gif. Now TotalRSZ can properly handle 
+  animated gif files whose frames' offsets are variable.
+
+* Added: Version property to TotalRSZ.wcx.
+
+* Added: A simple support for Chinese (Simplified). If there is file called 
+  Totalrsz_chs.dll in the same directory as TotalRSZ.wcx, it will use 
+  Chinese (Simplified). Otherwise, it uses English.
+
+
+v1.1:
+* Fixed: A problem with default target image type.
+* Added: Support for batch resizing of animated GIF files.
+* Added: Options for various resizing algorithms.
+
+
+v1.0:
+* First release.

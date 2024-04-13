@@ -1,0 +1,115 @@
+
+Imagine - 图像/动画查看器
+
+*** 特点 ***
+
+- 极快的查看图像/动画文件（不依赖其扩展名）
+- 支持多种图像格式
+- 显示图像/动画文件信息
+- 显示 EXIF(JPEG) 信息
+- 显示透明度
+- 提取动画文件的帧（单个或全部）
+- 将动画文件导出为动态的 GIF 文件/AVI/Flic/Pro Motion Animation.
+- 处理图像（翻转、灰度、底片、更改色深、交换颜色、旋转、调整大小、效果滤镜、编辑调色板、透明度设置）
+- 小巧快捷的可执行文件
+- 可以自定义快捷键、工具栏
+- 支持插件
+- 多语言支持
+- 不依赖任何 OLE 模式或任何外部查看器
+- 不创建或使用任何注册表值（仅设置桌面墙纸除外）
+- 外壳扩展支持（资源管理器中的上下文(右键)菜单）
+
+*** 支持的文件类型 ***
+
+|-------------------------------------|-----|-----|---------------------------|
+| 扩展名 (类型)                       |读取 | 写入| 备注                      |
+|-------------------------------------|-----|-----|---------------------------|
+| JPG;JPEG (JFIF Compliant)           |  O  |  O  |                           |
+| GIF (Graphics Interchange Format)   |  O  |  O  | 也支持动态 GIF            |
+| PNG (Portable Network Graphics)     |  O  |  O  |                           |
+| BMP (Windows or OS/2 Bitmap)        |  O  |  O  |                           |
+| PCX (Zsoft Paintbrush)              |  O  |  O  |                           |
+| TGA (Truevision Targa)              |  O  |  O  |                           |
+| PSD (Adobe Photoshop)               |  O  |  X  |                           |
+| TIF;TIFF (Tagged Image File Format) |  O  |  O  |                           |
+| LBM;IFF (IFF Interleaved Bitmap)    |  O  |  O  |                           |
+| FLI;FLC (Autodesk Flic Animation)   |  O  |  O  |                           |
+| SPR (Pro Motion Animation)          |  O  |  O  |                           |
+| PCD (Kodak PhotoCD)                 |  O  |  X  |                           |
+| JPC;JP2;J2K (JPEG2000 Wavelet)      |  O  |  O  | 需要插件                  |
+| PBM;PGM;PPM (Portable Bitmap)       |  O  |  O  |                           |
+| RAS (Sun Raster Image)              |  O  |  O  |                           |
+| SGI;RGB;BW (Silicon Graphics Image) |  O  |  O  |                           |
+| JBG;JBIG (JBIG Bi-level Image)      |  O  |  X  | 需要插件                  |
+| ICO (Windows Icon)                  |  O  |  O  |                           |
+| CUR (Windows Cursor)                |  O  |  O  |                           |
+| ANI (Windows Animated Cursor)       |  O  |  O  |                           |
+| CLP (Windows Clipboard)             |  O  |  O  |                           |
+| RLE (Utah RLE)                      |  O  |  O  |                           |
+| DCX (Zsoft Multi-Page Paintbrush)   |  O  |  O  |                           |
+| WBMP;WAP;WBM (Wireless Bitmap)      |  O  |  O  |                           |
+| LBM (SK-VM LCD Bitmap)              |  O  |  O  | 需要插件                  |
+| CDR;CDT;PAT;CMX (CorelDRAW Drawing) |  O  |  X  | 仅预览                    |
+| PIC;SEL (Autodesk Animator PIC)     |  O  |  O  |                           |
+|-------------------------------------|-----|-----|---------------------------|
+
+
+*** 安装 (仅用于 Total Commander) ***
+
+1. 解压所有文件到任意文件夹中
+2. 选择“配置 - 选项”
+3. 打开“编辑/查看”页
+4. 单击“配置内部查看器'
+5. 单击“LS 插件”按钮
+6. 单击“添加”按钮，然后选择 Imagine.wlx
+7. 单击“确定”
+
+
+*** 默认快捷键 (允许自定义) ***
+
+Ctrl+O - 打开图像
+Ctrl+S - 保存图像
+空格键 - 下一个图像
+Backspace - 上一个图像
+Ctrl+C - 复制到剪贴板
+I - 图像信息
+V - 垂直翻转
+H - 水平翻转
+Shift+G - 灰度
+Shift+T - 底片
+Ctrl+D - 更改色深
+L - 向左旋转
+R - 向右旋转
+Shift+R - 自由旋转
+Ctrl+Shift+E - 设为墙纸（居中）
+Ctrl+Shift+T - 设为墙纸（平铺）
+Ctrl+Shift+S - 设为墙纸（伸展）
+Ctrl+I - 滤镜浏览
+E - 编辑调色板
+Shift+S - 状态栏
+B - 仅大图像适应窗口
+回车键 - 全屏幕
+T - 显示透明度
++ - 放大
+- - 缩小
+* - 实际大小
+Alt+Enter - 参数选项
+Delete - 删除当前文件（到回收站，如果可用）
+Shift+Delete - 删除当前文件（直接删除）
+
+(动画快捷键)
+Pause - 暂停
+Ctrl+Pause - 下一帧
+S - 显示帧数
+Ctrl+E - 提取所有帧
+
+(多页图像快捷键)
+Shift+PageUp - 上一页
+Shift+PageDn - 下一页
+Shift+Home - 第一页
+Shift+End - 最后一页
+
+作者: Chun Sejin (韩国)
+
+URL: http://www.nyam.pe.kr
+e-mail: nyam@nyam.pe.kr

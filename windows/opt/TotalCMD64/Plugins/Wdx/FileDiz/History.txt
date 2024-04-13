@@ -1,0 +1,25 @@
+Versions history
+----------------
+
+1.2.3 (oct 2011)
+  "Version info - xxxx" fields.
+  "Version flag - xxxx" fields.
+1.2.0 (sep 2011)
+  fixed init bug.
+  Recompiled as x64.
+
+11.05: you may specify empty extension in ini-file;
+       you may specify CR (#13) as lines delimiter - useful for tooltips;
+       field "Short description" is removed
+11.05: shows .URL targets
+06.05: fixed displaying of Files.bbs multi-line descriptions
+05.05: shows Meta tag for HTML files
+04.05: you may specify text replace strings in FileDiz.ini
+03.05: fixed Descript.ion reading
+03.05: added source code
+11.04: added subfileds "Private build", "Special build"
+11.04: added field "Version info" with all standard subfields
+11.04: shows version info for executables
+11.04: shows HTML/Text descriptions
+10.04: shows descriptions from Files.bbs
+10.04: initial version

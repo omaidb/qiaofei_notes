@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<TotalrszSettings>
+	<General>
+		<Language>Chinese (Simplified)</Language>
+		<Lang-file>LANGUAGE\totalrsz_chs.dll</Lang-file>
+		<Target-fname_noext>$(FileNameNoExt)_resized</Target-fname_noext>
+		<Target-type>JPEG</Target-type>
+		<Use-my-type>0</Use-my-type>
+		<Size-option>1</Size-option>
+		<Percentage>50</Percentage>
+		<Resizing-algorithm>lanczos</Resizing-algorithm>
+		<Number-threads>0</Number-threads>
+		<Set-quality>0</Set-quality>
+		<Compression-quality>75</Compression-quality>
+		<Default-output-dir></Default-output-dir>
+		<To-original-dir>0</To-original-dir>
+		<Keep-file-time>1</Keep-file-time>
+		<Replace-original-file>0</Replace-original-file>
+	</General>
+</TotalrszSettings>

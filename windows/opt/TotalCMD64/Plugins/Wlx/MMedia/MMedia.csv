@@ -1,0 +1,24 @@
+General;%FileName%.%FileExtension%\r\n    Path........:  %FolderName%\r\n    Date........:  %File_Modified_Date%\r\n    Created.....:  %File_Created_Date%\r\n    Size........:  %FileSize/String3% \[%FileSize% bytes\]\r\n_____________________________________________________________________\r\n    Format......: %FileExtension% | %Format%$if(%Audio_Codec_List%, | %Audio_Codec_List%,)$if(%InternetMediaType%, | %InternetMediaType%,)$if(%Format_Profile%, | %Format_Profile%,)\r\n    Time........: %Duration/String2% \[%Duration/String3%\]\r\n    BitRate.....:  %OverallBitRate/String% \(%OverallBitRate_Mode%\) \[%OverallBitRate%\]\r\n    Header......: %StreamSize/String5% \[%StreamSize% bytes\][\r\n    Writing App.:  %Encoded_Application%]\r\n[\r\n    Album.......: %Album%]$if(%Album/Performer%,\r\n    Album.Artist: %Album/Performer%,)[\r\n    Artist......: %Performer%][\r\n    Title.......: %Track%]$if(%Part/Position%,\r\n    Disc.#......: %Part/Position% / %Part/Position_Total%,)[\r\n    Year/Date...: %Recorded_Date%][\r\n    Genre.......: %Genre%][\r\n    Track.#.....: %Track/Position%$if(%Track/Position_Total%,/%Track/Position_Total%,)]$if(%Comment%,\(%Comment%\), )$if(%Publisher%,\r\n    Label.......: %Publisher%,)$if(%Producer%,\r\n  Producer....: %Producer%,)$if(%RemixedBy%,\r\n    Remixed by..: %RemixedBy%,)$if(%BPM%,\r\n   BPM.........: %BPM%,)$if(%Rating%,\r\n    Rating......: %Rating%,)$if(%Composer%,\r\n    Composer....: %Composer%,)$if(%Copyright%,\r\n    Copyright...: %Copyright%,)$if(%ISRC%,\r\n    ISRC........: %ISRC%,)$if(%CatalogNumber%,\r\n    Catalog.#...: %CatalogNumber%,)$if(%Comment%,\r\n    Comment.....: %Comment%,)\r\n    Cover Art...: $if(%Cover%,%Cover%,No)$if(%Cover_Description%, \(%Cover_Description%\),)$if(%Cover_Mime%, \[%Cover_Mime%\],)
+Video;\r\n\r\n  VIDEO[\r\n    Title............:  %Title%]\r\n    Duration.........:  %Duration/String3% \(%FrameCount% frames\)\r\n    Codec............:  %CodecID% \([%CodecID/Hint% / ]%Encoded_Library/Name%\)[ \(Str.%ID%\)][ \(ID: %UniqueID%\)]\r\n    Format (Profile).:  %Format% \(%Format_Profile%[ / %Format_Settings_RefFrames% Ref.Fr.]\)\r\n    Dimensions.......:  %Width% x %Height% px\r\n    Aspect Ratio.....:  %DisplayAspectRatio/String%[ \(%DisplayAspectRatio%\)][ / Pixel A.R.: %PixelAspectRatio%]\r\n    FrameRate........:  %FrameRate/String%[ \(%FrameRate_Mode%\)][ \(%FrameRate_Minimum% fps » %FrameRate_Maximum% fps\)][\r\n    FrameRate Mode...:  %FrameRate_Mode/String%]\r\n    BitRate..........:  $if(%BitRate%,%BitRate/String%,%BitRate_Nominal/String%)[\r\n    ScanType.........:  %ScanType/String%]\r\n    Bits \(px*fr\).....:  %Bits-(Pixel*Frame)%[\r\n    Bitdepth.........:  %BitDepth% bits][\r\n    ColorSpace.......:  %ColorSpace%][\r\n    ChromaSubsampling:  %ChromaSubsampling%][\r\n    Delay............:  %Delay% ms][\r\n    Stream Size......:  %StreamSize/String5%][\r\n    Writing Lib......:  %Encoded_Application%][\r\n    W.Library........:  %Encoded_Library/Name% - %Encoded_Library/Version%][\r\n    W.Settings.......:  %Encoded_Library_Settings%][\r\n    Matrix/BVOP/QPel/GMC: %Format_Settings_Matrix% • %Format_Settings_BVOP% • %Format_Settings_QPel% • %Format_Settings_GMC/String%]$if(%Encoded_Date%,\r\n    Date \(enc./tag\)..:  %Encoded_Date% | %Tagged_Date%,[\r\n    Date \(tag\).......:  %Tagged_Date%])
+Audio;\r\n\r\n  AUDIO[\r\n    Title............:  %Title%][\r\n    Language.........:  %Language/String% \(%Language/String3%\)]\r\n    Stream Count.....:  %StreamCount%[ \(Str.%ID%\)][ \(ID: %UniqueID%\)]\r\n    Duration.........:  %Duration/String3%\r\n    Format...........:  %Format%[ \(%Format/Info%\)][ \(%CodecID/Hint%\)][ \(%CodecID%\)][\r\n    Profile..........:  %Format_Profile%][ • %Format_Version%][ • %Format_Settings%][ • SBR: %Format_Settings_SBR%][ • PS: %Format_Settings_PS%]\r\n    BitRate/Channel..:  $if(%BitRate%,%BitRate/String%,%BitRate_Nominal/String%) \($if(%BitRate_Mode%,%BitRate_Mode%,xBR)\) / %Channel(s)% ch\r\n    Sampling \(Res.\)..:  %SamplingRate/String%[ \(%Resolution/String%\)][\r\n    Interl./Preload..:  %Interleave_Duration/String% • %Interleave_Preload/String%][\r\n    Delay/Video......:  %Delay% ms][ / %Video_Delay% ms][\r\n    Stream Size......:  %StreamSize/String5%][\r\n    W.Library........:  %Encoded_Library%][\r\n    W.Settings.......:  %Encoded_Library_Settings%]$if(%Encoded_Date%,\r\n    Date \(enc./tag\)..:  %Encoded_Date% | %Tagged_Date%,[\r\n    Date \(tag\).......:  %Tagged_Date%])
+Text;[\r\n  SUBTITLES\r\n    Type.............:  %CodecID%][\r\n    Format...........:  %Format% \(%CodecID/Info%\) (Str.%ID%)]
+Chapters
+File_Begin
+File_End
+Page_Begin
+Page_Middle
+Page_End
+General_Begin
+General_End
+Video_Begin
+Video_Middle
+Video_End
+Audio_Begin
+Audio_Middle
+Audio_End
+Text_Begin
+Text_Middle
+Text_End
+Chapters_Begin
+Chapters_Middle
+Chapters_End
