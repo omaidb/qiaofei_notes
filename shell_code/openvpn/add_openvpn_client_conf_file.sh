@@ -101,7 +101,7 @@ function generate_client_conf() {
         echo "keepalive 5 75"
         echo "mute-replay-warnings"
         echo "<tls-auth>"
-        cat "${ta_crt_file} 1"
+        cat ${ta_crt_file} 1
         echo "</tls-auth>"
 
         echo "<ca>"
