@@ -2,10 +2,8 @@
     "remoteaddr": "138.2.3.186:29900-29909",
     "localaddr": "127.0.0.1:1080",
     "crypt": "none",
-    "mode": "fast2",
+    "mode": "fast",
     "mtu": 1200,
-    "sndwnd": 2048,
-    "rcvwnd": 2048,
     "nocomp": true,
     "datashard": 20,
     "parityshard": 10,
@@ -14,15 +12,12 @@
     "interval": 20,
     "resend": 2,
     "nc": 1,
-    "sockbuf": 8388608, 
     "smuxver": 1,
-    "smuxbuf": 8388608,
-    "streambuf": 4194304,
     "acknodelay": false,
     "keepalive": 10,
     "pprof": false,
     "quiet": true,
     "conn": 10,
     "signal": true,
-    "tcp":false
+    "tcp": false
 }
