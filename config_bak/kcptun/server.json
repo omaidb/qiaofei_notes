@@ -1,8 +1,8 @@
 {
     "listen": ":29900-29909",
     "target": "127.0.0.1:1081",
-    "crypt": "none",
-    "mode": "fast",
+    "crypt": "salsa20",
+    "mode": "normal",
     "mtu": 1200,
     "nocomp": true,
     "datashard": 20,
@@ -16,7 +16,7 @@
     "acknodelay": false,
     "pprof": false,
     "quiet": true,
-    "keepalive": 10,
+    "keepalive": 1,
     "conn": 10,
     "signal": true,
     "tcp": false
