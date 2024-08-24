@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
- 
 # Filename: backrsync.sh
 # 作者：omaidb@gmail.com
 # 更新时间：2024年8月24日
@@ -23,9 +22,9 @@
 # yum -y install inotify-tools
 # rpm -qa inotify-tools
 
-#printlog 函数说明
-#两个参数，一，是否打印日志，二，日志内容
-#一参数可选，0表示不打印日志内容出来，1表示打印日志内容出来
+# printlog 函数说明
+# 两个参数，一，是否打印日志，二，日志内容
+# 一参数可选，0表示不打印日志内容出来，1表示打印日志内容出来
 LOGFILE_PATH="/var/log/zdrsynclog"
 NOWTIME=$(date "+%Y-%m-%d %H:%M:%S")
 function printlog() {
@@ -39,7 +38,7 @@ function printlog() {
     fi
 }
 
-#检查上一条命令执行是否正常，不正常退出
+# 检查上一条命令执行是否正常，不正常退出
 check_error_exit() {
     #echo $?"+++++++++++"
     RUSELT=$?
@@ -51,7 +50,7 @@ check_error_exit() {
     fi
 }
 
-#输出颜色字体
+# 输出颜色字体
 function echo_colour() {
     if [ $1 -eq 0 ]; then
         echo -e "\033[41;37m ${2} \033[0m"
@@ -69,39 +68,39 @@ function echo_colour() {
     fi
 }
 
-#打印结束符
+# 打印结束符
 print_end() {
     printlog 1 "<<<<<<<<<<<<<<<<<<<<<<END<<<<<<<<<<<<<<<<<<<<<<<<<<"
 }
 
 ####################################################################
-#脚本即将开始运行
+# 脚本即将开始运行
 ####################################################################
 printlog 1 "<<<<<<<<<<<<<<<<<<<<<<Start<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
-#定义目的服务器及其需要备份的文件夹、备份的目的路径
+# 定义目的服务器及其需要备份的文件夹、备份的目的路径
 Backup_Server=192.168.1.221
 Path=/root/aa_inotify
 Backup_Server_Path=/test_inotify
 
-#以下语句带有--delete
+# 以下语句带有--delete
 rsync -Rraz --delete -e ssh $Path root@${backup_Server}:${Backup_Server_Path}
 /usr/bin/inotifywait -mrq --format '%w%f' -e create,close_write,delete $Path | while read line; do
     rsync -Rraz --delete -e ssh ${line} root@${Backup_Server}:${Backup_Server_Path}
 done
 
 # 以下为旧版本的备份
-#主要是下面的这句了，检查一下有没有rsync进程，如果有就直接提示有在运行，写到日志中，然后再等下一步循环了
-#ps -ef|grep 'rsync'|grep -v 'grep'|grep -v 'backrsync'
-#if [ $? -ne 0 ]
-#then
+# 主要是下面的这句了，检查一下有没有rsync进程，如果有就直接提示有在运行，写到日志中，然后再等下一步循环了
+# ps -ef|grep 'rsync'|grep -v 'grep'|grep -v 'backrsync'
+# if [ $? -ne 0 ]
+# then
 #    printlog 1 "start process..."
 #    printlog 0 "$NOWTIME: crontab start"
 #    /usr/bin/rsync -rav /home/mailbox /mailbackup/
 #    printlog 0 "Success Rsync"
-#else
+# else
 #    printlog 1 "runing...."
 #    printlog 0 "$NOWTIME: running... start"
-#fi
+# fi
 
 print_end
