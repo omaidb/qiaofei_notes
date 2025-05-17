@@ -1,2 +1,0 @@
-为当前系统更新安全补丁，以管理员身份运行 LiveOS-Setup.cmd 
-将安全补丁集成到镜像安装文件中，以管理员身份运行 Wim-Integration.cmd 
