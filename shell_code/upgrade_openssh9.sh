@@ -1,4 +1,4 @@
-#!/usr/bin/env bash  # 指定脚本解释器为bash
+#!/usr/bin/env bash
 
 # 声明: 该脚本适用于升级Centos7的默认openssh到openssh-9.0p1版本
 
