@@ -49,9 +49,6 @@ mv client_linux_amd64 kcptun-client && chmod +x kcptun-client
 # 将kcptun可执行文件移动到/opt/kcptun/
 mv kcptun-server kcptun-client /opt/kcptun/
 
-# 检查/etc/kcptun目录，不存在则创建
-[ -d /etc/kcptun ] || mkdir -p /etc/kcptun
-
 # 将服务端配置文件写入kcptun-server.json文件
 echo '{
     "listen": ":29900-29909",
@@ -76,8 +73,7 @@ echo '{
     "conn": 7,
     "signal": true,
     "tcp":false
-}' >/etc/kcptun/kcptun-server.json
-
+}' >/opt/kcptun/kcptun-server.json
 
 # 将客户端配置文件写入kcptun-client.json文件
 echo '{
@@ -104,7 +100,7 @@ echo '{
     "conn": 2,
     "signal": true,
     "tcp": false
-}' >/etc/kcptun/kcptun-client.json
+}' >/opt/kcptun/kcptun-client.json
 
 # 创建kcptun-client.service文件
 echo "
@@ -116,9 +112,9 @@ Wants=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/etc/kcptun
+WorkingDirectory=/opt/kcptun
 Nice=-20
-ExecStart=/opt/kcptun/kcptun-client -c /etc/kcptun/kcptun-client.json
+ExecStart=/opt/kcptun/kcptun-client -c /opt/kcptun/kcptun-client.json
 ExecReload=/bin/kill -HUP 
 KillMode=control-group
 RestartSec=10s
@@ -127,7 +123,6 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 " >/etc/systemd/system/kcptun-client.service
-
 
 # 创建kcptun-server.service文件
 echo "
@@ -139,9 +134,9 @@ Wants=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/etc/kcptun
+WorkingDirectory=/opt/kcptun
 Nice=-20
-ExecStart=/opt/kcptun/kcptun-server -c /etc/kcptun/kcptun-server.json
+ExecStart=/opt/kcptun/kcptun-server -c /opt/kcptun/kcptun-server.json
 ExecReload=/bin/kill -HUP 
 KillMode=control-group
 RestartSec=10s
