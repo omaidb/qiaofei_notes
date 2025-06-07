@@ -43,11 +43,11 @@ mv server_linux_amd64 kcptun-server && chmod +x kcptun-server
 # 重命名kcp-tun客户端
 mv client_linux_amd64 kcptun-client && chmod +x kcptun-client
 
-# 检查/usr/local/kcptun目录，不存在则创建
-[ -d /usr/local/kcptun ] || mkdir -p /usr/local/kcptun
+# 检查/opt/kcptun目录，不存在则创建
+[ -d /opt/kcptun ] || mkdir -p /opt/kcptun
 
-# 将kcptun可执行文件移动到/usr/local/kcptun/
-mv kcptun-server kcptun-client /usr/local/kcptun/
+# 将kcptun可执行文件移动到/opt/kcptun/
+mv kcptun-server kcptun-client /opt/kcptun/
 
 # 检查/etc/kcptun目录，不存在则创建
 [ -d /etc/kcptun ] || mkdir -p /etc/kcptun
@@ -118,7 +118,7 @@ Type=simple
 User=root
 WorkingDirectory=/etc/kcptun
 Nice=-20
-ExecStart=/usr/local/kcptun/kcptun-client -c /etc/kcptun/kcptun-client.json
+ExecStart=/opt/kcptun/kcptun-client -c /etc/kcptun/kcptun-client.json
 ExecReload=/bin/kill -HUP 
 KillMode=control-group
 RestartSec=10s
@@ -141,7 +141,7 @@ Type=simple
 User=root
 WorkingDirectory=/etc/kcptun
 Nice=-20
-ExecStart=/usr/local/kcptun/kcptun-server -c /etc/kcptun/kcptun-server.json
+ExecStart=/opt/kcptun/kcptun-server -c /etc/kcptun/kcptun-server.json
 ExecReload=/bin/kill -HUP 
 KillMode=control-group
 RestartSec=10s
