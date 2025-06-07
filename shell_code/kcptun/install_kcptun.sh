@@ -23,9 +23,9 @@ if [ $? -ne 0 ]; then
     # 下载二进制包
     wget -cO /usr/local/src/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz --no-check-certificate
 
-else
-    # 从镜像站下载
-    wget -cO /usr/local/src/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz https://ghproxy.com/https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz --no-check-certificate
+# else
+#     # 从镜像站下载
+#     wget -cO /usr/local/src/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz https://ghproxy.com/https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz --no-check-certificate
 fi
 
 # 如果二进制包没下载下来,退出
