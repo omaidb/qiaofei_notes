@@ -4,7 +4,7 @@
 # KCPTUN项目地址 https://github.com/xtaci/kcptun
 
 # 定义kcptun版本
-KCPTUN_VERSION=20231012
+KCPTUN_VERSION=20250427
 
 # ifCMD函数,判断上一条命令(不等于0)没执行成就停止,成功就继续运行
 function ifcmd() {
@@ -116,6 +116,8 @@ Wants=network.target
 [Service]
 Type=simple
 User=root
+WorkingDirectory=/etc/kcptun
+Nice=-20
 ExecStart=/usr/local/kcptun/kcptun-client -c /etc/kcptun/kcptun-client.json
 ExecReload=/bin/kill -HUP 
 KillMode=control-group
@@ -137,6 +139,8 @@ Wants=network.target
 [Service]
 Type=simple
 User=root
+WorkingDirectory=/etc/kcptun
+Nice=-20
 ExecStart=/usr/local/kcptun/kcptun-server -c /etc/kcptun/kcptun-server.json
 ExecReload=/bin/kill -HUP 
 KillMode=control-group
