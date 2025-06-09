@@ -1,0 +1,20 @@
+[Unit]
+Description=bubble service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+Nice=-20
+ExecStart=/opt/bubble/bubble --socks5
+# \是反转义符
+ExecReload=/bin/kill -HUP \$MAINPID
+KillMode=control-group
+Restart=always
+# 最大运行秒数(7天自动重启)
+RuntimeMaxSec=604800
+RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target
