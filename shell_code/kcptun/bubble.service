@@ -7,7 +7,7 @@ Wants=network.target
 Type=simple
 User=root
 Nice=-20
-ExecStart=/opt/bubble/bubble --socks5
+ExecStart=/opt/bubble/bubble --socks5 --socks5-ip=127.0.0.1 --socks5-port=1080
 # \是反转义符
 ExecReload=/bin/kill -HUP \$MAINPID
 KillMode=control-group
