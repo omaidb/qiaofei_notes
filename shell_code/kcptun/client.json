@@ -1,5 +1,5 @@
 {
-    "remoteaddr": "132.145.125.61:29900-29909",
+    "remoteaddr": "远程服务器地址:29900-29909",
     "localaddr": "0.0.0.0:1080",
     "key": "1",
     "crypt": "none",
@@ -11,7 +11,7 @@
     "datashard": 1,
     "parityshard": 9,
     "dscp": 46,
-    "nodelay": 1,
+    "nodelay": 1,   
     "interval": 20,
     "resend": 2,
     "nc": 1,
