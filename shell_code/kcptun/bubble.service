@@ -13,7 +13,7 @@ ExecReload=/bin/kill -HUP \$MAINPID
 KillMode=control-group
 Restart=always
 # 最大运行秒数(7天自动重启)
-RuntimeMaxSec=604800
+# RuntimeMaxSec=604800
 RestartSec=2s
 
 [Install]
